@@ -170,7 +170,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 454.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,7 +183,7 @@
       "bases:新建数据库": false
     }
   },
-  "active": "0402a4f5c8310f89",
+  "active": "f8eac27b15b2a763",
   "lastOpenFiles": [
     "2026-06-05.md",
     "未命名.canvas",
