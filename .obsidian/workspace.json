@@ -14,8 +14,8 @@
               "type": "markdown",
               "state": {
                 "file": "reading/Agent-Skills-橙皮书.md",
-                "mode": "source",
-                "source": false
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
               "title": "Agent-Skills-橙皮书"
@@ -183,7 +183,7 @@
       "bases:新建数据库": false
     }
   },
-  "active": "f8eac27b15b2a763",
+  "active": "0402a4f5c8310f89",
   "lastOpenFiles": [
     "2026-06-05.md",
     "未命名.canvas",
