@@ -14,8 +14,8 @@
               "type": "markdown",
               "state": {
                 "file": "reading/Agent-Skills-橙皮书.md",
-                "mode": "preview",
-                "source": true
+                "mode": "source",
+                "source": false
               },
               "icon": "lucide-file",
               "title": "Agent-Skills-橙皮书"
@@ -185,17 +185,20 @@
   },
   "active": "0402a4f5c8310f89",
   "lastOpenFiles": [
+    "learning/english-120-days.md",
+    "learning",
+    "index.md",
+    "daily/2026-06-05.md",
+    "reading/Agent-Skills-橙皮书.md",
+    "daily/2026-06-04.md",
+    "daily/2026-06-03.md",
     "2026-06-05.md",
     "未命名.canvas",
     "未命名.base",
-    "reading/Agent-Skills-橙皮书.md",
-    "index.md",
     "SCHEMA.md",
-    "daily/2026-06-04.md",
     "reading",
     "templates/reading-notes-template.md",
     "templates",
-    "log.md",
-    "daily/2026-06-03.md"
+    "log.md"
   ]
 }

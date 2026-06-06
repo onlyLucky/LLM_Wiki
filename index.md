@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-06-04 | Total pages: 3
+> Last updated: 2026-06-05 | Total pages: 4
 
 ---
 
@@ -32,6 +32,8 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-06-05]] — 读书笔记工作流优化、Hermes 知识库 Skill、橙皮书精读、Token 优化策略、看板 UI 更新
+- [[daily/2026-06-04]] — macOS 辅助功能权限、Agent Skills 橙皮书精读笔记、飞书消息无响应排查
 - [[daily/2026-06-03]] — Hermes 安装配置、Wiki 搭建、飞书 Markdown 渲染、多 Agent 设置
 
 ## 📚 Reading Notes
@@ -53,3 +55,6 @@ wiki/
 
 ## 🔍 Queries
 <!-- 问题追踪、待解事项、调研任务 -->
+
+## 📚 Learning
+- [[learning/english-120-days]] — 坠落天空 120 天英语入门笔记 | 零基础到 4000 词汇 | 2026-06-06

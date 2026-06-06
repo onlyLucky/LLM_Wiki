@@ -26,3 +26,10 @@
 - 会话来源: 飞书 (2 sessions, 264 messages), cron (1 session, 29 messages)
 - 主题: macOS 辅助功能权限、Agent Skills 橙皮书精读笔记、飞书消息无响应排查
 - 总计 3 个会话，293 条消息
+
+## [2026-06-06] create | 每日汇总 - 2026-06-05
+- 文件: daily/2026-06-05.md
+- 会话来源: 飞书 (6 sessions, 871 messages), cron (1 session, 35 messages)
+- 主题: 读书笔记工作流优化、Hermes 知识库 Skill、橙皮书精读、Token 优化策略、看板 UI 更新
+- 总计 7 个会话，906 条消息
+- index.md 同步更新：补录 2026-06-04 条目，新增 2026-06-05 条目，页面计数更新为 4
