@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-06-05 | Total pages: 4
+> Last updated: 2026-06-10 | Total pages: 8
 
 ---
 
@@ -20,18 +20,31 @@ wiki/
 ├── queries/         ← 🔍 查询：问题追踪、待解事项
 ├── raw/             ← 📄 原始资料：文章、文档、摘录
 ├── reading/         ← 📚 读书笔记
+├── learning/        ← 📖 学习笔记
+├── content/         ← 📝 内容创作中心
+│   ├── README.md           ← 内容创作指南
+│   ├── topics/             ← 选题库
+│   ├── references/         ← 参考资料
+│   ├── drafts/             ← 草稿区
+│   ├── xiaohongshu/        ← 小红书内容
+│   ├── wechat/             ← 公众号内容
+│   ├── bilibili/           ← B站内容
+│   └── templates/          ← 内容模板
 ├── templates/       ← 📝 模板
 └── _archive/        ← 🗄️ 归档：已过时的页面
 ```
 
 ### 标签体系
 
-`daily` `project` `tech` `research` `meeting` `decision` `todo` `discovery` `error` `config` `ai` `tool` `person` `company` `comparison` `timeline` `controversy` `prediction` `reading`
+`daily` `project` `tech` `research` `meeting` `decision` `todo` `discovery` `error` `config` `ai` `tool` `person` `company` `comparison` `timeline` `controversy` `prediction` `reading` `content` `xiaohongshu` `wechat` `bilibili`
 
 ---
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-06-08]] — Playwright 自动化能力咨询、飞书会话继续、Cron 汇总任务正常执行
+- [[daily/2026-06-07]] — 周日休息，无用户会话（仅 Cron 自动汇总执行）
+- [[daily/2026-06-06]] — 工作日无用户会话（仅 Cron 自动汇总执行）
 - [[daily/2026-06-05]] — 读书笔记工作流优化、Hermes 知识库 Skill、橙皮书精读、Token 优化策略、看板 UI 更新
 - [[daily/2026-06-04]] — macOS 辅助功能权限、Agent Skills 橙皮书精读笔记、飞书消息无响应排查
 - [[daily/2026-06-03]] — Hermes 安装配置、Wiki 搭建、飞书 Markdown 渲染、多 Agent 设置
@@ -39,6 +52,16 @@ wiki/
 ## 📚 Reading Notes
 <!-- 读书笔记，按阅读日期倒序排列 -->
 - [[reading/Agent-Skills-橙皮书]] — Agent Skills 完全指南：SKILL.md 结构、6 种设计模式、Goldilocks Zone、Skills 经济、实战案例 | 花叔 | 2026-06-05
+
+## 📖 Learning
+<!-- 学习笔记 -->
+- [[learning/内容创作全流程SOP_从0到1到100]] — 内容创作全流程SOP：选题策划→大纲设计→文案撰写→脚本分镜→画面生成→话本稿→多平台输出 | 2026-06-10
+
+## 📝 Content Creation
+<!-- 内容创作中心 -->
+- [[content/README]] — 内容创作指南：目录结构、分类体系、创作流程、多平台适配策略 | 2026-06-10
+- [[content/topics/topic-pool]] — 选题库：AI工具、全栈开发、游戏开发、学习成长四大类选题 | 2026-06-10
+- [[content/references/sop]] — 内容创作参考资料：平台运营、写作技巧、素材收集 | 2026-06-10
 
 ## 🛠️ Skills
 <!-- 自定义 Skills -->
@@ -57,4 +80,3 @@ wiki/
 <!-- 问题追踪、待解事项、调研任务 -->
 
 ## 📚 Learning
-- [[learning/english-120-days]] — 坠落天空 120 天英语入门笔记 | 零基础到 4000 词汇 | 2026-06-06
