@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/topics/topic-pool.md",
+                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "topic-pool"
+              "title": "2026-06-10-game-dev-full-process"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/topics/topic-pool.md",
+                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "topic-pool 的反向链接列表"
+              "title": "2026-06-10-game-dev-full-process 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/topics/topic-pool.md",
+                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "topic-pool 的出链列表"
+              "title": "2026-06-10-game-dev-full-process 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/topics/topic-pool.md",
+                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "topic-pool 的大纲"
+              "title": "2026-06-10-game-dev-full-process 的大纲"
             }
           },
           {
@@ -196,9 +196,10 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "content/topics/topic-pool.md",
+    "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/README.md",
     "content/templates/outline-template.md",
-    "content/topics/topic-pool.md",
     "index.md",
     "content/references/sop.md",
     "content/references",
