@@ -51,14 +51,34 @@
 > - 编程语言：C# / GDScript / C++
 > - 美术工具：Aseprite / Blender / Photoshop
 > - 音效工具：Audacity / FMOD
+> - **AI辅助工具**：
+>   - 代码生成：Cursor / GitHub Copilot / Claude
+>   - 美术素材：Midjourney / Stable Diffusion / Meshy
+>   - 音效生成：Suno / Udio / AudioCraft
+>   - 文案/剧情：ChatGPT / Claude / Kimi
 
-**要点3：开发流程拆解**
+**要点3：AI加速开发流程**
+> - **原型阶段**：用AI快速生成代码框架
+>   - Cursor/Claude：快速搭建游戏原型
+>   - ChatGPT：设计游戏机制和数值
+> - **开发阶段**：用AI辅助编码和美术
+>   - GitHub Copilot：代码补全和Bug修复
+>   - Midjourney：生成游戏角色、场景概念图
+>   - Meshy：2D图片转3D模型
+> - **测试阶段**：用AI辅助测试
+>   - Claude：代码审查和Bug定位
+>   - ChatGPT：生成测试用例
+> - **上架阶段**：用AI辅助文案
+>   - ChatGPT：生成商店描述、关键词
+>   - Claude：优化宣传文案
+
+**要点4：开发流程拆解**
 > 1. **原型阶段**（1-2周）：核心玩法验证
 > 2. **开发阶段**（4-8周）：功能完善
 > 3. **测试阶段**（1-2周）：Bug修复
 > 4. **上架阶段**（1周）：平台审核
 
-**要点4：上架和推广**
+**要点5：上架和推广**
 > - 平台选择：Steam / App Store / Google Play
 > - 审核要点：图标、截图、描述、定价
 > - 推广策略：社交媒体、游戏社区、KOL合作
