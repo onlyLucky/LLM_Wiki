@@ -30,6 +30,10 @@ wiki/
 │   ├── wechat/             ← 公众号内容
 │   ├── bilibili/           ← B站内容
 │   └── templates/          ← 内容模板
+├── assets/          ← 📦 素材库
+│   ├── images/            ← 文章配图
+│   ├── screenshots/       ← 截图素材
+│   └── code/              ← 代码片段
 ├── templates/       ← 📝 模板
 └── _archive/        ← 🗄️ 归档：已过时的页面
 ```
