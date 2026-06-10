@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "index.md",
+                "file": "content/topics/topic-pool.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "topic-pool"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "index.md",
+                "file": "content/topics/topic-pool.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "index 的反向链接列表"
+              "title": "topic-pool 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "index.md",
+                "file": "content/topics/topic-pool.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "index 的出链列表"
+              "title": "topic-pool 的出链列表"
             }
           },
           {
@@ -156,17 +156,27 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "index.md",
+                "file": "content/topics/topic-pool.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "index 的大纲"
+              "title": "topic-pool 的大纲"
+            }
+          },
+          {
+            "id": "edfdd1990f0437eb",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -184,24 +194,24 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b031332f5a05c8a5",
+  "active": "3d922f8217ec86da",
   "lastOpenFiles": [
-    "content/references/sop.md",
+    "content/README.md",
+    "content/templates/outline-template.md",
     "content/topics/topic-pool.md",
+    "index.md",
+    "content/references/sop.md",
     "content/references",
     "content/topics",
     "content/bilibili",
     "content/wechat",
     "content/xiaohongshu",
-    "content/templates/outline-template.md",
     "assets/screenshots/growth",
     "assets/screenshots/game",
     "assets/screenshots/dev",
     "assets/screenshots/ai",
     "assets/screenshots",
-    "content/README.md",
     "learning/内容创作全流程SOP_从0到1到100.md",
-    "index.md",
     "daily/2026-06-08.md",
     "assets/index/file-20260608224850457.png",
     "Pasted image 20260608224222.png",
