@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-06-10 | Total pages: 8
+> Last updated: 2026-06-10 | Total pages: 9
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-06-10]] — 内容创作体系搭建：SOP学习、Wiki内容中心创建、选题库建立（27题）、游戏开发全流程速通大纲+小红书图文版
 - [[daily/2026-06-08]] — Playwright 自动化能力咨询、飞书会话继续、Cron 汇总任务正常执行
 - [[daily/2026-06-07]] — 周日休息，无用户会话（仅 Cron 自动汇总执行）
 - [[daily/2026-06-06]] — 工作日无用户会话（仅 Cron 自动汇总执行）

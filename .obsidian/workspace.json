@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
+                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
                 "mode": "source",
                 "source": false
               },
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
+                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
+                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -156,7 +156,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/drafts/2026-06-10-game-dev-full-process.md",
+                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -196,10 +196,11 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "daily/2026-06-10.md",
+    "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
     "content/templates/xiaohongshu-template.md",
     "content/references/sop.md",
-    "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/topics/topic-pool.md",
     "content/README.md",
     "content/templates/outline-template.md",
