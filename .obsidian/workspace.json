@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
+                "file": "daily/2026-06-10.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-06-10-game-dev-full-process"
+              "title": "2026-06-10"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
+                "file": "daily/2026-06-10.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "2026-06-10-game-dev-full-process 的反向链接列表"
+              "title": "2026-06-10 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
+                "file": "daily/2026-06-10.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "2026-06-10-game-dev-full-process 的出链列表"
+              "title": "2026-06-10 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
+                "file": "daily/2026-06-10.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2026-06-10-game-dev-full-process 的大纲"
+              "title": "2026-06-10 的大纲"
             }
           },
           {
@@ -196,6 +196,9 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "daily/2026-06-14.md",
+    "index.md",
+    "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
     "assets/screenshots/websites/igloo.inc/assets/images/perlin-datatexture.png",
     "assets/screenshots/websites/igloo.inc/assets/images/cubes/advect.png",
     "assets/screenshots/websites/igloo.inc/assets/images/cubes/bg.png",
@@ -216,16 +219,13 @@
     "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_001.avif",
     "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_000.avif",
     "assets/screenshots/websites/shader.se/fonts/stix_bold.png",
-    "assets/screenshots/websites/shader.se/fonts/stix_medium.png",
     "daily/2026-06-10.md",
     "content/drafts/2026-06-10-game-dev-full-process.md",
-    "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
     "content/templates/xiaohongshu-template.md",
     "content/references/sop.md",
     "content/topics/topic-pool.md",
     "content/README.md",
     "content/templates/outline-template.md",
-    "index.md",
     "learning/内容创作全流程SOP_从0到1到100.md",
     "daily/2026-06-08.md",
     "reading/Agent-Skills-橙皮书.md",
