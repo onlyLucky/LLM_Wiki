@@ -68,3 +68,17 @@
 - 主题：离线网站复刻工程（follow.art + shader.se + igloo.inc）
 - Git 提交：10 个
 - index.md 同步更新
+
+## [2026-06-16] create | 每日汇总 - 2026-06-15
+- 文件: daily/2026-06-15.md
+- 会话来源: 飞书 (1 session), cron (1 session)
+- 主题: 飞书任务 API 脚本工程化（token 自动续期）、离线网站存储迁移、3 个飞书任务完成
+- 总计 2 个会话，~8 条用户消息
+- index.md 同步更新
+
+## [2026-06-16] create | 每日汇总 - 2026-06-16
+- 文件: daily/2026-06-16.md
+- 会话来源: 飞书 (1 session), cron (1 session)
+- 主题: 前端部署上线流程（域名/备案/HTTPS）、域名基础知识、ICP 备案详解、CityMemory 项目冻结
+- 总计 2 个会话，10 条用户消息
+- index.md 同步更新

@@ -1,1 +1,0 @@
-import{b9 as l,ba as f,S as c,i as n}from"./DJ9DjCKf.js";function t(e){const r=n(!1);r.value=e.query==="xs"||e.query==="xs-up"||e.query.includes("-down");{const u=[l(e.query,a=>{r.value=!0,e.enter&&e.enter(a)}),f(e.query,a=>{r.value=!1,e.leave&&e.leave(a)})];c(()=>{u.forEach(a=>a())})}return{matches:r}}export{t as u};

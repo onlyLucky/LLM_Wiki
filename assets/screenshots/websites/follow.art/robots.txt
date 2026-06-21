@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: 
-Disallow: /cdn-cgi
-
-Sitemap: https://follow.art/sitemap.xml

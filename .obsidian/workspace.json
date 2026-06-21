@@ -11,14 +11,10 @@
             "id": "3d922f8217ec86da",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "daily/2026-06-10.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026-06-10"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "关系图谱"
             }
           }
         ]
@@ -94,7 +90,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "daily/2026-06-10.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +99,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "2026-06-10 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
@@ -113,12 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "daily/2026-06-10.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "2026-06-10 的出链列表"
+              "title": "出链"
             }
           },
           {
@@ -156,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "daily/2026-06-10.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2026-06-10 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -196,7 +189,12 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "languages/english-basics.md",
     "daily/2026-06-14.md",
+    "languages",
+    "daily/2026-06-16.md",
+    "daily/2026-06-15.md",
+    "daily/2026-06-10.md",
     "index.md",
     "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
     "assets/screenshots/websites/igloo.inc/assets/images/perlin-datatexture.png",
@@ -211,7 +209,6 @@
     "assets/screenshots/websites/igloo.inc/assets/audio/particles.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/circles.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/project-text.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/shard.ogg",
     "assets/screenshots/websites/igloo.inc/assets/favicon32-af94112f.png",
     "assets/screenshots/websites/shader.se/api/mux-image/Y7HzOsrmhjd7M00Ib6JYF861ME00I3ZqicLcr4V9vhoXU/w800-h600.jpg",
     "assets/screenshots/websites/shader.se/icon.svg",
@@ -219,7 +216,6 @@
     "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_001.avif",
     "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_000.avif",
     "assets/screenshots/websites/shader.se/fonts/stix_bold.png",
-    "daily/2026-06-10.md",
     "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/templates/xiaohongshu-template.md",
     "content/references/sop.md",
