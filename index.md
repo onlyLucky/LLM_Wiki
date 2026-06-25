@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-06-16 | Total pages: 11
+> Last updated: 2026-06-23 | Total pages: 12
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-06-22]] — animejs.com 离线复刻：wget 全站爬取、本地服务器搭建、GLB 3D 模型补齐、Draco 解码器本地化
 - [[daily/2026-06-16]] — 前端部署上线流程（域名/备案/HTTPS）、域名基础知识、ICP 备案详解、CityMemory 项目冻结
 - [[daily/2026-06-15]] — 飞书任务 API 脚本工程化（token 自动续期）、离线网站存储迁移到 AwardWebsites、3 个飞书任务完成
 - [[daily/2026-06-14]] — 离线网站复刻工程：follow.art 智能回退服务器、shader.se 3D+Draco 本地化、igloo.inc Three.js 冰屋场景（10 个 git 提交）
@@ -57,6 +58,7 @@ wiki/
 ## 📚 Reading Notes
 <!-- 读书笔记，按阅读日期倒序排列 -->
 - [[reading/Agent-Skills-橙皮书]] — Agent Skills 完全指南：SKILL.md 结构、6 种设计模式、Goldilocks Zone、Skills 经济、实战案例 | 花叔 | 2026-06-05
+- [[reading/罗辑思维]] — 从认知、历史、商业、人物、人文五维度升级认知：刺猬与狐狸、策略性同理心、品牌共识、网络小说三公式 | 罗振宇 | 2026-06-14
 
 ## 📖 Learning
 <!-- 学习笔记 -->

@@ -11,10 +11,14 @@
             "id": "3d922f8217ec86da",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "关系图谱"
+              "type": "markdown",
+              "state": {
+                "file": "learning/具身智能/具身智能学习路径规划.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "具身智能学习路径规划"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "learning/具身智能/具身智能学习路径规划.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "反向链接"
+              "title": "具身智能学习路径规划 的反向链接列表"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "learning/具身智能/具身智能学习路径规划.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "出链"
+              "title": "具身智能学习路径规划 的出链列表"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "learning/具身智能/具身智能学习路径规划.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "具身智能学习路径规划 的大纲"
             }
           },
           {
@@ -173,7 +180,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 454.5
+    "width": 454.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -189,7 +197,13 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "reading/罗辑思维.md",
+    "learning/具身智能/学习路线.md",
+    "learning/具身智能/具身智能学习路径规划.md",
+    "learning/内容创作全流程SOP_从0到1到100.md",
     "languages/english-basics.md",
+    "learning/具身智能",
+    "daily/2026-06-22.md",
     "daily/2026-06-14.md",
     "languages",
     "daily/2026-06-16.md",
@@ -208,7 +222,6 @@
     "assets/screenshots/websites/igloo.inc/assets/audio/logo.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/particles.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/circles.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/project-text.ogg",
     "assets/screenshots/websites/igloo.inc/assets/favicon32-af94112f.png",
     "assets/screenshots/websites/shader.se/api/mux-image/Y7HzOsrmhjd7M00Ib6JYF861ME00I3ZqicLcr4V9vhoXU/w800-h600.jpg",
     "assets/screenshots/websites/shader.se/icon.svg",
@@ -222,7 +235,6 @@
     "content/topics/topic-pool.md",
     "content/README.md",
     "content/templates/outline-template.md",
-    "learning/内容创作全流程SOP_从0到1到100.md",
     "daily/2026-06-08.md",
     "reading/Agent-Skills-橙皮书.md",
     "daily/2026-06-06.md",
@@ -231,10 +243,6 @@
     "learning/english-120-days.md",
     "daily/2026-06-05.md",
     "daily/2026-06-04.md",
-    "daily/2026-06-03.md",
-    "2026-06-05.md",
-    "未命名.canvas",
-    "SCHEMA.md",
-    "log.md"
+    "未命名.canvas"
   ]
 }

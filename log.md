@@ -82,3 +82,10 @@
 - 主题: 前端部署上线流程（域名/备案/HTTPS）、域名基础知识、ICP 备案详解、CityMemory 项目冻结
 - 总计 2 个会话，10 条用户消息
 - index.md 同步更新
+
+## [2026-06-23] create | 每日汇总 - 2026-06-22
+- 文件: daily/2026-06-22.md
+- 会话来源: 飞书 (1 session), cron (1 session)
+- 主题: animejs.com 离线复刻：wget 全站爬取、本地服务器搭建、GLB 3D 模型补齐、Draco 解码器本地化
+- 总计 2 个会话，3 条用户消息
+- index.md 同步更新
