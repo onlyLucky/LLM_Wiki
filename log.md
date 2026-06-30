@@ -89,3 +89,10 @@
 - 主题: animejs.com 离线复刻：wget 全站爬取、本地服务器搭建、GLB 3D 模型补齐、Draco 解码器本地化
 - 总计 2 个会话，3 条用户消息
 - index.md 同步更新
+
+## [2026-06-29] create | 每日汇总 - 2026-06-29
+- 文件: daily/2026-06-29.md
+- 会话来源: 飞书 (1 session, 100 messages), CLI (1 session, 19 messages)
+- 主题: 读书笔记扩写（《奇妙的JavaScript》973行/43K字）、飞书Gateway停运3天修复、微信读书API鉴权失败
+- 总计 2 个会话，119 条消息
+- index.md 同步更新

@@ -278,18 +278,31 @@ $$
 
 **维度要求**：$(M \times N) \times (N \times P) = (M \times P)$
 
-$\begin{pmatrix} 1 & 3 \\ 5 & 2 \\ 0 & 4 \end{pmatrix} \begin{pmatrix} 3 & 6 & 9 & 4 \\ 2 & 7 & 8 & 3 \end{pmatrix} = \begin{pmatrix} 9 & ? & 33 & 13 \\ 19 & 44 & 61 & 26 \\ 8 & 28 & 32 & ? \end{pmatrix}$
-
-如何得到：以2行4列 26 举例，获取原来的两个向量数据 2行对应的为 5和2，4列对应的为 4和3，点积计算：$5*4 + 2*3 = 26$
-
 
 $$
 C_{ij} = \sum_{k=1}^{N} A_{ik} \cdot B_{kj}
 $$
 
+- $c_{ij}$ 表示 **C** 的第 $i$ 行第 $j$ 列元素
+- $a_{ik}$ 表示 **A** 的第 $i$ 行第 $k$ 列元素
+- $b_{kj}$ 表示 **B** 的第 $k$ 行第 $j$ 列元素
 
-> **计算规则**：$C_{ij}$ 是矩阵 $A$ 的第 $i$ 行与矩阵 $B$ 的第 $j$ 列的点积
-> $(M \times N) \times (N \times P) = (M \times P)$
+设：
+$$\mathbf{A} = \begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} b_{11} & b_{12} \\ b_{21} & b_{22} \end{bmatrix}$$
+
+则：
+$$\mathbf{AB} = \begin{bmatrix} 
+a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22}
+\end{bmatrix}$$
+
+$
+\begin{pmatrix} 1 & 3 \\ 5 & 2 \\ 0 & 4 \end{pmatrix}
+\begin{pmatrix} 3 & 6 & 9 & 4 \\ 2 & 7 & 8 & 3 \end{pmatrix}
+= \begin{pmatrix} 9 & 27 & 33 & 13 \\ 19 & 44 & 61 & 26 \\ 8 & 28 & 32 & 12 \end{pmatrix}
+$
+
+如何得到：以2行4列 26 举例，获取原来的两个向量数据 2行对应的为 5和2，4列对应的为 4和3，点积计算：$5*4 + 2*3 = 26$
 
 **性质**：
 
@@ -341,68 +354,564 @@ $I_{3 \times 3} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0  \\ 0 & 0 & 1 \end{pmat
 
 ## 3. 变换
 
-### 3.1 二维变换
+> 本章对应课程第 3-4 讲
+> - 第 3 讲 [[课件 PDF](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_03.pdf)]
+> - 第 4 讲 [[课件 PDF](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04.pdf)]
+> - [[补充材料](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)]
+
+### 3.1 为什么要学习变换
+
+变换在图形学中有两大核心应用：
+
+| 应用场景 | 说明 | 示例 |
+|:---:|:---|:---|
+| **建模 (Modeling)** | 在场景中摆放物体 | 平移、旋转、缩放物体 |
+| **观察 (Viewing)** | 将 3D 场景投影到 2D 图像 | 相机变换、投影变换 |
+
+<!-- 截图：变换的应用示例 -->
+
+---
+
+### 3.2 二维变换
+
+#### 线性变换的统一表示
+
+所有二维线性变换都可以用矩阵乘法表示：
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+$$
+
+即 $\vec{x'} = M \vec{x}$
 
 #### 缩放变换 (Scale)
+
+**均匀缩放**（所有方向等比例）：
+
+![均匀缩放](./images/Games101/chap3_01.png)
+
+$x' = sx \qquad y' = sy$  
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} s & 0 \\ 0 & s \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+$$
+
+例如：$x = 2, \; y = 2, \; s = 0.5$
+
+$
+\begin{bmatrix} x' \\ y' \end{bmatrix}
+= \begin{bmatrix} 0.5 & 0 \\ 0 & 0.5 \end{bmatrix} \begin{bmatrix} 2 \\ 2 \end{bmatrix}
+= \begin{bmatrix} 0.5 \times 2 + 0 \times 2 \\ 0 \times 2 + 0.5 \times 2 \end{bmatrix}
+= \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+$
+
+
+**非均匀缩放**（各方向独立缩放）：
+
+![非均匀缩放](./images/Games101/chap3_02.png)
 
 $$
 \begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} s_x & 0 \\ 0 & s_y \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
 $$
 
+#### 反射变换 (Reflection)
+![反射变换](./images/Games101/chap3_03.png)
+关于 y 轴的反射：
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} -x \\ y \end{bmatrix}
+$$
+
+#### 剪切变换 (Shear)
+![剪切变换](./images/Games101/chap3_04.png)
+水平剪切（y=0 处不动，y=1 处水平偏移 a）：
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} 1 & a \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+$$
+
+参数 $a$ 的含义： 控制倾斜程度。$a = 0$ 时矩阵退化为单位矩阵（不变换），$a$ 越大倾斜越明显
+
+
 #### 旋转变换 (Rotation)
+
+默认旋转的原点为 $(0, 0)$，逆时针为正方向，旋转角度为 $\theta$。
+![默认旋转变换](./images/Games101/chap3_05.png)
+
+绕原点逆时针旋转 $\theta$ 角：
 
 $$
 \begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
 $$
 
-#### 平移变换 (Translation)
+记作 $R_\theta$，特殊地：
+- $R_{90°} = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$
+- $R_{-90°} = \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}$
 
-使用齐次坐标：
+![旋转变换](./images/Games101/chap3_06.png)
+
+##### 旋转变换推导公式：
+
+设旋转矩阵为未知数：$
+R = \begin{bmatrix} A & B \\ C & D \end{bmatrix}
+$ 已知两个基向量旋转后的结果，代入求解：
+
+**基向量 $\hat{e_1} = (1, 0)$ 旋转 $\theta$ 后 → $(\cos\theta, \sin\theta)$：**
+
 $$
-\begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = \begin{bmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+\begin{bmatrix} A & B \\ C & D \end{bmatrix} \begin{bmatrix} 1 \\ 0 \end{bmatrix}
+= \begin{bmatrix} A \times 1 + B \times 0 \\ C \times 1 + D \times 0 \end{bmatrix}
+= \begin{bmatrix} A \\ C \end{bmatrix}
+= \begin{bmatrix} \cos\theta \\ \sin\theta \end{bmatrix}
+\implies A = \cos\theta, \; C = \sin\theta
 $$
 
-### 3.2 仿射变换 (Affine Transformation)
+**基向量 $\hat{e_2} = (0, 1)$ 旋转 $\theta$ 后 → $(-\sin\theta, \cos\theta)$：**
 
-- 仿射变换 = 线性变换 + 平移
-- 齐次坐标表示：
 $$
-\begin{bmatrix} x' \\ y' \\ w' \end{bmatrix} = \begin{bmatrix} a & b & t_x \\ c & d & t_y \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+\begin{bmatrix} A & B \\ C & D \end{bmatrix} \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+= \begin{bmatrix} A \times 0 + B \times 1 \\ C \times 0 + D \times 1 \end{bmatrix}
+= \begin{bmatrix} B \\ D \end{bmatrix}
+= \begin{bmatrix} -\sin\theta \\ \cos\theta \end{bmatrix}
+\implies B = -\sin\theta, \; D = \cos\theta
 $$
 
-### 3.3 三维变换
+**得到旋转矩阵：**
 
-- 三维空间中的变换同样使用 4×4 矩阵和齐次坐标
-- 旋转矩阵的分解：绕 x、y、z 轴旋转
+$$
+R_\theta = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}
+$$
 
-### 3.4 MVP 变换
+对任意点 $(x, y)$ 旋转的展开过程：
 
-1. **Model 变换**：将物体从模型坐标系变换到世界坐标系
-2. **View 变换**：将世界坐标系变换到相机坐标系
-3. **Projection 变换**：将相机坐标系变换到裁剪坐标系
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix}
+= \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+= \begin{bmatrix} x\cos\theta - y\sin\theta \\ x\sin\theta + y\cos\theta \end{bmatrix}
+$$
 
-### 3.5 视图变换 (View Transformation)
+---
 
-- 相机位置 `e`，观察方向 `g`，上方向 `t`
-- 视图变换矩阵：
+### 3.3 齐次坐标 (Homogeneous Coordinates)
+
+#### 为什么需要齐次坐标
+
+**问题**：平移变换**不是**线性变换，无法用 2×2 矩阵表示！
+
+![平移变换](./images/Games101/chap3_07.png)
+
+$x' = x+t_x \qquad y' = y+t_y$  
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} + \begin{bmatrix} t_x \\ t_y \end{bmatrix}
+$$
+
+我们希望用**统一的矩阵形式**表示所有仿射变换（线性变换 + 平移）。
+
+#### 齐次坐标的定义
+
+增加第三个坐标（w 坐标）：
+
+| 类型 | 齐次坐标表示 | 说明 |
+|:---:|:---:|:---|
+| **2D 点** | $(x, y, 1)^T$ | w = 1 |
+| **2D 向量** | $(x, y, 0)^T$ | w = 0 |
+
+平移的矩阵表示：
+
+$$
+\begin{pmatrix} x' \\ y' \\ w' \end{pmatrix}
+= \begin{pmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \\ 0 & 0 & 1 \end{pmatrix}
+\begin{pmatrix} x \\ y \\ 1 \end{pmatrix}
+= \begin{pmatrix} 1 \times x + 0 \times y + t_x \times 1 \\ 0 \times x + 1 \times y + t_y \times 1 \\ 0 \times x + 0 \times y + 1 \times 1 \end{pmatrix}
+= \begin{pmatrix} x + t_x \\ y + t_y \\ 1 \end{pmatrix}
+$$
+
+**关键性质**：$(x, y, w)^T$ 表示的是 2D 点 $(x/w, y/w)^T$（当 $w \neq 0$）
+
+例如：$(1, 0, 0, 1)$ 和 $(2, 0, 0, 2)$ 都表示同一个点 $(1, 0, 0)$
+
+#### 齐次坐标下的运算规则
+
+| 运算 | 结果类型 | 说明 |
+|:---:|:---:|:---|
+| 向量 + 向量 | 向量 | w = 0 + 0 = 0 |
+| 点 - 点 | 向量 | w = 1 - 1 = 0 |
+| 点 + 向量 | 点 | w = 1 + 0 = 1 |
+| 点 + 点 | **？？** | w = 1 + 1 = 2，表示中点 $(x_1+x_2)/2, (y_1+y_2)/2$ |
+
+---
+
+### 3.4 仿射变换 (Affine Transformation)
+
+#### 定义
+
+仿射变换 = 线性变换 + 平移
+
+$$
+\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \cdot \begin{bmatrix} x \\ y \end{bmatrix} + \begin{bmatrix} t_x \\ t_y \end{bmatrix}
+$$
+
+#### 齐次坐标下的统一表示
+
+$$
+\begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = \begin{bmatrix} a & b & t_x \\ c & d & t_y \\ 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+$$
+
+#### 二维变换的齐次坐标矩阵汇总
+
+| 变换类型 | 齐次矩阵 |
+|:---|:---:|
+| **平移** $T(t_x, t_y)$ | $\begin{bmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \\ 0 & 0 & 1 \end{bmatrix}$ |
+| **缩放** $S(s_x, s_y)$ | $\begin{bmatrix} s_x & 0 & 0 \\ 0 & s_y & 0 \\ 0 & 0 & 1 \end{bmatrix}$ |
+| **旋转** $R(\theta)$ | $\begin{bmatrix} \cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{bmatrix}$ |
+
+<!-- 截图：齐次坐标下的变换矩阵 -->
+
+---
+
+### 3.5 逆变换 (Inverse Transform)
+
+变换矩阵 $M$ 的逆矩阵 $M^{-1}$ 表示**反向变换**：
+
+- 平移 $T^{-1}(t_x, t_y) = T(-t_x, -t_y)$
+- 旋转 $R^{-1}(\theta) = R(-\theta) = R^T(\theta)$（正交矩阵的逆等于转置）
+- 缩放 $S^{-1}(s_x, s_y) = S(1/s_x, 1/s_y)$
+
+<!-- 截图：逆变换示意 -->
+
+---
+
+### 3.6 复合变换 (Composing Transforms)
+
+#### 变换的组合
+
+多个变换可以通过**矩阵乘法**组合成一个矩阵：
+
+$$
+A_n(...A_2(A_1(\vec{x}))) = A_n \cdots A_2 \cdot A_1 \cdot \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+$$
+
+**预乘** n 个矩阵得到一个代表组合变换的单一矩阵，对性能非常重要！
+
+#### ⚠️ 变换顺序很重要！
+
+矩阵乘法**不满足交换律**：
+
+$$
+R_{45°} \cdot T_{(1,0)} \neq T_{(1,0)} \cdot R_{45°}
+$$
+
+矩阵从**右到左**应用（先写先应用）：
+
+$$
+T_{(1,0)} \cdot R_{45°} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+$$
+
+表示：先旋转 45°，再平移 (1,0)
+
+<!-- 截图：变换顺序对比 -->
+
+#### 绕任意点旋转的分解
+
+如何绕给定点 $c$ 旋转？
+
+1. **平移**：将旋转中心 $c$ 移到原点 → $T(-c)$
+2. **旋转**：绕原点旋转 → $R(\alpha)$
+3. **平移**：移回原位置 → $T(c)$
+
+$$
+M = T(c) \cdot R(\alpha) \cdot T(-c)
+$$
+
+<!-- 截图：绕任意点旋转分解 -->
+
+---
+
+### 3.7 三维变换 (3D Transformations)
+
+#### 齐次坐标表示
+
+- **3D 点**：$(x, y, z, 1)^T$
+- **3D 向量**：$(x, y, z, 0)^T$
+- 一般地，$(x, y, z, w)^T$（$w \neq 0$）表示 3D 点 $(x/w, y/w, z/w)$
+
+使用 **4×4 矩阵**进行仿射变换：
+
+$$
+\begin{bmatrix} x' \\ y' \\ z' \\ 1 \end{bmatrix} = \begin{bmatrix} a & b & c & t_x \\ d & e & f & t_y \\ g & h & i & t_z \\ 0 & 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} x \\ y \\ z \\ 1 \end{bmatrix}
+$$
+
+#### 三维变换矩阵
+
+**缩放**：
+
+$$
+S(s_x, s_y, s_z) = \begin{bmatrix} s_x & 0 & 0 & 0 \\ 0 & s_y & 0 & 0 \\ 0 & 0 & s_z & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+**平移**：
+
+$$
+T(t_x, t_y, t_z) = \begin{bmatrix} 1 & 0 & 0 & t_x \\ 0 & 1 & 0 & t_y \\ 0 & 0 & 1 & t_z \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+**绕坐标轴旋转**：
+
+绕 x 轴旋转：
+
+$$
+R_x(\alpha) = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\alpha & -\sin\alpha & 0 \\ 0 & \sin\alpha & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+绕 y 轴旋转（注意方向）：
+
+$$
+R_y(\alpha) = \begin{bmatrix} \cos\alpha & 0 & \sin\alpha & 0 \\ 0 & 1 & 0 & 0 \\ -\sin\alpha & 0 & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+绕 z 轴旋转：
+
+$$
+R_z(\alpha) = \begin{bmatrix} \cos\alpha & -\sin\alpha & 0 & 0 \\ \sin\alpha & \cos\alpha & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+#### 欧拉角 (Euler Angles)
+
+通过组合绕三个轴的旋转来表示任意 3D 旋转：
+
+$$
+R_{xyz}(\alpha, \beta, \gamma) = R_x(\alpha) \cdot R_y(\beta) \cdot R_z(\gamma)
+$$
+
+常用于飞行模拟器：**滚转 (Roll)、俯仰 (Pitch)、偏航 (Yaw)**
+
+<!-- 截图：欧拉角示意 -->
+
+#### 罗德里格斯旋转公式 (Rodrigues' Rotation Formula)
+
+绕任意单位轴 $\vec{n}$ 旋转 $\alpha$ 角：
+
+$$
+R(\vec{n}, \alpha) = \cos\alpha \cdot I + (1 - \cos\alpha) \vec{n} \vec{n}^T + \sin\alpha \cdot N
+$$
+
+其中 $N$ 是叉积矩阵：
+
+$$
+N = \begin{bmatrix} 0 & -n_z & n_y \\ n_z & 0 & -n_x \\ -n_y & n_x & 0 \end{bmatrix}
+$$
+
+**推导**：可参考课程补充材料 [[补充材料](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)]
+
+<!-- 截图：罗德里格斯公式图示 -->
+
+---
+
+### 3.8 MVP 变换总览
+
+图形渲染管线中的三大变换：
+
+```
+模型坐标 → [Model 变换] → 世界坐标 → [View 变换] → 相机坐标 → [Projection 变换] → 裁剪坐标
+```
+
+| 变换 | 作用 | 说明 |
+|:---:|:---|:---|
+| **Model** | 模型坐标 → 世界坐标 | 在场景中摆放物体 |
+| **View** | 世界坐标 → 相机坐标 | 确定观察角度 |
+| **Projection** | 相机坐标 → 裁剪坐标 | 3D → 2D 投影 |
+
+---
+
+### 3.9 视图变换 (View Transformation)
+
+#### 类比拍照过程
+
+1. **找好位置、安排人物** → Model 变换
+2. **找好角度、放置相机** → View 变换
+3. **按下快门** → Projection 变换
+
+#### 相机的定义
+
+| 参数 | 符号 | 说明 |
+|:---:|:---:|:---|
+| 位置 | $\vec{e}$ | 相机在世界坐标系中的位置 |
+| 观察方向 | $\hat{g}$ | 相机看向的方向 (gaze direction) |
+| 上方向 | $\hat{t}$ | 相机的上方 (up direction)，假设与观察方向垂直 |
+
+#### 视图变换的核心思想
+
+**关键观察**：如果相机和所有物体一起移动，"照片"效果相同！
+
+**目标**：将相机变换到：
+- 位于**原点**
+- 上方向朝 **+Y**
+- 观察方向朝 **-Z**
+
+同时将所有物体一起变换。
+
+#### 视图变换矩阵推导
+
 $$
 M_{view} = R_{view} \cdot T_{view}
 $$
 
-### 3.6 投影变换 (Projection)
+**第一步：平移** $T_{view}$，将相机位置 $\vec{e} = (x_e, y_e, z_e)$ 移到原点：
 
-#### 正交投影 (Orthographic)
-
-- 将立方体 $[l,r] \times [b,t] \times [f,n]$ 映射到标准立方体 $[-1,1]^3$
-- 先平移，再缩放
-
-#### 透视投影 (Perspective)
-
-- 先做透视压缩（远小近大），再做正交投影
-- 透视投影矩阵：
 $$
-M_{persp} = \begin{bmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ 0 & 0 & n+f & -nf \\ 0 & 0 & 1 & 0 \end{bmatrix}
+T_{view} = \begin{bmatrix} 1 & 0 & 0 & -x_e \\ 0 & 1 & 0 & -y_e \\ 0 & 0 & 1 & -z_e \\ 0 & 0 & 0 & 1 \end{bmatrix}
 $$
+
+**第二步：旋转** $R_{view}$，将 $\hat{g}$ 旋转到 $-Z$，$\hat{t}$ 旋转到 $Y$，$\hat{g} \times \hat{t}$ 旋转到 $X$
+
+考虑其**逆旋转**更容易理解：将 $X$ 转到 $\hat{g} \times \hat{t}$，$Y$ 转到 $\hat{t}$，$Z$ 转到 $-\hat{g}$
+
+$$
+R_{view}^{-1} = \begin{bmatrix} x_{\hat{g} \times \hat{t}} & x_{\hat{t}} & x_{-\hat{g}} & 0 \\ y_{\hat{g} \times \hat{t}} & y_{\hat{t}} & y_{-\hat{g}} & 0 \\ z_{\hat{g} \times \hat{t}} & z_{\hat{t}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+由于旋转矩阵是正交矩阵，$R_{view} = (R_{view}^{-1})^T$：
+
+$$
+R_{view} = \begin{bmatrix} x_{\hat{g} \times \hat{t}} & y_{\hat{g} \times \hat{t}} & z_{\hat{g} \times \hat{t}} & 0 \\ x_{\hat{t}} & y_{\hat{t}} & z_{\hat{t}} & 0 \\ x_{-\hat{g}} & y_{-\hat{g}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+<!-- 截图：视图变换图示 -->
+
+---
+
+### 3.10 投影变换 (Projection Transformation)
+
+#### 两种投影方式
+
+| 投影类型 | 特点 | 应用场景 |
+|:---:|:---|:---|
+| **正交投影** | 平行线保持平行，无近大远小 | 工程制图、CAD |
+| **透视投影** | 平行线汇聚于一点，近大远小 | 游戏、电影、真实感渲染 |
+
+<!-- 截图：两种投影对比 -->
+
+---
+
+#### 正交投影 (Orthographic Projection)
+
+**直观理解**：
+
+1. 相机位于原点，看向 $-Z$，上方向为 $Y$
+2. **丢弃 Z 坐标**
+3. 将得到的矩形**平移、缩放**到 $[-1, 1]^2$
+
+**一般情况**：
+
+将长方体 $[l, r] \times [b, t] \times [f, n]$ 映射到标准立方体 $[-1, 1]^3$
+
+其中：$l$=左，$r$=右，$b$=下，$t$=上，$n$=近，$f$=远
+
+**步骤**：
+
+1. **平移**：将长方体中心移到原点
+2. **缩放**：将长宽高缩放到 2（映射到 $[-1, 1]$）
+
+**变换矩阵**：
+
+$$
+M_{ortho} = \begin{bmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+**注意**：看向 $-Z$ 方向时，近平面 $n > f$（近平面 z 值更大）
+
+<!-- 截图：正交投影示意 -->
+
+---
+
+#### 透视投影 (Perspective Projection)
+
+**特点**：
+- 更远处的物体看起来更小
+- 平行线不再平行，汇聚于一点（灭点）
+
+**齐次坐标的重要性质**：
+
+$(x, y, z, 1)^T$ 和 $(kx, ky, kz, k)^T$（$k \neq 0$）表示**同一个点**
+
+例如：$(x, y, z, 1)$ 和 $(xz, yz, z^2, z)$ 都表示 $(x, y, z)$
+
+**透视投影的核心思想**：
+
+1. **第一步**：将视锥体 (frustum) "挤压" 成长方体 (cuboid)
+   - 近平面不变：$n \to n$
+   - 远平面不变：$f \to f$
+   - 记作 $M_{persp \to ortho}$
+
+2. **第二步**：做正交投影（已经知道怎么做了！）
+
+$$
+M_{persp} = M_{ortho} \cdot M_{persp \to ortho}
+$$
+
+<!-- 截图：透视投影挤压示意 -->
+
+**推导 $M_{persp \to ortho}$**：
+
+对于点 $(x, y, z)$，在挤压后：
+- $x' = \frac{n}{z} x$
+- $y' = \frac{n}{z} y$
+
+利用齐次坐标：
+
+$$
+\begin{bmatrix} x \\ y \\ z \\ 1 \end{bmatrix} \Rightarrow \begin{bmatrix} nx/z \\ ny/z \\ unknown \\ 1 \end{bmatrix} = \begin{bmatrix} nx \\ ny \\ unknown \\ z \end{bmatrix}
+$$
+
+因此可以确定矩阵的部分元素：
+
+$$
+M_{persp \to ortho} = \begin{bmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ ? & ? & ? & ? \\ 0 & 0 & 1 & 0 \end{bmatrix}
+$$
+
+**确定第三行**：
+
+利用两个条件：
+- 近平面上的点变换后不变（$z = n \to z' = n$）
+- 远平面上的点变换后不变（$z = f \to z' = f$）
+
+解方程组可得第三行为 $(0, 0, n+f, -nf)$
+
+**完整的透视投影矩阵**：
+
+$$
+M_{persp \to ortho} = \begin{bmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ 0 & 0 & n+f & -nf \\ 0 & 0 & 1 & 0 \end{bmatrix}
+$$
+
+**最终透视投影矩阵**：
+
+$$
+M_{persp} = M_{ortho} \cdot M_{persp \to ortho}
+$$
+
+<!-- 截图：透视投影推导过程 -->
+
+---
+
+### 3.11 补充：Field of View (FOV)
+
+**视场角 (FOV)** 描述了相机能看到的范围：
+
+| 类型 | 说明 |
+|:---:|:---|
+| **垂直 FOV** | 垂直方向的视角范围 |
+| **水平 FOV** | 水平方向的视角范围 |
+
+FOV 与宽高比的关系：
+
+$$
+\tan(\frac{fovY}{2}) = \frac{t}{|n|}
+$$
+
+其中 $t$ 是近平面上边界，$|n|$ 是近平面距离
+
+宽高比：$\text{aspect} = \frac{r}{t}$
 
 ---
 

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "reading/罗辑思维.md",
+                "file": "reading/奇妙的JavaScript.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "罗辑思维"
+              "title": "奇妙的JavaScript"
             }
           }
         ]
@@ -180,8 +180,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 454.5,
-    "collapsed": true
+    "width": 454.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -197,9 +196,17 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "learning/计算机图形学/images/Games101/chap3_07.png",
+    "learning/计算机图形学/images/Games101/chap3_06.png",
+    "learning/计算机图形学/images/Games101/chap3_05.png",
+    "learning/计算机图形学/images/Games101/chap3_04.png",
+    "learning/计算机图形学/images/Games101/chap3_03.png",
+    "learning/计算机图形学/images/Games101/chap3_02.png",
+    "learning/计算机图形学/images/Games101/chap3_01.png",
+    "daily/2026-06-29.md",
+    "reading/罗辑思维.md",
     "reading/奇妙的JavaScript.md",
     "learning/具身智能/具身智能学习路径规划.md",
-    "reading/罗辑思维.md",
     "learning/具身智能/学习路线.md",
     "learning/内容创作全流程SOP_从0到1到100.md",
     "languages/english-basics.md",
@@ -224,12 +231,6 @@
     "assets/screenshots/websites/igloo.inc/assets/audio/particles.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/circles.ogg",
     "assets/screenshots/websites/igloo.inc/assets/favicon32-af94112f.png",
-    "assets/screenshots/websites/shader.se/api/mux-image/Y7HzOsrmhjd7M00Ib6JYF861ME00I3ZqicLcr4V9vhoXU/w800-h600.jpg",
-    "assets/screenshots/websites/shader.se/icon.svg",
-    "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_002.avif",
-    "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_001.avif",
-    "assets/screenshots/websites/shader.se/videos/prebaked/handshake_avif/handshake_sheet_000.avif",
-    "assets/screenshots/websites/shader.se/fonts/stix_bold.png",
     "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/templates/xiaohongshu-template.md",
     "content/references/sop.md",
@@ -241,8 +242,6 @@
     "daily/2026-06-06.md",
     "daily/2026-06-07.md",
     "templates/reading-notes-template.md",
-    "learning/english-120-days.md",
-    "daily/2026-06-05.md",
     "未命名.canvas"
   ]
 }

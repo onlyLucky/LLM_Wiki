@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-06-23 | Total pages: 12
+> Last updated: 2026-06-29 | Total pages: 13
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-06-29]] — 读书笔记扩写（《奇妙的JavaScript》973行/43K字）、飞书Gateway停运3天修复、微信读书API鉴权失败
 - [[daily/2026-06-22]] — animejs.com 离线复刻：wget 全站爬取、本地服务器搭建、GLB 3D 模型补齐、Draco 解码器本地化
 - [[daily/2026-06-16]] — 前端部署上线流程（域名/备案/HTTPS）、域名基础知识、ICP 备案详解、CityMemory 项目冻结
 - [[daily/2026-06-15]] — 飞书任务 API 脚本工程化（token 自动续期）、离线网站存储迁移到 AwardWebsites、3 个飞书任务完成
