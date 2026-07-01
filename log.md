@@ -96,3 +96,10 @@
 - 主题: 读书笔记扩写（《奇妙的JavaScript》973行/43K字）、飞书Gateway停运3天修复、微信读书API鉴权失败
 - 总计 2 个会话，119 条消息
 - index.md 同步更新
+
+## [2026-06-30] create | 每日汇总 - 2026-06-30
+- 文件: daily/2026-06-30.md
+- 会话来源: 飞书 (1 session, 28 messages), cron (1 session)
+- 主题: Wiki Git 提交规范制定（Conventional Commits）、GAMES101 齐次坐标笔记优化推送
+- 总计 2 个会话，28 条用户消息
+- index.md 同步更新
