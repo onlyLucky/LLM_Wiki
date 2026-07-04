@@ -393,17 +393,17 @@ $$
 $x' = sx \qquad y' = sy$  
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} s & 0 \\ 0 & s \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} s & 0 \\ 0 & s \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}
 $$
 
 例如：$x = 2, \; y = 2, \; s = 0.5$
 
-$
-\begin{bmatrix} x' \\ y' \end{bmatrix}
-= \begin{bmatrix} 0.5 & 0 \\ 0 & 0.5 \end{bmatrix} \begin{bmatrix} 2 \\ 2 \end{bmatrix}
-= \begin{bmatrix} 0.5 \times 2 + 0 \times 2 \\ 0 \times 2 + 0.5 \times 2 \end{bmatrix}
-= \begin{bmatrix} 1 \\ 1 \end{bmatrix}
-$
+$$
+\begin{pmatrix} x' \\ y' \end{pmatrix}
+= \begin{pmatrix} 0.5 & 0 \\ 0 & 0.5 \end{pmatrix} \begin{pmatrix} 2 \\ 2 \end{pmatrix}
+= \begin{pmatrix} 0.5 \times 2 + 0 \times 2 \\ 0 \times 2 + 0.5 \times 2 \end{pmatrix}
+= \begin{pmatrix} 1 \\ 1 \end{pmatrix}
+$$
 
 
 **非均匀缩放**（各方向独立缩放）：
@@ -411,7 +411,7 @@ $
 ![非均匀缩放](./images/Games101/chap3_02.png)
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} s_x & 0 \\ 0 & s_y \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} s_x & 0 \\ 0 & s_y \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}
 $$
 
 #### 反射变换 (Reflection)
@@ -419,7 +419,7 @@ $$
 关于 y 轴的反射：
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} -x \\ y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} -1 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} -x \\ y \end{pmatrix}
 $$
 
 #### 剪切变换 (Shear)
@@ -427,7 +427,7 @@ $$
 水平剪切（y=0 处不动，y=1 处水平偏移 a）：
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} 1 & a \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}
 $$
 
 参数 $a$ 的含义： 控制倾斜程度。$a = 0$ 时矩阵退化为单位矩阵（不变换），$a$ 越大倾斜越明显
@@ -441,53 +441,53 @@ $$
 绕原点逆时针旋转 $\theta$ 角：
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}
 $$
 
 记作 $R_\theta$，特殊地：
-- $R_{90°} = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$
-- $R_{-90°} = \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}$
+- $R_{90°} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$
+- $R_{-90°} = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$
 
 ![旋转变换](./images/Games101/chap3_06.png)
 
 ##### 旋转变换推导公式：
 
 设旋转矩阵为未知数：$
-R = \begin{bmatrix} A & B \\ C & D \end{bmatrix}
+R = \begin{pmatrix} A & B \\ C & D \end{pmatrix}
 $ 已知两个基向量旋转后的结果，代入求解：
 
 **基向量 $\hat{e_1} = (1, 0)$ 旋转 $\theta$ 后 → $(\cos\theta, \sin\theta)$：**
 
 $$
-\begin{bmatrix} A & B \\ C & D \end{bmatrix} \begin{bmatrix} 1 \\ 0 \end{bmatrix}
-= \begin{bmatrix} A \times 1 + B \times 0 \\ C \times 1 + D \times 0 \end{bmatrix}
-= \begin{bmatrix} A \\ C \end{bmatrix}
-= \begin{bmatrix} \cos\theta \\ \sin\theta \end{bmatrix}
+\begin{pmatrix} A & B \\ C & D \end{pmatrix} \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+= \begin{pmatrix} A \times 1 + B \times 0 \\ C \times 1 + D \times 0 \end{pmatrix}
+= \begin{pmatrix} A \\ C \end{pmatrix}
+= \begin{pmatrix} \cos\theta \\ \sin\theta \end{pmatrix}
 \implies A = \cos\theta, \; C = \sin\theta
 $$
 
 **基向量 $\hat{e_2} = (0, 1)$ 旋转 $\theta$ 后 → $(-\sin\theta, \cos\theta)$：**
 
 $$
-\begin{bmatrix} A & B \\ C & D \end{bmatrix} \begin{bmatrix} 0 \\ 1 \end{bmatrix}
-= \begin{bmatrix} A \times 0 + B \times 1 \\ C \times 0 + D \times 1 \end{bmatrix}
-= \begin{bmatrix} B \\ D \end{bmatrix}
-= \begin{bmatrix} -\sin\theta \\ \cos\theta \end{bmatrix}
+\begin{pmatrix} A & B \\ C & D \end{pmatrix} \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+= \begin{pmatrix} A \times 0 + B \times 1 \\ C \times 0 + D \times 1 \end{pmatrix}
+= \begin{pmatrix} B \\ D \end{pmatrix}
+= \begin{pmatrix} -\sin\theta \\ \cos\theta \end{pmatrix}
 \implies B = -\sin\theta, \; D = \cos\theta
 $$
 
 **得到旋转矩阵：**
 
 $$
-R_\theta = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}
+R_\theta = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
 $$
 
 对任意点 $(x, y)$ 旋转的展开过程：
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix}
-= \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
-= \begin{bmatrix} x\cos\theta - y\sin\theta \\ x\sin\theta + y\cos\theta \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix}
+= \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix}
+= \begin{pmatrix} x\cos\theta - y\sin\theta \\ x\sin\theta + y\cos\theta \end{pmatrix}
 $$
 
 ---
@@ -503,7 +503,7 @@ $$
 $x' = x+t_x \qquad y' = y+t_y$  
 
 $$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} + \begin{bmatrix} t_x \\ t_y \end{bmatrix}
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} a & b \\ c & d \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} + \begin{pmatrix} t_x \\ t_y \end{pmatrix}
 $$
 
 我们希望用**统一的矩阵形式**表示所有仿射变换（线性变换 + 平移）。
@@ -555,23 +555,23 @@ $$
 
 仿射变换 = 线性变换 + 平移
 
-$$
-\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \cdot \begin{bmatrix} x \\ y \end{bmatrix} + \begin{bmatrix} t_x \\ t_y \end{bmatrix}
-$$
+$
+\begin{pmatrix} x' \\ y' \end{pmatrix} = \begin{pmatrix} a & b \\ c & d \end{pmatrix} \cdot \begin{pmatrix} x \\ y \end{pmatrix} + \begin{pmatrix} t_x \\ t_y \end{pmatrix}
+$
 
 #### 齐次坐标下的统一表示
 
-$$
-\begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = \begin{bmatrix} a & b & t_x \\ c & d & t_y \\ 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
-$$
+$
+\begin{pmatrix} x' \\ y' \\ 1 \end{pmatrix} = \begin{pmatrix} a & b & t_x \\ c & d & t_y \\ 0 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} x \\ y \\ 1 \end{pmatrix}
+$
 
 #### 二维变换的齐次坐标矩阵汇总
 
 | 变换类型 | 齐次矩阵 |
 |:---|:---:|
-| **平移** $T(t_x, t_y)$ | $\begin{bmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \\ 0 & 0 & 1 \end{bmatrix}$ |
-| **缩放** $S(s_x, s_y)$ | $\begin{bmatrix} s_x & 0 & 0 \\ 0 & s_y & 0 \\ 0 & 0 & 1 \end{bmatrix}$ |
-| **旋转** $R(\theta)$ | $\begin{bmatrix} \cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{bmatrix}$ |
+| **平移** | $T(t_x, t_y) = \begin{pmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \\ 0 & 0 & 1 \end{pmatrix}$ |
+| **缩放** | $S(s_x, s_y) = \begin{pmatrix} s_x & 0 & 0 \\ 0 & s_y & 0 \\ 0 & 0 & 1 \end{pmatrix}$ |
+| **旋转** | $R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{pmatrix}$ |
 
 <!-- 截图：齐次坐标下的变换矩阵 -->
 
@@ -579,49 +579,53 @@ $$
 
 ### 3.5 逆变换 (Inverse Transform)
 
+逆变换就是"撤销"变换的操作
+
 变换矩阵 $M$ 的逆矩阵 $M^{-1}$ 表示**反向变换**：
 
 - 平移 $T^{-1}(t_x, t_y) = T(-t_x, -t_y)$
 - 旋转 $R^{-1}(\theta) = R(-\theta) = R^T(\theta)$（正交矩阵的逆等于转置）
 - 缩放 $S^{-1}(s_x, s_y) = S(1/s_x, 1/s_y)$
 
-<!-- 截图：逆变换示意 -->
+![逆变换](./images/Games101/chap3_08.png)
 
 ---
 
 ### 3.6 复合变换 (Composing Transforms)
+
+#### 变换顺序很重要！
+
+矩阵乘法**不满足交换律**：
+
+$
+R_{45°} \cdot T_{(1,0)} \neq T_{(1,0)} \cdot R_{45°}
+$
+
+矩阵从**右到左**应用（先写先应用）：
+
+$
+T_{(1,0)} \cdot R_{45°} \begin{pmatrix} x \\ y \\ 1 \end{pmatrix} = \begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} \cos{45°} & -\sin{45°} & 0 \\ \sin{45°} & \cos{45°} & 0 \\ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} x \\ y \\ 1 \end{pmatrix}
+$
+
+表示：先旋转 45°，再平移 (1,0)
+
+![变换顺序对比](./images/Games101/chap3_09.png)
 
 #### 变换的组合
 
 多个变换可以通过**矩阵乘法**组合成一个矩阵：
 
 $$
-A_n(...A_2(A_1(\vec{x}))) = A_n \cdots A_2 \cdot A_1 \cdot \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+A_n(...A_2(A_1(\vec{x}))) = A_n \cdots A_2 \cdot A_1 \cdot \begin{pmatrix} x \\ y \\ 1 \end{pmatrix}
 $$
 
-**预乘** n 个矩阵得到一个代表组合变换的单一矩阵，对性能非常重要！
-
-#### ⚠️ 变换顺序很重要！
-
-矩阵乘法**不满足交换律**：
-
-$$
-R_{45°} \cdot T_{(1,0)} \neq T_{(1,0)} \cdot R_{45°}
-$$
-
-矩阵从**右到左**应用（先写先应用）：
-
-$$
-T_{(1,0)} \cdot R_{45°} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
-$$
-
-表示：先旋转 45°，再平移 (1,0)
-
-<!-- 截图：变换顺序对比 -->
+**预乘** n 个矩阵得到一个代表组合变换的单一矩阵，对性能非常重要！，可以获取旋转平移矩阵。
 
 #### 绕任意点旋转的分解
 
 如何绕给定点 $c$ 旋转？
+
+
 
 1. **平移**：将旋转中心 $c$ 移到原点 → $T(-c)$
 2. **旋转**：绕原点旋转 → $R(\alpha)$
@@ -631,7 +635,7 @@ $$
 M = T(c) \cdot R(\alpha) \cdot T(-c)
 $$
 
-<!-- 截图：绕任意点旋转分解 -->
+![绕任意点旋转分解](./images/Games101/chap3_10.png)
 
 ---
 
@@ -646,21 +650,58 @@ $$
 使用 **4×4 矩阵**进行仿射变换：
 
 $$
-\begin{bmatrix} x' \\ y' \\ z' \\ 1 \end{bmatrix} = \begin{bmatrix} a & b & c & t_x \\ d & e & f & t_y \\ g & h & i & t_z \\ 0 & 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} x \\ y \\ z \\ 1 \end{bmatrix}
+\begin{pmatrix} x' \\ y' \\ z' \\ 1 \end{pmatrix} = \begin{pmatrix} a & b & c & t_x \\ d & e & f & t_y \\ g & h & i & t_z \\ 0 & 0 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix}
 $$
 
 #### 三维变换矩阵
 
+旋转矩阵 $R(\theta)$ 的性质：
+
+$$
+R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+$$
+
+$\cos\theta$为对称曲线 $\cos\theta$与$\cos-\theta$值是一致的，$\sin\theta$ 为反对称曲线 $\sin\theta$与$\sin-\theta$值是相反数。由此得出：
+
+$$
+R(-\theta) = \begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix} = R(\theta)^T
+$$
+
+$R(-\theta)$矩阵的行等于 $R(\theta)$矩阵的列，两者为逆矩阵，满足：
+
+$$
+R(-\theta) = R(\theta)^{-1} \quad \text{(by definition)}
+$$
+
+数学上，一个矩阵的逆矩阵等于他的转置矩阵的条件是该矩阵是正交矩阵，旋转矩阵就是正交矩阵。
+
+**旋转**：
+
+$$
+R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+$$
+
+$$
+R(-\theta) = \begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix} = R(\theta)^T
+$$
+
+$$
+R(-\theta) = R(\theta)^{-1} \quad \text{(by definition)}
+$$
+
+
+
+
 **缩放**：
 
 $$
-S(s_x, s_y, s_z) = \begin{bmatrix} s_x & 0 & 0 & 0 \\ 0 & s_y & 0 & 0 \\ 0 & 0 & s_z & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+S(s_x, s_y, s_z) = \begin{pmatrix} s_x & 0 & 0 & 0 \\ 0 & s_y & 0 & 0 \\ 0 & 0 & s_z & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 **平移**：
 
 $$
-T(t_x, t_y, t_z) = \begin{bmatrix} 1 & 0 & 0 & t_x \\ 0 & 1 & 0 & t_y \\ 0 & 0 & 1 & t_z \\ 0 & 0 & 0 & 1 \end{bmatrix}
+T(t_x, t_y, t_z) = \begin{pmatrix} 1 & 0 & 0 & t_x \\ 0 & 1 & 0 & t_y \\ 0 & 0 & 1 & t_z \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 **绕坐标轴旋转**：
@@ -668,19 +709,19 @@ $$
 绕 x 轴旋转：
 
 $$
-R_x(\alpha) = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\alpha & -\sin\alpha & 0 \\ 0 & \sin\alpha & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+R_x(\alpha) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\alpha & -\sin\alpha & 0 \\ 0 & \sin\alpha & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 绕 y 轴旋转（注意方向）：
 
 $$
-R_y(\alpha) = \begin{bmatrix} \cos\alpha & 0 & \sin\alpha & 0 \\ 0 & 1 & 0 & 0 \\ -\sin\alpha & 0 & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+R_y(\alpha) = \begin{pmatrix} \cos\alpha & 0 & \sin\alpha & 0 \\ 0 & 1 & 0 & 0 \\ -\sin\alpha & 0 & \cos\alpha & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 绕 z 轴旋转：
 
 $$
-R_z(\alpha) = \begin{bmatrix} \cos\alpha & -\sin\alpha & 0 & 0 \\ \sin\alpha & \cos\alpha & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+R_z(\alpha) = \begin{pmatrix} \cos\alpha & -\sin\alpha & 0 & 0 \\ \sin\alpha & \cos\alpha & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 #### 欧拉角 (Euler Angles)
@@ -706,7 +747,7 @@ $$
 其中 $N$ 是叉积矩阵：
 
 $$
-N = \begin{bmatrix} 0 & -n_z & n_y \\ n_z & 0 & -n_x \\ -n_y & n_x & 0 \end{bmatrix}
+N = \begin{pmatrix} 0 & -n_z & n_y \\ n_z & 0 & -n_x \\ -n_y & n_x & 0 \end{pmatrix}
 $$
 
 **推导**：可参考课程补充材料 [[补充材料](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)]
@@ -767,7 +808,7 @@ $$
 **第一步：平移** $T_{view}$，将相机位置 $\vec{e} = (x_e, y_e, z_e)$ 移到原点：
 
 $$
-T_{view} = \begin{bmatrix} 1 & 0 & 0 & -x_e \\ 0 & 1 & 0 & -y_e \\ 0 & 0 & 1 & -z_e \\ 0 & 0 & 0 & 1 \end{bmatrix}
+T_{view} = \begin{pmatrix} 1 & 0 & 0 & -x_e \\ 0 & 1 & 0 & -y_e \\ 0 & 0 & 1 & -z_e \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 **第二步：旋转** $R_{view}$，将 $\hat{g}$ 旋转到 $-Z$，$\hat{t}$ 旋转到 $Y$，$\hat{g} \times \hat{t}$ 旋转到 $X$
@@ -775,13 +816,13 @@ $$
 考虑其**逆旋转**更容易理解：将 $X$ 转到 $\hat{g} \times \hat{t}$，$Y$ 转到 $\hat{t}$，$Z$ 转到 $-\hat{g}$
 
 $$
-R_{view}^{-1} = \begin{bmatrix} x_{\hat{g} \times \hat{t}} & x_{\hat{t}} & x_{-\hat{g}} & 0 \\ y_{\hat{g} \times \hat{t}} & y_{\hat{t}} & y_{-\hat{g}} & 0 \\ z_{\hat{g} \times \hat{t}} & z_{\hat{t}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+R_{view}^{-1} = \begin{pmatrix} x_{\hat{g} \times \hat{t}} & x_{\hat{t}} & x_{-\hat{g}} & 0 \\ y_{\hat{g} \times \hat{t}} & y_{\hat{t}} & y_{-\hat{g}} & 0 \\ z_{\hat{g} \times \hat{t}} & z_{\hat{t}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 由于旋转矩阵是正交矩阵，$R_{view} = (R_{view}^{-1})^T$：
 
 $$
-R_{view} = \begin{bmatrix} x_{\hat{g} \times \hat{t}} & y_{\hat{g} \times \hat{t}} & z_{\hat{g} \times \hat{t}} & 0 \\ x_{\hat{t}} & y_{\hat{t}} & z_{\hat{t}} & 0 \\ x_{-\hat{g}} & y_{-\hat{g}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}
+R_{view} = \begin{pmatrix} x_{\hat{g} \times \hat{t}} & y_{\hat{g} \times \hat{t}} & z_{\hat{g} \times \hat{t}} & 0 \\ x_{\hat{t}} & y_{\hat{t}} & z_{\hat{t}} & 0 \\ x_{-\hat{g}} & y_{-\hat{g}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 <!-- 截图：视图变换图示 -->
@@ -823,7 +864,7 @@ $$
 **变换矩阵**：
 
 $$
-M_{ortho} = \begin{bmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} \cdot \begin{bmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{bmatrix}
+M_{ortho} = \begin{pmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
 **注意**：看向 $-Z$ 方向时，近平面 $n > f$（近平面 z 值更大）
@@ -868,13 +909,13 @@ $$
 利用齐次坐标：
 
 $$
-\begin{bmatrix} x \\ y \\ z \\ 1 \end{bmatrix} \Rightarrow \begin{bmatrix} nx/z \\ ny/z \\ unknown \\ 1 \end{bmatrix} = \begin{bmatrix} nx \\ ny \\ unknown \\ z \end{bmatrix}
+\begin{pmatrix} x \\ y \\ z \\ 1 \end{pmatrix} \Rightarrow \begin{pmatrix} nx/z \\ ny/z \\ unknown \\ 1 \end{pmatrix} = \begin{pmatrix} nx \\ ny \\ unknown \\ z \end{pmatrix}
 $$
 
 因此可以确定矩阵的部分元素：
 
 $$
-M_{persp \to ortho} = \begin{bmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ ? & ? & ? & ? \\ 0 & 0 & 1 & 0 \end{bmatrix}
+M_{persp \to ortho} = \begin{pmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ ? & ? & ? & ? \\ 0 & 0 & 1 & 0 \end{pmatrix}
 $$
 
 **确定第三行**：
@@ -888,7 +929,7 @@ $$
 **完整的透视投影矩阵**：
 
 $$
-M_{persp \to ortho} = \begin{bmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ 0 & 0 & n+f & -nf \\ 0 & 0 & 1 & 0 \end{bmatrix}
+M_{persp \to ortho} = \begin{pmatrix} n & 0 & 0 & 0 \\ 0 & n & 0 & 0 \\ 0 & 0 & n+f & -nf \\ 0 & 0 & 1 & 0 \end{pmatrix}
 $$
 
 **最终透视投影矩阵**：
