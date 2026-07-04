@@ -11,14 +11,14 @@
             "id": "3d922f8217ec86da",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": ".obsidian/workspace.json",
-                "bFile": ".obsidian/workspace.json",
-                "aRef": ""
+                "file": "learning/前端3D/Three.js基础知识完全指南.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: workspace.json  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "Three.js基础知识完全指南"
             }
           }
         ]
@@ -194,8 +194,10 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "3d922f8217ec86da",
+  "active": "edfdd1990f0437eb",
   "lastOpenFiles": [
+    "learning/macOS/Mac常用快捷键指南.md",
+    "learning/macOS",
     "learning/前端3D/Three.js基础知识完全指南.md",
     "reading/奇妙的JavaScript.md",
     "learning/前端3D",
@@ -231,7 +233,6 @@
     "assets/screenshots/websites/igloo.inc/assets/audio/manifesto.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/ui-long.ogg",
     "assets/screenshots/websites/igloo.inc/assets/audio/logo.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/particles.ogg",
     "content/drafts/2026-06-10-game-dev-full-process.md",
     "content/templates/xiaohongshu-template.md",
     "content/references/sop.md",
@@ -241,7 +242,6 @@
     "daily/2026-06-08.md",
     "reading/Agent-Skills-橙皮书.md",
     "daily/2026-06-06.md",
-    "daily/2026-06-07.md",
     "未命名.canvas"
   ]
 }
