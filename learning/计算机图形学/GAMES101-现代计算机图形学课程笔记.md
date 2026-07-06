@@ -724,6 +724,9 @@ $$
 R_z(\alpha) = \begin{pmatrix} \cos\alpha & -\sin\alpha & 0 & 0 \\ \sin\alpha & \cos\alpha & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
+![绕坐标轴旋转](./images/Games101/chap3_11.png)
+
+
 #### 欧拉角 (Euler Angles)
 
 通过组合绕三个轴的旋转来表示任意 3D 旋转：
@@ -734,7 +737,7 @@ $$
 
 常用于飞行模拟器：**滚转 (Roll)、俯仰 (Pitch)、偏航 (Yaw)**
 
-<!-- 截图：欧拉角示意 -->
+![欧拉角](./images/Games101/chap3_12.png)
 
 #### 罗德里格斯旋转公式 (Rodrigues' Rotation Formula)
 
@@ -752,7 +755,9 @@ $$
 
 **推导**：可参考课程补充材料 [[补充材料](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)]
 
-<!-- 截图：罗德里格斯公式图示 -->
+![推导](./images/Games101/chap3_13.png)
+
+四元数
 
 ---
 
@@ -780,6 +785,8 @@ $$
 2. **找好角度、放置相机** → View 变换
 3. **按下快门** → Projection 变换
 
+![拍照过程](./images/Games101/chap3_14.png)
+
 #### 相机的定义
 
 | 参数 | 符号 | 说明 |
@@ -799,6 +806,8 @@ $$
 
 同时将所有物体一起变换。
 
+![相机核心思想](./images/Games101/chap3_15.png)
+
 #### 视图变换矩阵推导
 
 $$
@@ -811,21 +820,67 @@ $$
 T_{view} = \begin{pmatrix} 1 & 0 & 0 & -x_e \\ 0 & 1 & 0 & -y_e \\ 0 & 0 & 1 & -z_e \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
-**第二步：旋转** $R_{view}$，将 $\hat{g}$ 旋转到 $-Z$，$\hat{t}$ 旋转到 $Y$，$\hat{g} \times \hat{t}$ 旋转到 $X$
+**第二步：旋转** $R_{view}$，将相机坐标系对齐到标准坐标系：
+- 观察方向 $\hat{g}$ → 对齐 **$-Z$** 轴
+- 上方向 $\hat{t}$ → 对齐 **$Y$** 轴
+- 右方向 $\hat{g} \times \hat{t}$ → 对齐 **$X$** 轴
 
-考虑其**逆旋转**更容易理解：将 $X$ 转到 $\hat{g} \times \hat{t}$，$Y$ 转到 $\hat{t}$，$Z$ 转到 $-\hat{g}$
+##### 为什么考虑逆旋转更简单？
+
+**直接求 $R_{view}$ 的困难**：需要解复杂的方程
 
 $$
-R_{view}^{-1} = \begin{pmatrix} x_{\hat{g} \times \hat{t}} & x_{\hat{t}} & x_{-\hat{g}} & 0 \\ y_{\hat{g} \times \hat{t}} & y_{\hat{t}} & y_{-\hat{g}} & 0 \\ z_{\hat{g} \times \hat{t}} & z_{\hat{t}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
+R_{view} \cdot \hat{g} = -Z, \quad R_{view} \cdot \hat{t} = Y, \quad R_{view} \cdot (\hat{g} \times \hat{t}) = X
 $$
 
-由于旋转矩阵是正交矩阵，$R_{view} = (R_{view}^{-1})^T$：
+**技巧**：考虑逆变换 $R_{view}^{-1}$，它做相反的事——将标准基变换到相机坐标系：
+
+$$
+R_{view}^{-1} \cdot X = \hat{g} \times \hat{t}, \quad R_{view}^{-1} \cdot Y = \hat{t}, \quad R_{view}^{-1} \cdot Z = -\hat{g}
+$$
+
+##### 逆变换 $R_{view}^{-1}$ 的矩阵
+
+**关键观察**：矩阵的每一列就是变换后的基向量！
+
+| 标准基 | 变换结果 | 矩阵的列 |
+|:---:|:---:|:---:|
+| $X = (1,0,0)$ | $\hat{g} \times \hat{t}$（右方向） | 第一列 |
+| $Y = (0,1,0)$ | $\hat{t}$（上方向） | 第二列 |
+| $Z = (0,0,1)$ | $-\hat{g}$（观察反方向） | 第三列 |
+
+因此：
+
+$$
+R_{view}^{-1} = \begin{pmatrix} | & | & | \\ \hat{g} \times \hat{t} & \hat{t} & -\hat{g} \\ | & | & | \end{pmatrix} = \begin{pmatrix} x_{\hat{g} \times \hat{t}} & x_{\hat{t}} & x_{-\hat{g}} & 0 \\ y_{\hat{g} \times \hat{t}} & y_{\hat{t}} & y_{-\hat{g}} & 0 \\ z_{\hat{g} \times \hat{t}} & z_{\hat{t}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
+$$
+
+##### 求 $R_{view}$
+
+旋转矩阵是**正交矩阵**，满足 $R^{-1} = R^T$，所以：
+
+$$
+R_{view} = (R_{view}^{-1})^T
+$$
+
+转置就是把行变成列：
 
 $$
 R_{view} = \begin{pmatrix} x_{\hat{g} \times \hat{t}} & y_{\hat{g} \times \hat{t}} & z_{\hat{g} \times \hat{t}} & 0 \\ x_{\hat{t}} & y_{\hat{t}} & z_{\hat{t}} & 0 \\ x_{-\hat{g}} & y_{-\hat{g}} & z_{-\hat{g}} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
-<!-- 截图：视图变换图示 -->
+##### 验证
+
+用 $R_{view}$ 作用于 $\hat{g}$，检验是否得到 $-Z$：
+
+$$
+R_{view} \cdot \hat{g} = \begin{pmatrix} (\hat{g} \times \hat{t}) \cdot \hat{g} \\ \hat{t} \cdot \hat{g} \\ (-\hat{g}) \cdot \hat{g} \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\ -1 \\ 0 \end{pmatrix} = -Z \quad \checkmark
+$$
+
+解释：
+- 第一行：$(\hat{g} \times \hat{t}) \cdot \hat{g} = 0$（叉积垂直于原向量）
+- 第二行：$\hat{t} \cdot \hat{g} = 0$（上方向垂直于观察方向）
+- 第三行：$(-\hat{g}) \cdot \hat{g} = -|\hat{g}|^2 = -1$
 
 ---
 
@@ -838,8 +893,7 @@ $$
 | **正交投影** | 平行线保持平行，无近大远小 | 工程制图、CAD |
 | **透视投影** | 平行线汇聚于一点，近大远小 | 游戏、电影、真实感渲染 |
 
-<!-- 截图：两种投影对比 -->
-
+![两种投影对比](./images/Games101/chap3_16.png)
 ---
 
 #### 正交投影 (Orthographic Projection)
@@ -856,20 +910,57 @@ $$
 
 其中：$l$=左，$r$=右，$b$=下，$t$=上，$n$=近，$f$=远
 
-**步骤**：
+![正交投影](./images/Games101/chap3_17.png)
 
-1. **平移**：将长方体中心移到原点
-2. **缩放**：将长宽高缩放到 2（映射到 $[-1, 1]$）
+##### 推导过程
 
-**变换矩阵**：
+**第一步：平移** $T$，将长方体的**中心**移到原点
+
+长方体的中心坐标为 $\left(\frac{l+r}{2}, \frac{b+t}{2}, \frac{n+f}{2}\right)$，因此平移量取负：
 
 $$
-M_{ortho} = \begin{pmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{pmatrix}
+T = \begin{pmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{pmatrix}
 $$
 
-**注意**：看向 $-Z$ 方向时，近平面 $n > f$（近平面 z 值更大）
+平移后各方向的范围变为：
 
-<!-- 截图：正交投影示意 -->
+| 方向 | 原始范围 | 平移后范围 |
+|:---:|:---:|:---:|
+| x | $[l, r]$ | $[-\frac{r-l}{2}, \frac{r-l}{2}]$ |
+| y | $[b, t]$ | $[-\frac{t-b}{2}, \frac{t-b}{2}]$ |
+| z | $[f, n]$ | $[-\frac{n-f}{2}, \frac{n-f}{2}]$ |
+
+**第二步：缩放** $S$，将长方体从 $\left[-\frac{r-l}{2}, \frac{r-l}{2}\right]$ 等缩放到 $[-1, 1]$
+
+各方向的缩放因子：
+
+| 方向 | 范围宽度 | 缩放因子 | 目标 |
+|:---:|:---:|:---:|:---:|
+| x | $r - l$ | $\frac{2}{r-l}$ | $[-1, 1]$ |
+| y | $t - b$ | $\frac{2}{t-b}$ | $[-1, 1]$ |
+| z | $n - f$ | $\frac{2}{n-f}$ | $[-1, 1]$ |
+
+例如 x 方向：$\left[-\frac{r-l}{2}\right] \times \frac{2}{r-l} = -1$，$\left[\frac{r-l}{2}\right] \times \frac{2}{r-l} = 1$ ✓
+
+$$
+S = \begin{pmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
+$$
+
+**组合**：先平移，再缩放（矩阵从右到左应用）
+
+$$
+M_{ortho} = S \cdot T = \begin{pmatrix} \frac{2}{r-l} & 0 & 0 & 0 \\ 0 & \frac{2}{t-b} & 0 & 0 \\ 0 & 0 & \frac{2}{n-f} & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & -\frac{r+l}{2} \\ 0 & 1 & 0 & -\frac{t+b}{2} \\ 0 & 0 & 1 & -\frac{n+f}{2} \\ 0 & 0 & 0 & 1 \end{pmatrix}
+$$
+
+##### 验证
+
+| 原始点 | 平移后 | 缩放后 | 结果 |
+|:---:|:---:|:---:|:---:|
+| $(r, t, n)$ | $(\frac{r-l}{2}, \frac{t-b}{2}, \frac{n-f}{2})$ | $(1, 1, 1)$ | ✓ |
+| $(l, b, f)$ | $(-\frac{r-l}{2}, -\frac{t-b}{2}, -\frac{n-f}{2})$ | $(-1, -1, -1)$ | ✓ |
+| 中心 $(\frac{l+r}{2}, \frac{b+t}{2}, \frac{n+f}{2})$ | $(0, 0, 0)$ | $(0, 0, 0)$ | ✓ |
+
+**注意**：看向 $-Z$ 方向时，近平面 $n > f$（近平面 z 值更大），所以 $n - f > 0$，缩放因子 $\frac{2}{n-f} > 0$
 
 ---
 
@@ -898,13 +989,15 @@ $$
 M_{persp} = M_{ortho} \cdot M_{persp \to ortho}
 $$
 
-<!-- 截图：透视投影挤压示意 -->
+![透视投影挤压示意](./images/Games101/chap3_18.png)
 
 **推导 $M_{persp \to ortho}$**：
 
 对于点 $(x, y, z)$，在挤压后：
 - $x' = \frac{n}{z} x$
 - $y' = \frac{n}{z} y$
+
+![persp to ortho](./images/Games101/chap3_19.png)
 
 利用齐次坐标：
 
@@ -921,7 +1014,14 @@ $$
 **确定第三行**：
 
 利用两个条件：
-- 近平面上的点变换后不变（$z = n \to z' = n$）
+- 近平面上的点变换后不变（$z = n \to z' = n$）,将z替换称为n
+$$
+\begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} \Rightarrow \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} == \begin{pmatrix} nx \\ ny \\ n^2 \\ z \end{pmatrix}
+$$
+第三行
+$$
+\begin{pmatrix} 0 & 0 & A & B \end{pmatrix} \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} = n^2
+$$
 - 远平面上的点变换后不变（$z = f \to z' = f$）
 
 解方程组可得第三行为 $(0, 0, n+f, -nf)$
