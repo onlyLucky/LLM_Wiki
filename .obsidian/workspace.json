@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "learning/前端3D/Three.js基础知识完全指南.md",
+                "file": "learning/前端3D/Threejs创意3D/学习进度跟踪.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Three.js基础知识完全指南"
+              "title": "学习进度跟踪"
             }
           }
         ]
@@ -194,23 +194,38 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "edfdd1990f0437eb",
+  "active": "3d922f8217ec86da",
   "lastOpenFiles": [
+    "learning/前端3D/Threejs创意3D/课程笔记/第1课-项目架构.md",
+    "learning/前端3D/Threejs创意3D/学习计划.md",
+    "learning/前端3D/Threejs创意3D/学习进度跟踪.md",
+    "learning/前端3D/Threejs创意3D/基础知识完全指南.md",
+    "log.md",
+    "learning/AI加速学习的六种方法.md",
+    "learning/前端3D/Threejs创意3D/课程笔记",
+    "learning/前端3D/Threejs创意3D",
+    "learning/前端3D/Three.js+GLSL+WebGPU-学习进度跟踪.md",
+    "learning/前端3D/Three.js项目架构-学习进度跟踪.md",
+    "learning/前端3D/课程笔记/第1课-Three.js项目架构.md",
+    "daily/2026-07-06.md",
+    "learning/前端3D/课程笔记",
+    "learning/前端3D/Three.js+GLSL学习计划.md",
+    "learning/前端3D/Three.js基础知识完全指南.md",
+    "learning/计算机图形学/images/Games101/chap3_19.png",
+    "learning/计算机图形学/images/Games101/chap3_18.png",
+    "learning/计算机图形学/images/Games101/chap3_17.png",
+    "learning/计算机图形学/images/Games101/chap3_16.png",
+    "learning/计算机图形学/images/Games101/chap3_15.png",
+    "learning/计算机图形学/images/Games101/chap3_14.png",
+    "learning/计算机图形学/images/Games101/chap3_13.png",
+    "learning/计算机图形学/images/Games101/chap3_12.png",
+    "learning/计算机图形学/images/Games101/chap3_11.png",
     "learning/macOS/Mac常用快捷键指南.md",
     "learning/macOS",
-    "learning/前端3D/Three.js基础知识完全指南.md",
     "reading/奇妙的JavaScript.md",
     "learning/前端3D",
     "learning/计算机图形学/images/Games101/chap3_09.png",
-    "learning/计算机图形学/images/Games101/chap3_08.png",
     "daily/2026-06-30.md",
-    "learning/计算机图形学/images/Games101/chap3_07.png",
-    "learning/计算机图形学/images/Games101/chap3_06.png",
-    "learning/计算机图形学/images/Games101/chap3_05.png",
-    "learning/计算机图形学/images/Games101/chap3_04.png",
-    "learning/计算机图形学/images/Games101/chap3_03.png",
-    "learning/计算机图形学/images/Games101/chap3_02.png",
-    "learning/计算机图形学/images/Games101/chap3_01.png",
     "daily/2026-06-29.md",
     "reading/罗辑思维.md",
     "learning/具身智能/具身智能学习路径规划.md",
@@ -224,24 +239,9 @@
     "daily/2026-06-16.md",
     "daily/2026-06-15.md",
     "daily/2026-06-10.md",
-    "index.md",
-    "content/xiaohongshu/2026-06-10-game-dev-full-process.md",
-    "assets/screenshots/websites/igloo.inc/assets/images/perlin-datatexture.png",
     "assets/screenshots/websites/igloo.inc/assets/images/cubes_env.exr",
     "assets/screenshots/websites/igloo.inc/server.py",
     "assets/screenshots/websites/igloo.inc/assets/audio/ui-short.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/manifesto.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/ui-long.ogg",
-    "assets/screenshots/websites/igloo.inc/assets/audio/logo.ogg",
-    "content/drafts/2026-06-10-game-dev-full-process.md",
-    "content/templates/xiaohongshu-template.md",
-    "content/references/sop.md",
-    "content/topics/topic-pool.md",
-    "content/README.md",
-    "content/templates/outline-template.md",
-    "daily/2026-06-08.md",
-    "reading/Agent-Skills-橙皮书.md",
-    "daily/2026-06-06.md",
     "未命名.canvas"
   ]
 }

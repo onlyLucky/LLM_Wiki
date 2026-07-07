@@ -1020,9 +1020,12 @@ $$
 $$
 第三行
 $$
-\begin{pmatrix} 0 & 0 & A & B \end{pmatrix} \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} = n^2
+\begin{pmatrix} 0 & 0 & A & B \end{pmatrix} \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} = n^2 得出 \Rightarrow  A n + B = n^2
 $$
 - 远平面上的点变换后不变（$z = f \to z' = f$）
+$$
+\begin{pmatrix} 0 \\ 0 \\ f \\ 1 \end{pmatrix} \Rightarrow \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} == \begin{pmatrix} nx \\ ny \\ n^2 \\ z \end{pmatrix}
+$$
 
 解方程组可得第三行为 $(0, 0, n+f, -nf)$
 

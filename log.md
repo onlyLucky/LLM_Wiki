@@ -103,3 +103,10 @@
 - 主题: Wiki Git 提交规范制定（Conventional Commits）、GAMES101 齐次坐标笔记优化推送
 - 总计 2 个会话，28 条用户消息
 - index.md 同步更新
+
+## [2026-07-06] create | 每日汇总 - 2026-07-06
+- 文件: daily/2026-07-06.md
+- 会话来源: 飞书 (1 session, 147 messages), cron (1 session)
+- 主题: GAMES101 笔记推送、AI加速学习六种方法文档、Three.js+GLSL 4周学习计划、threejs_creative_3d 项目搭建
+- 总计 2 个会话，147 条用户消息
+- index.md 同步更新
