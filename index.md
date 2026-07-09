@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-07-06 | Total pages: 14
+> Last updated: 2026-07-08 | Total pages: 15
 
 ---
 
@@ -43,6 +43,8 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-07-08]] — 飞书群聊免@配置、Three.js 第2/3课教学、代码参数注释规范
+- [[daily/2026-07-07]] — Three.js 课程讲义格式规范化、第1课/第2课讲义重写、学习笔记体系梳理
 - [[daily/2026-07-06]] — GAMES101 笔记推送、AI加速学习六种方法文档、Three.js+GLSL 4周学习计划、threejs_creative_3d 项目搭建
 - [[daily/2026-06-30]] — Wiki Git 提交规范制定（Conventional Commits）、GAMES101 齐次坐标笔记优化推送
 - [[daily/2026-06-29]] — 读书笔记扩写（《奇妙的JavaScript》973行/43K字）、飞书Gateway停运3天修复、微信读书API鉴权失败

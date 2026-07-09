@@ -110,3 +110,17 @@
 - 主题: GAMES101 笔记推送、AI加速学习六种方法文档、Three.js+GLSL 4周学习计划、threejs_creative_3d 项目搭建
 - 总计 2 个会话，147 条用户消息
 - index.md 同步更新
+
+## [2026-07-07] create | 每日汇总 - 2026-07-07
+- 文件: daily/2026-07-07.md
+- 会话来源: 飞书 (1 session, 251 messages), cron (1 session)
+- 主题: Three.js 课程讲义格式规范化、第1课/第2课讲义重写、学习笔记体系梳理
+- 总计 2 个会话，289 条消息
+- index.md 同步更新
+
+## [2026-07-08] create | 每日汇总 - 2026-07-08
+- 文件: daily/2026-07-08.md
+- 会话来源: 飞书 (5 sessions, 392 messages), cron (1 session)
+- 主题: 飞书群聊免@配置、Three.js 第2/3课教学、代码参数注释规范
+- 总计 6 个会话，420 条消息
+- index.md 同步更新
