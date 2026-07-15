@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-07-08 | Total pages: 15
+> Last updated: 2026-07-10 | Total pages: 15
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-07-10]] — Three.js 课程进度查询、前两课核心知识点复习
 - [[daily/2026-07-08]] — 飞书群聊免@配置、Three.js 第2/3课教学、代码参数注释规范
 - [[daily/2026-07-07]] — Three.js 课程讲义格式规范化、第1课/第2课讲义重写、学习笔记体系梳理
 - [[daily/2026-07-06]] — GAMES101 笔记推送、AI加速学习六种方法文档、Three.js+GLSL 4周学习计划、threejs_creative_3d 项目搭建
@@ -68,6 +69,7 @@ wiki/
 ## 📖 Learning
 <!-- 学习笔记 -->
 - [[learning/内容创作全流程SOP_从0到1到100]] — 内容创作全流程SOP：选题策划→大纲设计→文案撰写→脚本分镜→画面生成→话本稿→多平台输出 | 2026-06-10
+- [[learning/计算机图形学/GAMES101/README]] — GAMES101 现代计算机图形学课程笔记：8 章完整笔记（闫令琪 | UCSB） | 2026-07-05
 
 ## 📝 Content Creation
 <!-- 内容创作中心 -->
