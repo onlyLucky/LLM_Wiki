@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "learning/计算机图形学/GAMES101/01-概览与光栅化.md",
+                "file": "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01-概览与光栅化"
+              "title": "02-向量与线性代数"
             }
           }
         ]
@@ -196,8 +196,9 @@
   },
   "active": "3d922f8217ec86da",
   "lastOpenFiles": [
-    "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
+    "learning/计算机图形学/GAMES101/README.md",
     "learning/计算机图形学/GAMES101/01-概览与光栅化.md",
+    "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
     "learning/前端3D/Threejs创意3D/学习计划.md",
     "learning/计算机图形学/GAMES101/images/chap4_02.png",
     "learning/计算机图形学/GAMES101/images/chap4_01.png",
@@ -209,7 +210,6 @@
     "learning/计算机图形学/GAMES101/images/chap3_16.png",
     "learning/计算机图形学/GAMES101/images/chap3_15.png",
     "learning/计算机图形学/GAMES101/images/chap3_14.png",
-    "learning/计算机图形学/GAMES101/README.md",
     "learning/计算机图形学/GAMES101/08-动画与模拟.md",
     "learning/计算机图形学/GAMES101/07-光线追踪.md",
     "learning/计算机图形学/GAMES101/06-几何.md",
