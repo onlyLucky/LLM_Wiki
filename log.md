@@ -131,3 +131,9 @@
 - 主题: Three.js 课程进度查询、前两课核心知识点复习
 - 总计 1 个会话，16 条消息
 - index.md 同步更新
+
+## [2026-07-16] create | 每日汇总 - 2026-07-16
+- 文件: daily/2026-07-16.md
+- 会话来源: 飞书 (1 session, ~19 messages)
+- 主题: Three.js 第4课资源问题解决、Suzanne模型上传与GLTFLoader升级、静态资源存放规范
+- index.md 同步更新
