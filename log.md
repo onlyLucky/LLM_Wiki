@@ -137,3 +137,17 @@
 - 会话来源: 飞书 (1 session, ~19 messages)
 - 主题: Three.js 第4课资源问题解决、Suzanne模型上传与GLTFLoader升级、静态资源存放规范
 - index.md 同步更新
+
+## [2026-07-19] create | 每日汇总 - 2026-07-19
+- 文件: daily/2026-07-19.md
+- 会话来源: 飞书 (1 session, ~36 messages), cron (1 session)
+- 主题: Hugo博客部署到腾讯云、第5课课后作业文档整合、学习进度日期修正
+- 总计 2 个会话，~37 条消息
+- index.md 同步更新
+
+## [2026-07-22] create | 每日汇总 - 2026-07-21
+- 文件: daily/2026-07-21.md
+- 会话来源: 飞书 (2 sessions, ~181 messages), cron (1 session, 20 messages)
+- 主题: Hugo英文国际化修复、GAMES101第2课博客、Fast Render修复、部署规范确立
+- 总计 3 个会话，~200+ 条消息
+- index.md 同步更新
