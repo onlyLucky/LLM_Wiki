@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-07-21 | Total pages: 18
+> Last updated: 2026-07-23 | Total pages: 20
 
 ---
 
@@ -43,6 +43,8 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-07-23]] — Three.js课程笔记结构清理（第5/6课）、第6课课后作业重新设计启动、第7课场景图与变换开始
+- [[daily/2026-07-22]] — 英文版Series描述修复部署、GAMES101第2课博客文章、静态资源清理
 - [[daily/2026-07-21]] — Hugo英文国际化修复、GAMES101第2课博客、Fast Render修复、部署规范确立
 - [[daily/2026-07-19]] — Hugo博客部署到腾讯云、第5课课后作业文档整合、学习进度日期修正
 - [[daily/2026-07-16]] — Three.js 第4课资源问题解决、Suzanne模型上传与GLTFLoader升级、静态资源存放规范

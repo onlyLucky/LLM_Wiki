@@ -151,3 +151,15 @@
 - 主题: Hugo英文国际化修复、GAMES101第2课博客、Fast Render修复、部署规范确立
 - 总计 3 个会话，~200+ 条消息
 - index.md 同步更新
+
+## [2026-07-22] create | 每日汇总 - 2026-07-22
+- 文件: daily/2026-07-22.md
+- 会话来源: 飞书 (1 session, ~117 messages), cron (1 session)
+- 主题: 英文版Series描述修复部署、GAMES101第2课博客文章、静态资源清理
+- index.md 同步更新
+
+## [2026-07-23] create | 每日汇总 - 2026-07-23
+- 文件: daily/2026-07-23.md
+- 会话来源: 飞书 (1 session, ~267 messages)
+- 主题: Three.js课程笔记结构清理、第6课课后作业重新设计、第7课场景图与变换开始
+- index.md 同步更新
