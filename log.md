@@ -163,3 +163,50 @@
 - 会话来源: 飞书 (1 session, ~267 messages)
 - 主题: Three.js课程笔记结构清理、第6课课后作业重新设计、第7课场景图与变换开始
 - index.md 同步更新
+
+## [2026-07-24] create | 每日汇总 - 2026-07-24
+- 文件: daily/2026-07-24.md
+- 会话来源: 飞书 (1 session, 35 messages)
+- 主题: Three.js 06课公众号文章完善、WebHugo博客部署、Wiki提交推送、Flutter入门咨询
+- 总计 1 个会话，35 条消息
+
+## [2026-07-27] create | 每日汇总 - 2026-07-26
+- 文件: daily/2026-07-26.md
+- 会话来源: CLI (2 sessions, 22 messages), cron (1 session)
+- 主题: 飞书网关启动配置、消息路由重启、macOS 26 launchd 兼容性问题
+- 总计 3 个会话，23 条消息
+- index.md 同步更新
+
+## [2026-07-27] create | 每日汇总 - 2026-07-27
+- 文件: daily/2026-07-27.md
+- 会话来源: 飞书 (1 session, 317 messages), cron (1 session, 29 messages)
+- 主题: Three.js 课程进度查询与复习、第7课微信公众号文章生成、第8课「模型加载」开始
+- 总计 2 个会话，346 条消息
+- index.md 同步更新
+
+## [2026-07-28] create | 每日汇总 - 2026-07-28
+- 文件: daily/2026-07-28.md
+- 会话来源: 飞书 (1 session, 跨日会话 348 messages)
+- 主题: Three.js 第8课「GLTF 模型加载实战」公众号文章与封面制作、课后作业补充
+- index.md 同步更新
+
+## [2026-07-29] create | 每日汇总 - 2026-07-29
+- 文件: daily/2026-07-29.md
+- 会话来源: 飞书 (1 session, 长期会话 user 2 messages on Jul 29)
+- 主题: Three.js 第8课问答扩写、第9课「动画系统」完整创建
+- index.md 同步更新（Total pages: 24）
+
+## [2026-07-30] create | 每日汇总 - 2026-07-30
+- 文件: daily/2026-07-30.md
+- 会话来源: 飞书 (1 session), CLI (1 session)
+- 主题: Three.js 第9课动画系统完成（9.8/10）、AnimationObjectGroup+VectorKeyframeTrack坑修复、飞书WebSocket连接问题排查
+- index.md 同步更新（Total pages: 25）
+
+## [2026-08-01] create | 每日会话汇总
+- 创建 daily/2026-08-01.md（飞书网关故障排查与修复）
+- 更新 index.md（新增 Daily Summaries 条目）
+
+## [2026-08-05] create | 每日会话汇总
+- 生成 2026-08-05 每日汇总：Three.js 第10课「GLSL 基础」开始
+- 文件：wiki/daily/2026-08-05.md
+- 更新：wiki/index.md（Daily Summaries 条目）

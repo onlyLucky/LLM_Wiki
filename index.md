@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-07-23 | Total pages: 20
+> Last updated: 2026-08-05 | Total pages: 25
 
 ---
 
@@ -43,6 +43,14 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-08-05]] — Three.js 第10课「GLSL 基础」开始（三个ShaderMaterial示例、控制面板、课程笔记和进度跟踪更新）
+- [[daily/2026-08-01]] — 飞书网关故障排查（launchd兼容性+消息权限修复）、双Profile网关启动、Three.js课程飞书连接验证
+- [[daily/2026-07-30]] — Three.js 第9课动画系统完成（评分9.8/10）、AnimationObjectGroup坑修复、飞书WebSocket连接问题排查
+- [[daily/2026-07-29]] — Three.js 第8课问答扩写（消除模糊描述）、第9课「动画系统」完整创建（代码+笔记+作业）
+- [[daily/2026-07-28]] — Three.js 第8课「GLTF 模型加载实战」公众号文章与封面制作、课后作业补充
+- [[daily/2026-07-27]] — Three.js 课程进度查询与复习、第7课微信公众号文章生成、第8课「模型加载」开始
+- [[daily/2026-07-26]] — 飞书网关启动配置、消息路由重启、macOS 26 launchd 兼容性问题
+- [[daily/2026-07-24]] — Three.js 06课公众号文章完善、WebHugo博客部署、Wiki提交推送、Flutter入门咨询
 - [[daily/2026-07-23]] — Three.js课程笔记结构清理（第5/6课）、第6课课后作业重新设计启动、第7课场景图与变换开始
 - [[daily/2026-07-22]] — 英文版Series描述修复部署、GAMES101第2课博客文章、静态资源清理
 - [[daily/2026-07-21]] — Hugo英文国际化修复、GAMES101第2课博客、Fast Render修复、部署规范确立

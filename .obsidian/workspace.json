@@ -11,14 +11,10 @@
             "id": "f670bb9e3e7747f2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "learning/前端3D/Threejs创意3D/课程笔记/第7课-场景图与变换.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "第7课-场景图与变换"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "关系图谱"
             }
           }
         ]
@@ -41,7 +37,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "文件列表"
@@ -180,7 +178,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 454.5
+    "width": 454.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -196,31 +195,37 @@
   },
   "active": "f670bb9e3e7747f2",
   "lastOpenFiles": [
-    "learning/前端3D/Threejs创意3D/课程笔记/第6课-纹理与贴图.md",
-    "learning/前端3D/Threejs创意3D/课程笔记/第7课-场景图与变换.md",
-    "daily/2026-07-23.md",
+    "learning/计算机图形学/GAMES101/03-变换.md",
+    "learning/Cocos/Cocos-Creator-快速上手到完整Demo开发教程.md",
+    "learning/Cocos",
+    "learning/Cocos-Creator-快速上手到完整Demo开发教程.md",
+    "learning/前端3D/Threejs创意3D/课程笔记/第9课-动画系统.md",
+    "daily/2026-07-30.md",
     "learning/前端3D/Threejs创意3D/学习进度跟踪.md",
+    "daily/2026-07-29.md",
+    "learning/网站效果复刻/moeru.ai/README.md",
+    "learning/网站效果复刻/moeru.ai/moeru-replica.html",
+    "learning/网站效果复刻/moeru.ai",
+    "learning/网站效果复刻/moeru-replica.html",
+    "learning/网站效果复刻",
+    "daily/2026-07-28.md",
+    "learning/前端3D/Threejs创意3D/学习计划.md",
+    "learning/前端3D/Threejs创意3D/课程笔记/第8课-模型加载.md",
+    "daily/2026-07-27.md",
+    "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
+    "learning/前端3D/Threejs创意3D/课程笔记/第7课-场景图与变换.md",
+    "learning/前端3D/Threejs创意3D/物料需求规格.md",
+    "learning/计算机图形学/GAMES101/02-向量与线性代数_副本.md",
+    "learning/计算机图形学/GAMES101/01-概览与光栅化.md",
+    "daily/2026-07-26.md",
+    "daily/2026-07-24.md",
+    "learning/前端3D/Threejs创意3D/课程笔记/第6课-纹理与贴图.md",
+    "daily/2026-07-23.md",
     "learning/前端3D/Threejs创意3D/课程笔记/第5课-相机与控制.md",
     "learning/前端3D/Threejs创意3D/课程笔记/第4课-灯光与阴影.md",
     "daily/2026-07-22.md",
     "daily/2026-07-21.md",
-    "learning/前端3D/Threejs创意3D/学习计划.md",
     "learning/前端3D/Threejs创意3D/基础知识完全指南.md",
-    "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
-    "learning/计算机图形学/GAMES101/04-光栅化.md",
-    "learning/计算机图形学/GAMES101/03-变换.md",
-    "learning/计算机图形学/GAMES101/01-概览与光栅化.md",
-    "learning/计算机图形学/GAMES101/README.md",
-    "learning/计算机图形学/GAMES101/GAMES101-现代计算机图形学课程笔记.md",
-    "daily/2026-07-19.md",
-    "learning/前端3D/Threejs创意3D/课程笔记/第1课-项目架构.md",
-    "learning/前端3D/Threejs创意3D/课程笔记/第2课-几何体与图元.md",
-    "learning/前端3D/Threejs创意3D/课程笔记/第3课-材质系统.md",
-    "daily/2026-07-16.md",
-    "learning/计算机图形学/GAMES101/08-动画与模拟.md",
-    "learning/计算机图形学/GAMES101/07-光线追踪.md",
-    "learning/计算机图形学/GAMES101/06-几何.md",
-    "learning/计算机图形学/GAMES101/05-着色.md",
     "learning/计算机图形学/GAMES101/images/chap4_02.png",
     "learning/计算机图形学/GAMES101/images/chap4_01.png",
     "learning/计算机图形学/GAMES101/images/chap3_21.png",
@@ -233,15 +238,9 @@
     "learning/计算机图形学/GAMES101/images/chap3_14.png",
     "learning/计算机图形学/GAMES101/images",
     "learning/计算机图形学/GAMES101",
-    "index.md",
     "learning/前端3D/Threejs创意3D/课程笔记",
     "learning/前端3D/Threejs创意3D",
     "learning/前端3D/课程笔记",
-    "learning/macOS",
-    "learning/前端3D",
-    "learning/具身智能",
-    "languages",
-    "assets/screenshots/websites/igloo.inc/assets/images/cubes_env.exr",
     "未命名.canvas"
   ]
 }
