@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-08-05 | Total pages: 25
+> Last updated: 2026-08-16 | Total pages: 28
 
 ---
 
@@ -43,6 +43,9 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-08-16]] — Three.js第11课准备、飞书Gateway多Profile multiplex冲突排查、sessions.json残留清理
+- [[daily/2026-08-12]] — Hermes 多 Profile 模型配置排查、default profile 切换至 agnes-2.5-flash、assistant profile 配置冲突修复
+- [[daily/2026-08-09]] — Hugo frontmatter损坏修复（games101-transformations.md重复拼接）、GAMES101第3讲SVG封面重新设计、gzh-design skill SVG内嵌方案更新
 - [[daily/2026-08-05]] — Three.js 第10课「GLSL 基础」开始（三个ShaderMaterial示例、控制面板、课程笔记和进度跟踪更新）
 - [[daily/2026-08-01]] — 飞书网关故障排查（launchd兼容性+消息权限修复）、双Profile网关启动、Three.js课程飞书连接验证
 - [[daily/2026-07-30]] — Three.js 第9课动画系统完成（评分9.8/10）、AnimationObjectGroup坑修复、飞书WebSocket连接问题排查

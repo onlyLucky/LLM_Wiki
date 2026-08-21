@@ -210,3 +210,24 @@
 - 生成 2026-08-05 每日汇总：Three.js 第10课「GLSL 基础」开始
 - 文件：wiki/daily/2026-08-05.md
 - 更新：wiki/index.md（Daily Summaries 条目）
+
+## [2026-08-09] create | 每日会话汇总
+- 生成 2026-08-09 每日汇总：Hugo frontmatter损坏修复、GAMES101第3讲SVG封面重新设计、gzh-design skill更新
+- 文件：wiki/daily/2026-08-09.md
+- 更新：wiki/index.md（Daily Summaries 条目，Total pages: 26）
+
+## [2026-08-12] create | 每日汇总 - 2026-08-12
+- 文件: daily/2026-08-12.md
+- 会话来源: 飞书 (1 session, 67 messages), CLI (1 session, 2 messages)
+- 主题: Hermes 多 Profile 模型配置排查、default profile 切换至 agnes-2.5-flash
+- 总计 2 个会话，69 条消息
+
+## [2026-08-12] update | index.md 更新日期和页数
+- Last updated: 2026-08-09 → 2026-08-12
+- Total pages: 26 → 27
+
+## [2026-08-16] create | 每日会话汇总 - 2026-08-16
+- 文件: daily/2026-08-16.md
+- 会话来源: 飞书 (1 session, 188 messages), 桌面CLI (1 session, 118 messages)
+- 主题: Three.js第11课准备、飞书Gateway多Profile multiplex冲突排查、sessions.json残留清理
+- 总计 2 个用户会话，约 306 条消息
