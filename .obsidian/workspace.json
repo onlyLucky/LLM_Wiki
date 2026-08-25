@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f4caa52cbe08f96d",
+        "id": "320f717e017dcc2c",
         "type": "tabs",
         "children": [
           {
-            "id": "ce30065355503e67",
+            "id": "a52ab0d4ce65b5e3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "learning/计算机图形学/GAMES101/05-着色.md",
+                "file": "learning/前端/Threejs创意3D/学习进度跟踪.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "05-着色"
+              "title": "学习进度跟踪"
             }
           }
         ]
@@ -197,28 +197,31 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ce30065355503e67",
+  "active": "a52ab0d4ce65b5e3",
   "lastOpenFiles": [
-    "learning/cocos/Cocos-Creator-3.8-用户使用手册.md",
+    "learning/前端/Threejs创意3D/基础知识完全指南.md",
+    "learning/前端/Threejs创意3D/课程笔记/第11课-GLSL数学函数.md",
     "learning/计算机图形学/GAMES101/05-着色.md",
-    "learning/计算机图形学/GAMES101/images/chap5_00_4.png",
-    "learning/计算机图形学/GAMES101/images/chap5_00_2.png",
-    "learning/计算机图形学/GAMES101/images/chap5_00_3.png",
-    "learning/计算机图形学/GAMES101/images/chap5_00_1.png",
+    "learning/计算机图形学/GAMES101/images/chap5_24_1.png",
+    "learning/计算机图形学/GAMES101/images/chap5_21_1.png",
+    "learning/计算机图形学/GAMES101/images/chap5_20_5.png",
+    "learning/计算机图形学/GAMES101/images/chap5_20_4.png",
+    "learning/计算机图形学/GAMES101/images/chap5_20_3.png",
+    "learning/计算机图形学/GAMES101/images/chap5_20_2.png",
+    "learning/计算机图形学/GAMES101/images/chap5_20_1.png",
+    "learning/计算机图形学/GAMES101/images/chap5_19_1.png",
+    "learning/计算机图形学/GAMES101/images/chap5_18_1.png",
+    "learning/计算机图形学/GAMES101/assets/05-着色/file-20260822222229017.png",
     "learning/计算机图形学/GAMES101/04-光栅化.md",
+    "learning/计算机图形学/GAMES101/06-几何.md",
+    "learning/计算机图形学/GAMES101/assets/05-着色",
+    "learning/cocos/Cocos-Creator-3.8-用户使用手册.md",
     "daily/2026-08-16.md",
     "learning/cocos",
     "languages/english-basics.md",
     "learning/网站效果复刻/moeru.ai/README.md",
-    "learning/计算机图形学/GAMES101/images/chap4_38_3.png",
-    "learning/计算机图形学/GAMES101/images/chap4_38_2.png",
-    "learning/计算机图形学/GAMES101/images/chap4_38_1.png",
-    "learning/计算机图形学/GAMES101/images/chap4_37.png",
-    "learning/计算机图形学/GAMES101/images/chap4_36.png",
-    "learning/计算机图形学/GAMES101/images/chap4_35.png",
     "learning/计算机图形学/GAMES101/assets/04-光栅化",
     "learning/计算机图形学/GAMES101/assets",
-    "learning/前端/Threejs创意3D/课程笔记/第11课-GLSL数学函数.md",
     "learning/计算机图形学/GAMES101/03-变换.md",
     "learning/前端/Threejs创意3D/课程笔记/第10课-GLSL基础.md",
     "learning/前端/Threejs创意3D/课程笔记/第9课-动画系统.md",
@@ -226,7 +229,6 @@
     "learning/前端/Threejs创意3D/学习计划.md",
     "learning/前端/Threejs创意3D/课程笔记/assets",
     "daily/2026-08-12.md",
-    "learning/计算机图形学/GAMES101/06-几何.md",
     "daily/2026-08-09.md",
     "learning/前端/Threejs创意3D/课程流程总结.md",
     "learning/计算机图形学/GAMES101/02-向量与线性代数.md",
@@ -243,8 +245,6 @@
     "learning/前端/Threejs创意3D/课程笔记/第8课-模型加载.md",
     "daily/2026-07-27.md",
     "learning/前端/Threejs创意3D/课程笔记/第7课-场景图与变换.md",
-    "learning/前端/Threejs创意3D/物料需求规格.md",
-    "learning/计算机图形学/GAMES101/images",
     "未命名.canvas"
   ]
 }
