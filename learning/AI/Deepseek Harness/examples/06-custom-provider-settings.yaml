@@ -1,0 +1,54 @@
+# 06-custom-provider-settings.yaml
+# 自定义模型接入配置：接公司网关 / 自托管服务 / 目录外的厂商
+# 来源：官方文档 "Configure models"（docs/user/guide/providers.md）
+# 文件位置：$DSH_HOME/settings.yaml
+#
+# 场景一：普通 OpenAI 兼容网关 + 一个视觉模型
+llm-pi-ai:
+  providers:
+    my-gateway:
+      apiKeyEnv: GATEWAY_API_KEY
+      api: openai-completions
+      baseURL: https://gateway.example/v1
+      models:
+        - id: legacy-chat
+        - id: vision-preview
+          input: [text, image]   # 手工填写的模型默认视为纯文本，需显式声明
+
+# 场景二：网关请求形状与 OpenAI 不一致时的兼容修正（最常见两种）：
+#   1) 推理模型的系统提示词会以 role: "developer" 发送，很多网关直接拒绝
+#   2) 输出上限字段发送 max_completion_tokens，只认 max_tokens 的服务器会拒绝
+#
+# my-gateway:
+#   apiKeyEnv: GATEWAY_API_KEY
+#   api: openai-completions
+#   baseURL: https://gateway.example/v1
+#   compat:
+#     supportsDeveloperRole: false
+#     maxTokensField: max_tokens
+#   models:
+#     - id: my-model
+#
+# 场景三：全部模型都收图片，在 route 上写一次 defaultInput（是回退值不是覆盖）：
+#
+# vision-gateway:
+#   apiKeyEnv: GATEWAY_API_KEY
+#   api: openai-completions
+#   baseURL: https://vision.example/v1
+#   defaultInput: [text, image]
+#   models:
+#     - id: first-model
+#     - id: second-model
+#
+# 场景四：给目录内某个模型收窄模态（modelOverrides 按模型 id 覆盖）：
+#
+# anthropic:
+#   modelOverrides:
+#     claude-sonnet-4-5:
+#       input: [text]
+#
+# 排错速查：
+#   MISSING_CREDENTIAL   -> 在 Models 页存好 key，或提供引用的环境变量
+#   UNKNOWN_MODEL        -> 选择已配置的模型，或补进 custom provider
+#   拉模型列表 401       -> key 错误；不支持 GET /models 的端点就手工填模型
+#   只有推理模型报错     -> 设 compat.supportsDeveloperRole: false

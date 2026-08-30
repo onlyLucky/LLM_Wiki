@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 01 · Hello World — HTML-in-Canvas</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; gap: 16px; padding: 32px 16px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: #f4f5f7; color: #1a1d24;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #14161c; color: #e8eaee; }
+  }
+  header { text-align: center; }
+  header h1 { font-size: 20px; margin: 0 0 4px; }
+  header p { font-size: 13px; margin: 0; opacity: .65; }
+  #badge {
+    font-size: 12px; padding: 4px 12px; border-radius: 999px;
+    border: 1px solid #c8cdd6; background: #fff; color: #555;
+  }
+  #badge.native { border-color: #22c55e; color: #15803d; background: #f0fdf4; }
+  #badge.polyfill { border-color: #f59e0b; color: #b45309; background: #fffbeb; }
+  @media (prefers-color-scheme: dark) {
+    #badge { border-color: #3a3f4b; background: #1d2028; color: #aab1bd; }
+    #badge.native { border-color: #2ea043; color: #7ee787; background: #0f2417; }
+    #badge.polyfill { border-color: #bb8009; color: #e3b341; background: #241a05; }
+  }
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  /* 画布：HTML-in-Canvas 的舞台 */
+  #canvas {
+    width: 480px; height: 300px; max-width: 100%;
+    background: #0e1420; border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(2, 6, 23, .35);
+  }
+  /* 画布内子元素：参与布局、不直接显示，等待被绘制 */
+  #card {
+    width: 340px; padding: 22px 26px; border-radius: 12px;
+    background: linear-gradient(135deg, #6d5dfc, #46c2cb);
+    color: #fff; font-size: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  #card h2 { margin: 0 0 8px; font-size: 18px; letter-spacing: .5px; }
+  #card p { margin: 0 0 14px; line-height: 1.6; opacity: .92; }
+  #card .pill {
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.18); font-size: 12px;
+  }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit; font-size: 13px; padding: 8px 16px; border-radius: 8px;
+    border: 1px solid #c8cdd6; background: #fff; color: #333; cursor: pointer;
+    transition: transform .1s;
+  }
+  .controls button:active { transform: scale(.96); }
+  @media (prefers-color-scheme: dark) {
+    .controls button { border-color: #3a3f4b; background: #1d2028; color: #e8eaee; }
+  }
+  .note {
+    max-width: 480px; font-size: 12.5px; line-height: 1.8; opacity: .75;
+    text-align: left; padding: 0 8px;
+  }
+  .note code {
+    font-family: ui-monospace, monospace; font-size: 11.5px;
+    background: rgba(125,125,155,.18); padding: 1px 5px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Demo 01 · Hello World</h1>
+  <p>把一张真实 DOM 卡片绘制进 2D Canvas</p>
+</header>
+<div id="badge">正在检测运行模式…</div>
+
+<div class="stage">
+  <!-- ① layoutsubtree：子元素参与布局与命中测试，但不直接显示 -->
+  <canvas id="canvas" layoutsubtree>
+    <div id="card">
+      <h2>你好，HTML-in-Canvas 👋</h2>
+      <p>我是画布内的真实 DOM 元素——不是截图，也不是 JS 手绘。改变我的内容，画布会自动重绘。</p>
+      <span class="pill">改动计数：<b id="count">0</b></span>
+    </div>
+  </canvas>
+
+  <div class="controls">
+    <button id="btn-theme">换个配色</button>
+    <button id="btn-text">改一段文字</button>
+  </div>
+
+  <p class="note">
+    教学要点：<code>layoutsubtree</code> 属性 → <code>onpaint</code> 事件内调用
+    <code>drawElementImage()</code> → 画布网格对齐设备像素比（防止模糊）。
+    点击上方按钮修改 DOM，观察画布如何在 <code>paint</code> 事件驱动下自动更新——这就是“活的 HTML”。
+  </p>
+</div>
+
+<script type="module">
+  // ── 运行模式检测：原生优先，缺失时动态加载 polyfill ─────────────
+  // 用 toString() 含 [native code] 判定，避免把 polyfill 补丁误判为原生
+  const badge = document.getElementById('badge');
+  const __fn = typeof CanvasRenderingContext2D !== 'undefined' &&
+    CanvasRenderingContext2D.prototype.drawElementImage;
+  const nativeSupported = !!__fn && String(__fn).includes('[native code]');
+
+  if (!nativeSupported) {
+    // 降级：加载 three-html-render 提供的 WICG API polyfill（与原生 API 同签名）
+    const { installHtmlInCanvasPolyfill } = await import(
+      'https://cdn.jsdelivr.net/npm/three-html-render@0.1.2/dist/polyfill.mjs'
+    );
+    installHtmlInCanvasPolyfill();
+    badge.textContent = 'Polyfill 模式（three-html-render）';
+    badge.classList.add('polyfill');
+  } else {
+    badge.textContent = '原生模式（Chrome flag 已开启）';
+    badge.classList.add('native');
+  }
+
+  // ── 基础三步：设置画布 → paint 内绘制 → DPR 对齐 ────────────────
+  const canvas = document.getElementById('canvas');
+  const card    = document.getElementById('card');
+  const ctx     = canvas.getContext('2d');
+
+  canvas.onpaint = () => {
+    ctx.reset();                              // 清空上帧
+    ctx.drawElementImage(card, 70, 60);       // ② 把 DOM 卡片画进画布
+    // 本 demo 无 3D 变换，返回的矩阵用于交互同步可省略；
+    // 涉及点击/输入交互时必须写回 style.transform（见 demo 02）
+  };
+
+  // 画布网格对齐设备像素比（防模糊的官方推荐写法）
+  const ro = new ResizeObserver(([entry]) => {
+    const dpc = entry.devicePixelContentBoxSize;
+    canvas.width  = dpc ? dpc[0].inlineSize : Math.round(entry.contentRect.width  * devicePixelRatio);
+    canvas.height = dpc ? dpc[0].blockSize  : Math.round(entry.contentRect.height * devicePixelRatio);
+  });
+  ro.observe(canvas, { box: 'device-pixel-content-box' });
+
+  canvas.requestPaint();                      // 首帧触发
+
+  // ── 交互演示：DOM 变化 → paint 自动触发 → 画布自动更新 ──────────
+  let count = 0;
+  const themes = [
+    ['linear-gradient(135deg,#6d5dfc,#46c2cb)', '深夜蓝青'],
+    ['linear-gradient(135deg,#f857a6,#ff5858)', '霓虹粉红'],
+    ['linear-gradient(135deg,#ffd200,#f7971e)', '琥珀暖黄'],
+    ['linear-gradient(135deg,#00b09b,#96c93d)', '薄荷青绿'],
+  ];
+  let ti = 0;
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    ti = (ti + 1) % themes.length;
+    card.style.background = themes[ti][0];
+    bump();
+  });
+  document.getElementById('btn-text').addEventListener('click', () => {
+    const texts = [
+      '我是画布内的真实 DOM 元素——不是截图，也不是 JS 手绘。',
+      '浏览器排版引擎直出：连字、换行、RTL 全部正确。',
+      '页内查找（Ctrl+F）都能搜到这段画布里的文字。',
+      'DevTools 可以直接选中我，改 CSS 立即反映到画布。',
+    ];
+    card.querySelector('p').textContent = texts[(count + 1) % texts.length];
+    bump();
+  });
+  function bump() {
+    count++;
+    document.getElementById('count').textContent = String(count);
+  }
+</script>
+</body>
+</html>

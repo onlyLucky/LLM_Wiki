@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 03 · WebGL 3D - HTML-in-Canvas</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; gap: 16px; padding: 32px 16px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: #0d1017; color: #e8eaee;
+  }
+  header { text-align: center; }
+  header h1 { font-size: 20px; margin: 0 0 4px; color: #e8eaee; }
+  header p { font-size: 13px; margin: 0; opacity: .6; }
+  #badge {
+    font-size: 12px; padding: 4px 12px; border-radius: 999px;
+    border: 1px solid #3a3f4b; background: #1d2028; color: #aab1bd;
+  }
+  #badge.native { border-color: #2ea043; color: #7ee787; background: #0f2417; }
+  #badge.polyfill { border-color: #bb8009; color: #e3b341; background: #241a05; }
+  #canvas {
+    width: 480px; height: 480px; max-width: 100%; aspect-ratio: 1;
+    background: #090c12; border-radius: 14px; cursor: grab; touch-action: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+  }
+  #canvas.dragging { cursor: grabbing; }
+  /* 画布内 HTML 面板：上传为立方体正面纹理 */
+  #panel {
+    width: 256px; height: 256px; padding: 20px;
+    background: #12182a; color: #eef1f8; border-radius: 0;
+    font-size: 14px; display: flex; flex-direction: column;
+    user-select: none;
+    /* 注意：不写 transform —— 由投影计算每帧接管 */
+  }
+  #panel .tag {
+    align-self: flex-start; font-size: 11px; letter-spacing: 2px;
+    color: #9aa5c0; border: 1px solid #2c3550; border-radius: 999px; padding: 2px 10px;
+  }
+  #panel h2 { margin: 12px 0 2px; font-size: 20px; }
+  #panel .time { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; color: #6ee7ff; }
+  #panel .date { font-size: 12px; opacity: .55; margin-top: 2px; }
+  #panel .spacer { flex: 1; }
+  #panel .hint { font-size: 11px; line-height: 1.5; color: #8b93a8; }
+  #panel button {
+    margin-top: 10px; padding: 10px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #6d5dfc, #8f7bff); color: #fff;
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  #panel button:hover { filter: brightness(1.08); }
+  .legend {
+    font-size: 12.5px; line-height: 1.8; opacity: .7; max-width: 480px; padding: 0 8px;
+  }
+  .legend code {
+    font-family: ui-monospace, monospace; font-size: 11.5px;
+    background: rgba(125,125,155,.2); padding: 1px 5px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Demo 03 · WebGL 3D</h1>
+  <p>HTML 面板作为 WebGL 纹理贴在旋转的立方体上</p>
+</header>
+<div id="badge">正在检测运行模式…</div>
+
+<canvas id="canvas" layoutsubtree>
+  <div id="panel">
+    <span class="tag">HTML TEXTURE</span>
+    <h2>实时面板</h2>
+    <div class="time" id="clock">--:--:--</div>
+    <div class="date" id="date"></div>
+    <div class="spacer"></div>
+    <p class="hint">我是贴在立方体正面的真实 DOM：<br>转到正面时可以直接点按钮。</p>
+    <button id="btn-theme">给立方体换配色</button>
+  </div>
+</canvas>
+
+<p class="legend">
+  教学要点：① <code>paint</code> 事件内调用 <code>texElementImage2D()</code> 把 DOM 上传为 WebGL 纹理；
+  ② 每秒更新时钟 -> DOM 变化 -> <code>paint</code> 自动触发 -> 纹理自动刷新（活的纹理）；
+  ③ HTML 面朝镜头时用投影计算把 DOM 元素对齐到立方体表面，按钮真实可点；
+  ④ 拖拽旋转立方体，观察“贴片式”DOM 跟随。
+</p>
+
+<script type="module">
+  import { mat4 } from 'https://cdn.jsdelivr.net/npm/gl-matrix@3.4.3/esm/index.js';
+
+  // ── 原生优先，polyfill 兜底 ──────────────────────────────────────
+  // 用 toString() 含 [native code] 判定，避免把 polyfill 补丁误判为原生
+  const badge = document.getElementById('badge');
+  const __fn = typeof WebGLRenderingContext !== 'undefined' &&
+    WebGLRenderingContext.prototype.texElementImage2D;
+  const nativeSupported = !!__fn && String(__fn).includes('[native code]');
+  if (!nativeSupported) {
+    const { installHtmlInCanvasPolyfill } = await import(
+      'https://cdn.jsdelivr.net/npm/three-html-render@0.1.2/dist/polyfill.mjs'
+    );
+    installHtmlInCanvasPolyfill();
+    badge.textContent = 'Polyfill 模式（three-html-render）';
+    badge.classList.add('polyfill');
+  } else {
+    badge.textContent = '原生模式（Chrome flag 已开启）';
+    badge.classList.add('native');
+  }
+
+  const canvas = document.getElementById('canvas');
+  const panel  = document.getElementById('panel');
+  const gl     = canvas.getContext('webgl', { antialias: true });
+
+  // ── 立方体几何：6 面，正面（+Z）留给 HTML 纹理，其余 5 面纯色 ───
+  function buildCube() {
+    // 每面: [法线]，生成 4 顶点 + 6 索引
+    const faces = [
+      { n: [ 0, 0, 1], color: null },                 // +Z: HTML 纹理面
+      { n: [ 0, 0,-1], color: [0.16, 0.19, 0.30] },
+      { n: [ 1, 0, 0], color: [0.22, 0.26, 0.40] },
+      { n: [-1, 0, 0], color: [0.22, 0.26, 0.40] },
+      { n: [ 0, 1, 0], color: [0.28, 0.33, 0.50] },
+      { n: [ 0,-1, 0], color: [0.12, 0.15, 0.24] },
+    ];
+    const pos = [], uv = [], idx = [];
+    for (const f of faces) {
+      const [nx, ny, nz] = f.n;
+      // 面内正交基 u/v
+      let u = [0, 0, 0], v = [0, 0, 0];
+      if (Math.abs(nz) === 1) { u = [1, 0, 0]; v = [0, 1, 0]; }
+      else if (Math.abs(nx) === 1) { u = [0, 0, 1]; v = [0, 1, 0]; }
+      else { u = [1, 0, 0]; v = [0, 0, 1]; }
+      // ★ 绕序修正：必须满足 u × v = n（叉积朝外），
+      //   否则配合 CULL_FACE 时该面朝向镜头会被当作背面剔除 -> 立方体“缺面”
+      const cx = u[1] * v[2] - u[2] * v[1];
+      const cy = u[2] * v[0] - u[0] * v[2];
+      const cz = u[0] * v[1] - u[1] * v[0];
+      if (cx * nx + cy * ny + cz * nz < 0) [u, v] = [v, u];
+      const base = pos.length / 3;
+      const half = 0.5;
+      for (const [su, sv] of [[-1,-1],[1,-1],[1,1],[-1,1]]) {
+        pos.push(
+          nx * half + u[0] * su * half + v[0] * sv * half,
+          ny * half + u[1] * su * half + v[1] * sv * half,
+          nz * half + u[2] * su * half + v[2] * sv * half
+        );
+        uv.push(su * 0.5 + 0.5, 1 - (sv * 0.5 + 0.5));
+      }
+      idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    }
+    return { pos: new Float32Array(pos), uv: new Float32Array(uv), idx: new Uint16Array(idx) };
+  }
+  const cube = buildCube();
+
+  // ── Shader：MVP + UV 采样纹理 ────────────────────────────────────
+  const vs = `
+    attribute vec3 aPos; attribute vec2 aUV;
+    uniform mat4 uMVP;
+    varying vec2 vUV;
+    void main() { vUV = aUV; gl_Position = uMVP * vec4(aPos, 1.0); }`;
+  const fs = `
+    precision mediump float;
+    varying vec2 vUV;
+    uniform sampler2D uTex;
+    void main() { gl_FragColor = texture2D(uTex, vUV); }`;
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const bufPos = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
+  gl.bufferData(gl.ARRAY_BUFFER, cube.pos, gl.STATIC_DRAW);
+  const bufUV = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufUV);
+  gl.bufferData(gl.ARRAY_BUFFER, cube.uv, gl.STATIC_DRAW);
+  const bufIdx = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufIdx);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cube.idx, gl.STATIC_DRAW);
+
+  const aPos = gl.getAttribLocation(prog, 'aPos');
+  const aUV  = gl.getAttribLocation(prog, 'aUV');
+  const uMVP = gl.getUniformLocation(prog, 'uMVP');
+  gl.enableVertexAttribArray(aPos);
+  gl.enableVertexAttribArray(aUV);
+
+  // ── 纹理：HTML 纹理 + 5 张 1x1 纯色纹理 ─────────────────────────
+  function solidTexture([r, g, b]) {
+    const t = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+      new Uint8Array([r * 255, g * 255, b * 255, 255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    return t;
+  }
+  const palettes = [
+    ['#6ee7ff', '#6d5dfc', [0.16,0.19,0.30], [0.22,0.26,0.40], [0.28,0.33,0.50], [0.12,0.15,0.24]],
+    ['#ffb86c', '#ff7eb3', [0.28,0.16,0.10], [0.34,0.21,0.14], [0.45,0.28,0.18], [0.20,0.12,0.08]],
+    ['#a3ff8f', '#38ef7d', [0.10,0.24,0.14], [0.14,0.30,0.19], [0.18,0.38,0.24], [0.08,0.18,0.11]],
+  ];
+  let pi = 0;
+  let faceTextures = palettes[0].slice(2).map(solidTexture);
+  const htmlTexture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, htmlTexture);
+  // 占位像素：保证纹理在首次 paint 上传前是“完整”的（否则采样为纯黑）
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+    new Uint8Array([24, 32, 58, 255]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  // ── ① paint 事件：HTML -> WebGL 纹理（本 demo 的灵魂） ──────────
+  canvas.onpaint = () => {
+    gl.bindTexture(gl.TEXTURE_2D, htmlTexture);
+    gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, panel);
+    // DOM -> 纹理上传一次即可；渲染由 rAF 循环负责
+  };
+
+  // 首次 paint/快照前同步画布网格尺寸（默认 300x150 会污染首帧快照）
+  ;(() => {
+    const r = canvas.getBoundingClientRect();
+    canvas.width  = Math.max(1, Math.round(r.width  * (devicePixelRatio || 1)));
+    canvas.height = Math.max(1, Math.round(r.height * (devicePixelRatio || 1)));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  })();
+  document.fonts?.ready.then(() => canvas.requestPaint()); // 字体就绪后重采样
+
+  // DPR 对齐
+  const ro = new ResizeObserver(([entry]) => {
+    const dpc = entry.devicePixelContentBoxSize;
+    const w = dpc ? dpc[0].inlineSize : Math.round(entry.contentRect.width * devicePixelRatio);
+    const h = dpc ? dpc[0].blockSize  : Math.round(entry.contentRect.height * devicePixelRatio);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h;
+      gl.viewport(0, 0, w, h);
+      canvas.requestPaint();
+    }
+  });
+  ro.observe(canvas, { box: 'device-pixel-content-box' });
+  canvas.requestPaint();
+
+  // ── 姿态：拖拽旋转 + 自动缓转 ────────────────────────────────────
+  let yaw = 0.6, pitch = -0.25, dragging = false, lastX = 0, lastY = 0, idleTimer = 0;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.target !== canvas) return;          // 点在 DOM 面板上时不启动拖拽
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    canvas.classList.add('dragging');
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    yaw   += (e.clientX - lastX) * 0.008;
+    pitch += (e.clientY - lastY) * 0.008;
+    pitch = Math.max(-1.2, Math.min(1.2, pitch));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  const endDrag = () => { dragging = false; canvas.classList.remove('dragging'); };
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+
+  // ── 矩阵 ─────────────────────────────────────────────────────────
+  const model = mat4.create(), view = mat4.create(), proj = mat4.create(), mvp = mat4.create();
+  mat4.fromTranslation(view, [0, 0, -3.2]);
+  const dpr = () => canvas.width / canvas.clientWidth || 1;
+
+  // HTML 面四角（local）与法线
+  const panelCorners = [[-0.5,-0.5,0.5],[0.5,-0.5,0.5],[0.5,0.5,0.5],[-0.5,0.5,0.5]];
+
+  function projectPoint(p) { // local -> 画布像素坐标（Y 向下），列主序 mvp
+    const m = mvp;
+    const x = m[0]*p[0] + m[4]*p[1] + m[8]*p[2]  + m[12];
+    const y = m[1]*p[0] + m[5]*p[1] + m[9]*p[2]  + m[13];
+    const z = m[2]*p[0] + m[6]*p[1] + m[10]*p[2] + m[14];
+    const w = m[3]*p[0] + m[7]*p[1] + m[11]*p[2] + m[15];
+    return { x: (x / w * 0.5 + 0.5) * canvas.width,
+             y: (1 - (y / w * 0.5 + 0.5)) * canvas.height };
+  }
+
+  // ── 渲染循环 ─────────────────────────────────────────────────────
+  let last = performance.now();
+  function frame(now) {
+    const dt = (now - last) / 1000; last = now;
+    if (!dragging) { idleTimer += dt; if (idleTimer > 1.2) yaw += dt * 0.35; } else idleTimer = 0;
+
+    // 模型矩阵：先绕 X 后绕 Y
+    mat4.fromXRotation(model, pitch);
+    const ry = mat4.fromYRotation(mat4.create(), yaw);
+    mat4.multiply(model, ry, model);
+    const aspect = canvas.width / canvas.height || 1;
+    mat4.perspective(proj, Math.PI / 5, aspect, 0.1, 100);
+    mat4.multiply(mvp, proj, view);
+    mat4.multiply(mvp, mvp, model);
+
+    gl.clearColor(0.035, 0.047, 0.07, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
+    gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufUV);
+    gl.vertexAttribPointer(aUV, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufIdx);
+
+    // 逐面绘制：面 0 是 HTML 纹理面
+    for (let f = 0; f < 6; f++) {
+      gl.bindTexture(gl.TEXTURE_2D, f === 0 ? htmlTexture : faceTextures[f - 1]);
+      gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, f * 6 * 2);
+    }
+
+    // ── ③ DOM 投影同步：HTML 面朝前时把元素贴到立方体表面 ─────────
+    const nWorld = [model[8], model[9], model[10]]; // 旋转后的 +Z 法线
+    const facing = nWorld[2];                       // 与视线的 cos 夹角
+    if (facing > 0.35) {
+      const pts = panelCorners.map(projectPoint);
+      const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+      const x0 = Math.min(...xs), x1 = Math.max(...xs);
+      const y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const r = dpr();
+      const w = (x1 - x0) / r, h = (y1 - y0) / r;
+      const s = w / panel.offsetWidth;
+      const opacity = Math.min(1, (facing - 0.35) / 0.3);
+      panel.style.transform =
+        `translate(${(x0 / r).toFixed(1)}px, ${(y0 / r).toFixed(1)}px) scale(${s.toFixed(4)})`;
+      panel.style.opacity = opacity.toFixed(2);
+      panel.style.pointerEvents = opacity > 0.6 ? 'auto' : 'none';
+    } else {
+      panel.style.opacity = '0';
+      panel.style.pointerEvents = 'none';
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ── ② 活的纹理：每秒更新时钟 -> paint 自动触发 -> 纹理刷新 ─────
+  function tick() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    document.getElementById('clock').textContent =
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    document.getElementById('date').textContent =
+      `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // 画布内 HTML 按钮 -> 驱动 WebGL 场景（双向联动）
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    pi = (pi + 1) % palettes.length;
+    faceTextures = palettes[pi].slice(2).map(solidTexture);
+    const [c1, c2] = [palettes[pi][0], palettes[pi][1]];
+    panel.style.background = `linear-gradient(135deg, #12182a 60%, ${c2}22)`;
+    document.querySelector('#panel .time').style.color = c1;
+    canvas.requestPaint();
+  });
+</script>
+</body>
+</html>

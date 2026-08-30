@@ -231,3 +231,9 @@
 - 会话来源: 飞书 (1 session, 188 messages), 桌面CLI (1 session, 118 messages)
 - 主题: Three.js第11课准备、飞书Gateway多Profile multiplex冲突排查、sessions.json残留清理
 - 总计 2 个用户会话，约 306 条消息
+
+## [2026-08-25] create | 每日会话汇总 - 2026-08-25
+- 文件: daily/2026-08-25.md
+- 会话来源: 飞书 (1 session)
+- 主题: Three.js第11课「GLSL数学函数」博客生成、代码校验修正、线上部署、Wiki元数据更新
+- 总计 1 个用户会话

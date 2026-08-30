@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 02 · Interactive Form - HTML-in-Canvas</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; gap: 16px; padding: 32px 16px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: #eef1f6; color: #1a1d24;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #14161c; color: #e8eaee; }
+  }
+  header { text-align: center; }
+  header h1 { font-size: 20px; margin: 0 0 4px; }
+  header p { font-size: 13px; margin: 0; opacity: .65; }
+  #badge {
+    font-size: 12px; padding: 4px 12px; border-radius: 999px;
+    border: 1px solid #c8cdd6; background: #fff; color: #555;
+  }
+  #badge.native { border-color: #22c55e; color: #15803d; background: #f0fdf4; }
+  #badge.polyfill { border-color: #f59e0b; color: #b45309; background: #fffbeb; }
+  @media (prefers-color-scheme: dark) {
+    #badge { border-color: #3a3f4b; background: #1d2028; color: #aab1bd; }
+    #badge.native { border-color: #2ea043; color: #7ee787; background: #0f2417; }
+    #badge.polyfill { border-color: #bb8009; color: #e3b341; background: #241a05; }
+  }
+  #canvas {
+    width: 480px; height: 400px; max-width: 100%;
+    background: #101521; border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(2,6,23,.35);
+    overflow: hidden;
+  }
+  /* 画布内表单卡片：会被绘制进画布并参与命中测试 */
+  #card {
+    width: 300px; padding: 24px 26px; border-radius: 14px;
+    background: #ffffff; color: #22283a;
+    box-shadow: 0 12px 32px rgba(0,0,0,.35);
+    font-size: 14px;
+    /* 注意：源元素的 CSS transform 由 drawElementImage 的返回矩阵接管，
+       不要自己再写 transform，否则会与画布位置脱钩 */
+  }
+  #card h2 { margin: 0 0 4px; font-size: 17px; }
+  #card .sub { margin: 0 0 16px; font-size: 12px; opacity: .6; }
+  #card label { display: block; font-size: 12px; margin: 12px 0 4px; color: #5a6172; }
+  #card input[type="text"], #card input[type="password"] {
+    width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid #d5d9e3;
+    font: inherit; font-size: 13px; background: #fafbfe; color: #22283a;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  #card input:focus {
+    outline: none; border-color: #6d5dfc;
+    box-shadow: 0 0 0 3px rgba(109,93,252,.18);
+  }
+  #card .row { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 12px; }
+  #card button {
+    width: 100%; margin-top: 18px; padding: 11px; border: none; border-radius: 9px;
+    background: linear-gradient(135deg,#6d5dfc,#8f7bff); color: #fff;
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: filter .15s, transform .1s;
+  }
+  #card button:hover { filter: brightness(1.07); }
+  #card button:active { transform: translateY(1px); }
+  #toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(8px);
+    background: #1f2430; color: #fff; padding: 10px 18px; border-radius: 999px;
+    font-size: 13px; opacity: 0; pointer-events: none;
+    transition: opacity .25s, transform .25s; z-index: 9;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .note { max-width: 480px; font-size: 12.5px; line-height: 1.8; opacity: .75; padding: 0 8px; }
+  .note code {
+    font-family: ui-monospace, monospace; font-size: 11.5px;
+    background: rgba(125,125,155,.18); padding: 1px 5px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Demo 02 · Interactive Form</h1>
+  <p>画布中的可输入表单 + Transform 同步 + CTM 动画</p>
+</header>
+<div id="badge">正在检测运行模式…</div>
+
+<canvas id="canvas" layoutsubtree>
+  <form id="card">
+    <h2>登录画布世界</h2>
+    <p class="sub">这张表单绘制在 Canvas 里，但输入完全正常</p>
+    <label for="email">邮箱</label>
+    <input id="email" type="text" value="feynman@web.dev" autocomplete="off">
+    <label for="pwd">密码</label>
+    <input id="pwd" type="password" value="123456">
+    <div class="row">
+      <input type="checkbox" id="remember" checked>
+      <label for="remember" style="margin:0">记住我</label>
+    </div>
+    <button type="button" id="submit">登 录</button>
+  </form>
+</canvas>
+
+<p class="note">
+  教学要点：① 源元素的 CSS transform 被 API 忽略，位置由<b>画布 CTM</b>驱动；
+  ② <code>drawElementImage()</code> 返回的矩阵必须写回 <code>style.transform</code>，
+  浏览器的命中测试、焦点、无障碍都依赖它；
+  ③ 持续动画用 <code>requestPaint()</code> 链式驱动。
+  试着直接在画布中点击输入框、勾选、按下登录按钮。
+</p>
+
+<div id="toast"></div>
+
+<script type="module">
+  // ── 原生优先，polyfill 兜底 ──────────────────────────────────────
+  // 用 toString() 含 [native code] 判定，避免把 polyfill 补丁误判为原生
+  const badge = document.getElementById('badge');
+  const __fn = typeof CanvasRenderingContext2D !== 'undefined' &&
+    CanvasRenderingContext2D.prototype.drawElementImage;
+  const nativeSupported = !!__fn && String(__fn).includes('[native code]');
+  if (!nativeSupported) {
+    const { installHtmlInCanvasPolyfill } = await import(
+      'https://cdn.jsdelivr.net/npm/three-html-render@0.1.2/dist/polyfill.mjs'
+    );
+    installHtmlInCanvasPolyfill();
+    badge.textContent = 'Polyfill 模式（three-html-render）';
+    badge.classList.add('polyfill');
+  } else {
+    badge.textContent = '原生模式（Chrome flag 已开启）';
+    badge.classList.add('native');
+  }
+
+  const canvas = document.getElementById('canvas');
+  const card   = document.getElementById('card');
+  const ctx    = canvas.getContext('2d');
+
+  // ── paint 循环：CTM 驱动的浮动 + 轻微摇摆动画 ────────────────────
+  // 原生模式 ~60fps 链式重绘；polyfill 下 SVG 栅格化成本高，节流到 20fps
+  // （这也是真实项目的性能取舍：见 README「注意事项」第 9 条）
+  const PAINT_INTERVAL = nativeSupported ? 16 : 50;
+  canvas.onpaint = () => {
+    const t   = performance.now() / 1000;
+    const dy  = Math.sin(t * 1.1) * 10;          // 上下浮动
+    const rot = Math.sin(t * 0.5) * 0.035;       // 轻微摇摆
+
+    ctx.reset();
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2 + dy); // 画布坐标系（已含 DPR）
+    ctx.rotate(rot);
+    // 以卡片自身中心为锚点绘制（宽高以 CSS 像素计，与 CTM 缩放无关）
+    const m = ctx.drawElementImage(card, -card.offsetWidth / 2, -card.offsetHeight / 2);
+    // ★ 核心：同步 DOM 位置 -> 点击/输入/焦点/无障碍全部对齐
+    card.style.transform = m.toString();
+    ctx.restore();
+
+    setTimeout(() => canvas.requestPaint(), PAINT_INTERVAL); // 节流链式驱动
+  };
+
+  // DPR 对齐
+  const ro = new ResizeObserver(([entry]) => {
+    const dpc = entry.devicePixelContentBoxSize;
+    canvas.width  = dpc ? dpc[0].inlineSize : Math.round(entry.contentRect.width  * devicePixelRatio);
+    canvas.height = dpc ? dpc[0].blockSize  : Math.round(entry.contentRect.height * devicePixelRatio);
+    canvas.requestPaint();
+  });
+  ro.observe(canvas, { box: 'device-pixel-content-box' });
+  canvas.requestPaint();
+
+  // ── 表单交互（证明“活的 HTML”） ─────────────────────────────────
+  const toast = document.getElementById('toast');
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+  document.getElementById('submit').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const pwd   = document.getElementById('pwd').value;
+    const remember = document.getElementById('remember').checked;
+    showToast(`画布内表单提交成功 → ${email || '(空)'} / ${pwd.length} 位密码${remember ? ' · 已记住' : ''}`);
+  });
+</script>
+</body>
+</html>

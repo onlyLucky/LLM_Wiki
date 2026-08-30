@@ -1,0 +1,14 @@
+# 04-cordis.yml
+# 插件注册 overlay：以补丁方式把本地插件插入 Web 配置
+# 来源：官方文档 "Your first plugin"（Register it in cordis.yml）
+#
+# 用法（路径必须写成绝对路径）：
+#   pnpm dsh web --patch ./scratch-plugin/cordis.yml
+# 补丁文件只贡献配置，不改变 loader 解析模块路径的 profile 目录，
+# 因此插件路径必须是绝对路径。
+#
+# 把 /absolute/path/to/deepseek-harness 替换成你的仓库真实路径
+
+- insert:
+    - id: hello
+      name: '/absolute/path/to/deepseek-harness/scratch-plugin/src/my-plugin.ts'
