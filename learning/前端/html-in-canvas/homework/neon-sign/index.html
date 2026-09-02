@@ -26,6 +26,10 @@
   #badge.polyfill { border-color: #bb8009; color: #e3b341; }
 
   /* ══ 画布内 DOM：这些是渲染进 3D 场景的“活 HTML” ══════════════ */
+  /* three-html-render 会把画布内的 DOM 再叠加一层到 3D 场景上（仅用于命中测试）。
+     Polyfill 下该叠加层默认可见，且其 transform 含 z 翻转会导致招牌显示成镜像。
+     这里隐藏叠加层的视觉（保留 pointer-events 供点击），由正确的 canvas 纹理显示招牌。 */
+  #scene > div { opacity: 0; pointer-events: auto; }
 
   /* 主招牌 480x304px -> 世界 3.0x1.9 */
   #signMain {
@@ -119,7 +123,7 @@
 <canvas id="scene" layoutsubtree>
   <!-- ══ 这两块 DOM 会被绘制成 3D 场景里的霓虹招牌 ══ -->
   <div id="signMain">
-    <div class="jp">営 業 中</div>
+    <div class="jp">营 业 中</div>
     <div class="title">深夜食堂</div>
     <div class="clock" id="clock">--:--</div>
     <div class="row">
@@ -131,7 +135,7 @@
     <div class="title">今日菜单</div>
     <div class="en">TODAY'S MENU</div>
     <ul id="menuList"></ul>
-    <button id="shuffle">🎲 换一批</button>
+    <button id="shuffle">换一批</button>
     <div class="wind-row">
       <span>风</span>
       <input type="range" id="wind" min="0" max="100" value="32">
