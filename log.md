@@ -237,3 +237,17 @@
 - 会话来源: 飞书 (1 session)
 - 主题: Three.js第11课「GLSL数学函数」博客生成、代码校验修正、线上部署、Wiki元数据更新
 - 总计 1 个用户会话
+
+## [2026-08-30] create | 每日会话汇总 - 2026-08-30
+- 文件: daily/2026-08-30.md
+- 会话来源: 飞书 (1 session, 10 messages), 桌面CLI (1 session, 1 message)
+- 主题: GAMES101第5讲「着色」博客部署上线、assistant飞书机器人不回复排查（agnes-ai key失效+providers配置错误）、大模型切换至 douyincodingplan/Coding Plan、Three.js第12课噪声函数问答出题
+- 总计 2 个用户会话，约 11 条用户消息
+- 更新: index.md（Last updated: 2026-08-30, Total pages: 29→30, 新增 Daily Summaries 条目）
+
+## [2026-08-31] create | 每日会话汇总 - 2026-08-31
+- 文件: daily/2026-08-31.md
+- 会话来源: 飞书 (1 session, 约 12 条用户消息)
+- 主题: Three.js第12课「噪声函数」苏格拉底问答完成（5道，平均9.92/10）+ 费曼学习法（10/10），第12课标记已完成（课程评分9.93/10）
+- 总计 1 个用户会话，约 12 条用户消息
+- 更新: index.md（Last updated: 2026-08-31, Total pages: 30→31, 新增 Daily Summaries 条目）
