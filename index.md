@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-08-31 | Total pages: 31
+> Last updated: 2026-09-02 | Total pages: 32
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-09-02]] — Wiki本地更新分类提交并push（Three.js第12课完成/GAMES101第5讲/neon-sign修复），git提交规则记忆确认
 - [[daily/2026-08-31]] — Three.js第12课「噪声函数」苏格拉底问答完成（5道，平均9.92/10）+ 费曼学习法（10/10），第12课标记已完成（9.93/10）
 - [[daily/2026-08-30]] — GAMES101第5讲「着色」博客部署、assistant飞书机器人不回复排查与Coding Plan配置切换、Three.js第12课噪声函数问答出题
 - [[daily/2026-08-25]] — Three.js第11课「GLSL数学函数」博客生成、代码校验修正、线上部署、Wiki元数据更新
