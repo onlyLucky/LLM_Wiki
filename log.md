@@ -259,3 +259,19 @@
 - 回退说明: 10:00 cron 运行时用户会话尚未发生（11:14），经默认 profile state.db 查询确认当天用户活动后补建
 - 总计 1 个用户会话，约 2 条用户消息
 - 更新: index.md（Last updated: 2026-09-02, Total pages: 31→32, 新增 Daily Summaries 条目）
+
+## [2026-09-03] create | 每日会话汇总 - 2026-09-03
+- 文件: daily/2026-09-03.md
+- 会话来源: 飞书 (2 sessions, 109 messages, 4 条用户消息)
+- 主题: ①Wiki每日汇总产物提交push（commit 5c45baf）②AwardWebsites打包部署腾讯云（Next.js静态导出双坑排查修复：bind mount inode需docker restart + demo目录补index.html），部署skill整合优化
+- 回退说明: 10:00 cron 运行时用户会话（10:42/10:50）尚未发生，经 default+assistant profile state.db 查询确认当天用户活动后补建
+- 总计 2 个用户会话，约 4 条用户消息
+- 更新: index.md（Last updated: 2026-09-03, Total pages: 32→33, 新增 Daily Summaries 条目）
+
+## [2026-09-07] create | 每日会话汇总 - 2026-09-07
+- 文件: daily/2026-09-07.md
+- 会话来源: 无 Hermes 会话（0 sessions, 0 条用户消息）
+- 回退说明: 当天 default+assistant profile state.db 均无非 cron 会话；但 wiki 文件系统显示 GAMES101 第6讲「几何」笔记在 16:57-19:47 被修改（+63/-29 行）+ 21 张配图 + assets/06-几何/ 目录，判定为 Obsidian 直接编辑活动，按文件时间戳回退重建汇总
+- 主题: GAMES101第6讲「几何」Obsidian直接编辑——补充21张配图（chap6_01~21.png）、替换12+截图占位符、Bernstein多项式/贝塞尔曲线/B样条等知识点通俗化完善
+- 待跟进: 06-几何.md 及 22 个未跟踪文件尚未提交（docs: 类型），需下次会话分类提交 push
+- 更新: index.md（新增 Daily Summaries 条目 2026-09-07）
