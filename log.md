@@ -275,3 +275,11 @@
 - 主题: GAMES101第6讲「几何」Obsidian直接编辑——补充21张配图（chap6_01~21.png）、替换12+截图占位符、Bernstein多项式/贝塞尔曲线/B样条等知识点通俗化完善
 - 待跟进: 06-几何.md 及 22 个未跟踪文件尚未提交（docs: 类型），需下次会话分类提交 push
 - 更新: index.md（新增 Daily Summaries 条目 2026-09-07）
+
+## [2026-09-08] create | 每日会话汇总 - 2026-09-08
+- 文件: daily/2026-09-08.md
+- 会话来源: 飞书 (1 session, 21 messages, 1 条用户消息)
+- 主题: Wiki 待提交改动分类提交并 push 远端——daily 联动 commit（879e35f：09-03/07 每日汇总）+ reading commit（d572cdf：GAMES101 第6讲几何配图补齐 21 张），5c45baf..d572cdf push 成功
+- 关键点: 闭环 09-07 汇总的待跟进事项（06-几何.md + 22 个未跟踪文件）；workspace.json 常驻噪音待用户确认 git rm --cached；push 后用户 18:32 又补充 chap6_25/25_2 等新配图（未提交）
+- 总计 1 个用户会话，1 条用户消息
+- 更新: index.md（Last updated: 2026-09-08, Total pages: 33→34, 新增 Daily Summaries 条目 2026-09-08）
