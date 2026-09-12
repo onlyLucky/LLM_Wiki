@@ -283,3 +283,11 @@
 - 关键点: 闭环 09-07 汇总的待跟进事项（06-几何.md + 22 个未跟踪文件）；workspace.json 常驻噪音待用户确认 git rm --cached；push 后用户 18:32 又补充 chap6_25/25_2 等新配图（未提交）
 - 总计 1 个用户会话，1 条用户消息
 - 更新: index.md（Last updated: 2026-09-08, Total pages: 33→34, 新增 Daily Summaries 条目 2026-09-08）
+
+## [2026-09-09] create | 每日会话汇总 - 2026-09-09
+- 文件: daily/2026-09-09.md
+- 会话来源: 飞书 (2 sessions, 101 messages, 8 条用户消息; default 1 + assistant 1)
+- 主题: ① Wiki 分类提交 push（f702674 reading: GAMES101 第6讲配图补齐 23 张 + 6d44526 daily: 09-08 汇总，闭环 09-08 待跟进）；② 双机器人模型切换为 glm-5.3-flash 并重启 gateway（launchd exit 5 → 后台进程 fallback）；③ webHugo 博客 hugo --minify + rsync 部署腾讯云（230 页，28MB，新增页面全部 200）
+- 关键点: 模型配置层级确认——顶层 model.default 为生效值，custom_providers 内 model 仅兜底，记忆中 deepseek-v4-flash 信息已过时
+- 总计 2 个用户会话，8 条用户消息
+- 更新: index.md（Last updated: 2026-09-09, Total pages: 34→35, 新增 Daily Summaries 条目 2026-09-09）

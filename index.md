@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-09-08 | Total pages: 34
+> Last updated: 2026-09-09 | Total pages: 35
 
 ---
 
@@ -43,6 +43,7 @@ wiki/
 
 ## 📅 Daily Summaries
 <!-- 每日对话汇总，按日期倒序排列 -->
+- [[daily/2026-09-09]] — Wiki分类提交push(闭环09-08待跟进) + 双机器人模型切换glm-5.3-flash并重启gateway + webHugo博客部署(4 commits上线,全200)
 - [[daily/2026-09-08]] — Wiki分类提交并push远端：09-03/07每日汇总 + GAMES101第6讲配图补齐（daily+reading两commit，闭环09-07待跟进）
 - [[daily/2026-09-07]] — GAMES101第6讲「几何」Obsidian直接编辑：补充21张配图+笔记通俗化完善（无Hermes会话，文件时间戳回退重建）
 - [[daily/2026-09-03]] — Wiki每日汇总提交push + AwardWebsites打包部署腾讯云（Next.js静态导出双坑：bind mount inode + demo目录补index.html），部署skill整合

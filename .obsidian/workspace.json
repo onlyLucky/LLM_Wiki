@@ -4,24 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "320f717e017dcc2c",
+        "id": "6c4b0ea23da116f0",
         "type": "tabs",
         "children": [
           {
-            "id": "a52ab0d4ce65b5e3",
+            "id": "de70217f33c70418",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "learning/前端/html-in-canvas/README.md",
+                "file": "learning/计算机图形学/GAMES101/06-几何.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "06-几何"
+            }
+          },
+          {
+            "id": "8ea50251ddecf3ac",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "learning/计算机图形学/GAMES101/07-光线追踪.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "07-光线追踪"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -197,8 +212,34 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "a52ab0d4ce65b5e3",
+  "active": "8ea50251ddecf3ac",
   "lastOpenFiles": [
+    "learning/计算机图形学/GAMES101/images/chap7_05.png",
+    "learning/计算机图形学/GAMES101/images/chap7_04.png",
+    "learning/计算机图形学/GAMES101/images/chap7_03.png",
+    "learning/计算机图形学/GAMES101/images/chap7_02.png",
+    "learning/计算机图形学/GAMES101/06-几何.md",
+    "learning/计算机图形学/GAMES101/04-光栅化.md",
+    "learning/计算机图形学/GAMES101/05-着色.md",
+    "learning/计算机图形学/GAMES101/07-光线追踪.md",
+    "learning/计算机图形学/GAMES101/images/chap7_01.png",
+    "learning/计算机图形学/GAMES101/08-动画与模拟.md",
+    "daily/2026-09-09.md",
+    "learning/计算机图形学/GAMES101/images/chap6_41.png",
+    "learning/计算机图形学/GAMES101/images/chap6_40.png",
+    "learning/计算机图形学/GAMES101/images/chap6_39.png",
+    "learning/计算机图形学/GAMES101/images/chap6_38.png",
+    "learning/计算机图形学/GAMES101/images/chap6_37.png",
+    "learning/计算机图形学/GAMES101/images/chap6_36.png",
+    "daily/2026-09-08.md",
+    "daily/2026-09-07.md",
+    "learning/计算机图形学/GAMES101/assets/06-几何",
+    "learning/前端/html-in-canvas/README.md",
+    "daily/2026-09-03.md",
+    "daily/2026-09-02.md",
+    "daily/2026-08-31.md",
+    "daily/2026-08-30.md",
+    "learning/前端/Threejs创意3D/课程笔记/第12课-噪声函数.md",
     "learning/前端/Threejs创意3D/学习进度跟踪.md",
     "learning/godot/about.md",
     "learning/godot/getting-started.md",
@@ -218,33 +259,7 @@
     "learning/AI/Deepseek Harness/examples/02-greet-tool.ts",
     "learning/AI/Deepseek Harness/examples/01-hello-plugin.ts",
     "learning/AI/Deepseek Harness/examples",
-    "learning/AI/Deepseek Harness",
     "learning/前端/Threejs创意3D/课程笔记/第15课-粒子系统.md",
-    "learning/AI/Deepseek Harness/README.md",
-    "learning/前端/Threejs创意3D/课程笔记/第18课-创意交互.md",
-    "learning/前端/Threejs创意3D/课程笔记/第17课-滚动驱动动画.md",
-    "learning/前端/Threejs创意3D/课程笔记/第14课-后处理效果.md",
-    "learning/前端/Threejs创意3D/课程笔记/第13课-高级Shader效果.md",
-    "learning/DeepSeek-Harness-研究报告.md",
-    "learning/前端/html-in-canvas/homework/neon-sign/README.md",
-    "learning/前端/html-in-canvas/README.md",
-    "daily/2026-08-25.md",
-    "learning/前端/Threejs创意3D/课程笔记/第12课-噪声函数.md",
-    "learning/前端/Threejs创意3D/基础知识完全指南.md",
-    "learning/前端/Threejs创意3D/课程笔记/第11课-GLSL数学函数.md",
-    "learning/计算机图形学/GAMES101/05-着色.md",
-    "learning/计算机图形学/GAMES101/images/chap5_24_1.png",
-    "learning/计算机图形学/GAMES101/images/chap5_21_1.png",
-    "learning/计算机图形学/GAMES101/images/chap5_20_5.png",
-    "learning/计算机图形学/GAMES101/images/chap5_20_4.png",
-    "learning/计算机图形学/GAMES101/images/chap5_20_3.png",
-    "learning/计算机图形学/GAMES101/images/chap5_20_2.png",
-    "learning/计算机图形学/GAMES101/images/chap5_20_1.png",
-    "learning/计算机图形学/GAMES101/images/chap5_19_1.png",
-    "learning/计算机图形学/GAMES101/images/chap5_18_1.png",
-    "learning/计算机图形学/GAMES101/assets/05-着色/file-20260822222229017.png",
-    "learning/计算机图形学/GAMES101/04-光栅化.md",
-    "learning/计算机图形学/GAMES101/06-几何.md",
     "未命名.canvas"
   ]
 }
