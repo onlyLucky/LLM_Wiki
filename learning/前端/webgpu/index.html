@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebGPU · 三天实战课程</title>
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --frame: #1e2530;
+      --ink: #8a93a6;
+      --ink-dim: #4a5263;
+      --ink-hi: #c8d0de;
+      --accent: #4c6fff;
+      --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--mono);
+      padding: 3rem 4rem 6rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header { margin-bottom: 4rem; }
+    header .kicker {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-dim); margin-bottom: 14px;
+    }
+    header h1 {
+      font-size: 22px; font-weight: normal; color: var(--ink-hi);
+      letter-spacing: 0.04em;
+    }
+    header h1 b { font-weight: normal; color: var(--accent); }
+    header p { margin-top: 12px; font-size: 12.5px; line-height: 1.8; max-width: 62ch; }
+
+    .day { margin-bottom: 3.5rem; }
+    .day-head {
+      display: flex; align-items: baseline; gap: 14px;
+      border-bottom: 1px solid var(--frame);
+      padding-bottom: 10px; margin-bottom: 6px;
+    }
+    .day-head .no { font-size: 11px; color: var(--accent); letter-spacing: 0.12em; }
+    .day-head h2 { font-size: 15px; font-weight: normal; color: var(--ink-hi); letter-spacing: 0.05em; }
+    .day-head .count { margin-left: auto; font-size: 11px; color: var(--ink-dim); }
+
+    .row {
+      display: grid;
+      grid-template-columns: 3.5rem 15rem 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 11px 6px;
+      border-bottom: 1px solid #141a24;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.15s ease, padding-left 0.15s ease;
+    }
+    .row:hover { background: #10151f; padding-left: 12px; }
+    .row .idx { font-size: 11px; color: var(--ink-dim); }
+    .row .name { font-size: 13px; color: var(--ink-hi); }
+    .row .desc { font-size: 11.5px; color: var(--ink-dim); }
+    .row .tag {
+      font-size: 10px; letter-spacing: 0.08em; color: var(--ink-dim);
+      border: 1px solid var(--frame); border-radius: 3px; padding: 2px 7px;
+      white-space: nowrap;
+    }
+    .row .tag.b { color: #2dd4bf; border-color: #1d3a37; }
+    .row .tag.a { color: #8b5cf6; border-color: #322a4d; }
+    .row .tag.c { color: #f59e0b; border-color: #4a3a1c; }
+
+    .day-hw { margin-top: 10px; }
+    .day-hw .label {
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-dim); margin: 14px 0 4px;
+    }
+    .note {
+      margin-top: 5rem; padding-top: 1.4rem; border-top: 1px solid var(--frame);
+      font-size: 11.5px; line-height: 2; color: var(--ink-dim);
+    }
+    .note a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--frame); }
+    .note a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="kicker">FRONTEND / GPU / THREE DAYS</div>
+    <h1>WebGPU <b>·</b> 三天实战课程</h1>
+    <p>
+      从零手写原生 WebGPU API 与 WGSL，到 Three.js TSL 桥接，终点是
+      lusion.co 一级的创意网站技术层次。每个页面都是可运行的设计作品：
+      深色画框、角落标注、实时 FPS。讲义见 讲义/ 目录。
+    </p>
+  </header>
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 1</span>
+      <h2>GPU 是如何画出一个三角形的</h2>
+      <span class="count">原生 API · 4 DEMOS</span>
+    </div>
+    <a class="row" href="demos/day1/01-hello-triangle/index.html">
+      <span class="idx">01</span><span class="name">Hello Triangle</span>
+      <span class="desc">第一个三角形：device / pipeline / renderPass 全流程</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day1/02-vertex-colors/index.html">
+      <span class="idx">02</span><span class="name">Vertex Colors</span>
+      <span class="desc">顶点缓冲与颜色插值：interleaved 布局</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day1/03-indexed-quad/index.html">
+      <span class="idx">03</span><span class="name">Indexed Quad</span>
+      <span class="desc">索引缓冲与 drawIndexed：四边形只用 4 个顶点</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day1/04-uniform-animation/index.html">
+      <span class="idx">04</span><span class="name">Uniform Animation</span>
+      <span class="desc">uniform buffer 与绑定组：时间驱动的动画</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <a class="row" href="homework/day1/basic-呼吸的渐变/index.html">
+        <span class="idx">B</span><span class="name">呼吸的渐变</span>
+        <span class="desc">顶点颜色插值 + uniform 时间驱动</span>
+        <span class="tag b">BASIC</span>
+      </a>
+      <a class="row" href="homework/day1/advanced-万花筒几何/index.html">
+        <span class="idx">A</span><span class="name">万花筒几何</span>
+        <span class="desc">interleaved 布局 + drawIndexed + 2D 矩阵</span>
+        <span class="tag a">ADVANCED</span>
+      </a>
+      <a class="row" href="homework/day1/challenge-星轨动画/index.html">
+        <span class="idx">C</span><span class="name">星轨动画</span>
+        <span class="desc">line-list 图元 + 多环数据 + 动画 uniform</span>
+        <span class="tag c">CHALLENGE</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 2</span>
+      <h2>从三角形到会动的 3D 世界</h2>
+      <span class="count">渲染进阶 · 7 DEMOS</span>
+    </div>
+    <a class="row" href="demos/day2/01-mvp-cube/index.html">
+      <span class="idx">01</span><span class="name">MVP Cube</span>
+      <span class="desc">手写 MVP 矩阵：透视投影与深度测试</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/02-textured-cube/index.html">
+      <span class="idx">02</span><span class="name">Textured Cube</span>
+      <span class="desc">纹理采样、mipmap 与 UV</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/03-phong-lighting/index.html">
+      <span class="idx">03</span><span class="name">Phong Lighting</span>
+      <span class="desc">Blinn-Phong 三分量与法线变换</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/04-procedural-geometry/index.html">
+      <span class="idx">04</span><span class="name">Procedural Geometry</span>
+      <span class="desc">程序化网格与顶点位移波浪</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/05-compute-basics/index.html">
+      <span class="idx">05</span><span class="name">Compute Basics</span>
+      <span class="desc">计算着色器：workgroup 与 storage 读写</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/06-particle-simulation/index.html">
+      <span class="idx">06</span><span class="name">Particle Simulation</span>
+      <span class="desc">GPGPU 粒子：ping-pong 双缓冲 + 噪声场</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day2/07-raymarching/index.html">
+      <span class="idx">07</span><span class="name">Raymarching</span>
+      <span class="desc">全屏 quad 上的 SDF 光线步进</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <a class="row" href="homework/day2/basic-旋转的立方体/index.html">
+        <span class="idx">B</span><span class="name">旋转的立方体</span>
+        <span class="desc">MVP uniform + 深度缓冲配置</span>
+        <span class="tag b">BASIC</span>
+      </a>
+      <a class="row" href="homework/day2/advanced-纹理与光照/index.html">
+        <span class="idx">A</span><span class="name">纹理与光照</span>
+        <span class="desc">贴图加载 + Blinn-Phong + 灯光切换</span>
+        <span class="tag a">ADVANCED</span>
+      </a>
+      <a class="row" href="homework/day2/challenge-GPGPU粒子星系/index.html">
+        <span class="idx">C</span><span class="name">GPGPU 粒子星系</span>
+        <span class="desc">compute + ping-pong + 鼠标交互（替代题：SDF 场景）</span>
+        <span class="tag c">CHALLENGE</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 3</span>
+      <h2>用工程化武器上生产力</h2>
+      <span class="count">Three.js / TSL · 4 DEMOS</span>
+    </div>
+    <a class="row" href="demos/day3/01-webgpu-renderer-basic/index.html">
+      <span class="idx">01</span><span class="name">WebGPURenderer Basic</span>
+      <span class="desc">three/webgpu 上手：scene / camera / NodeMaterial</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day3/02-tsl-wave-deform/index.html">
+      <span class="idx">02</span><span class="name">TSL Wave Deform</span>
+      <span class="desc">TSL 节点语言：positionNode 顶点波浪</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day3/03-tsl-compute-particles/index.html">
+      <span class="idx">03</span><span class="name">TSL Compute Particles</span>
+      <span class="desc">TSL compute() 与 storage 数据流</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <a class="row" href="demos/day3/04-postprocessing/index.html">
+      <span class="idx">04</span><span class="name">Postprocessing</span>
+      <span class="desc">PostProcessing 管线与 Bloom</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <a class="row" href="homework/day3/basic-TSL波浪网格/index.html">
+        <span class="idx">B</span><span class="name">TSL 波浪网格</span>
+        <span class="desc">用 TSL 复刻 Day 2 顶点波浪并对比代码量</span>
+        <span class="tag b">BASIC</span>
+      </a>
+      <a class="row" href="homework/day3/advanced-粒子文字成形/index.html">
+        <span class="idx">A</span><span class="name">粒子文字成形</span>
+        <span class="desc">TSL compute + 文字像素采样 + 吸附动画</span>
+        <span class="tag a">ADVANCED</span>
+      </a>
+      <a class="row" href="homework/day3/challenge-玻璃与滚动驱动/index.html">
+        <span class="idx">C</span><span class="name">玻璃与滚动驱动</span>
+        <span class="desc">transmission 玻璃 + 滚动驱动相机 + 后处理</span>
+        <span class="tag c">CHALLENGE</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="note">
+    讲义：<a href="讲义/day1-原生WebGPU基础/1.1-GPU架构与WebGPU全景.md">Day 1</a> ·
+    <a href="讲义/day2-渲染进阶与GPU计算/2.1-2D与3D空间变换.md">Day 2</a> ·
+    <a href="讲义/day3-Three.js桥接/3.1-WebGPURenderer架构与迁移策略.md">Day 3</a>
+    &nbsp;/&nbsp; 参考答案在 solutions/（先自己做完再看）。
+  </footer>
+</body>
+</html>

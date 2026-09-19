@@ -20,78 +20,101 @@
 
 ### 1. Dissolve（消融）效果
 
-**原理**：用噪声纹理作为遮罩，根据阈值决定哪些像素"消失"，消失边缘添加发光。
+**原理**：用噪声作为遮罩，根据阈值决定哪些像素"消失"，消失边缘添加发光。噪声可以来自纹理采样，也可以程序生成——本课用的是 FBM 程序生成（零资产、参数即风格），这也是物料规格里把"噪声纹理"标注为备用方案的原因。
 
 **核心流程**：
-1. 采样噪声纹理，得到一个 `[0, 1]` 的值
+1. 计算每个像素的噪声值（本课：`fbm(vUv * 5.0 + uTime * 0.05, 4) * 0.5 + 0.5`，映射到 `[0, 1]`）
 2. 如果噪声值 < 阈值（threshold），用 `discard` 丢弃该片元
-3. 如果噪声值在阈值附近（边缘带），混合发光颜色
-4. 否则正常渲染
+3. 如果噪声值在阈值附近的边缘带内，越靠近阈值边缘越亮
+4. 基础面用简单漫反射光照正常渲染
 
 ```
-噪声纹理采样值:  0.0 -------- 0.3 ---- 0.5 ---- 0.7 -------- 1.0
+FBM 噪声值:      0.0 -------- 0.3 ---- 0.5 ---- 0.7 -------- 1.0
                          |       边缘带       |
                  discard区 │  发光边缘  │  正常渲染区
 ```
 
-**片元着色器核心代码**：
+**片元着色器核心代码**（与课程 `lessons/13` 的 `dissolveFragmentShader` 一致）：
 ```glsl
+uniform float uTime;
 uniform float uThreshold;   // 0~1，消融进度
 uniform float uEdgeWidth;   // 边缘发光宽度
 uniform vec3 uEdgeColor;    // 边缘发光颜色
-uniform sampler2D uNoiseMap;
+uniform vec3 uBaseColor;    // 基础颜色
 
 varying vec2 vUv;
+varying vec3 vNormal;       // 简单光照用
+varying vec3 vViewDir;      // 预留：本效果暂未用到（课程代码同）
+
+// fbm / perlinNoise / hash / random 为第 12 课定义的噪声工具函数（课程里通过字符串拼接注入）
 
 void main() {
-  float noise = texture2D(uNoiseMap, vUv).r;
+  // FBM 程序生成噪声遮罩：fbm 值域约 [-0.9, 0.9]，* 0.5 + 0.5 映射到约 [0, 1]
+  float noise = fbm(vUv * 5.0 + uTime * 0.05, 4) * 0.5 + 0.5;
 
   // 1. 消融：低于阈值的像素直接丢弃
   if (noise < uThreshold) discard;
 
-  // 2. 边缘发光：在阈值附近的窄带内混合发光色
+  // 2. 边缘发光：在 [threshold, threshold + edgeWidth] 窄带内，
+  //    edge 从 0（阈值处）过渡到 1，越靠近阈值边缘越亮
   float edge = smoothstep(uThreshold, uThreshold + uEdgeWidth, noise);
-  vec3 baseColor = vec3(0.8, 0.2, 0.1);
-  vec3 color = mix(uEdgeColor, baseColor, edge);
+  vec3 emissive = uEdgeColor * (1.0 - edge) * 2.0;
+
+  // 3. 简单光照，让基础面有明暗立体感
+  vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+  float diffuse = max(dot(vNormal, lightDir), 0.0);
+  vec3 color = uBaseColor * (0.2 + diffuse * 0.8) + emissive;
 
   gl_FragColor = vec4(color, 1.0);
 }
 ```
 
+顶点着色器负责把 `vUv / vNormal / vViewDir` 三个 varying 传进来（完整代码见课程 `lessons/13`）。
+
+**为什么不用贴图**：程序生成零资产（不依赖任何图片文件）、参数即风格（改 `vUv * 5.0` 的缩放、octaves 数就能调出完全不同的消融质感），配合 `uTime * 0.05` 还能让噪声场缓慢流动，产生"活"的消融——这是静态纹理做不到的。纹理方案的优势是需要美术干预的场合（比如手绘特定形状的消融边界）。
+
 **关键细节**：
 - `discard` 会完全跳过该片元，不写入深度缓冲和颜色缓冲
 - 边缘带越窄，过渡越锐利；越宽，"燃烧"感越明显
-- 噪声纹理需要是灰度的、连续的，Perlin Noise 最合适
+- 噪声值需要连续平滑，FBM/Perlin 最合适；白噪声太碎，消融效果不自然
 
 ---
 
 ### 2. Hologram（全息）效果
 
-**视觉构成**：全息效果 = 扫描线 + Fresnel 边缘发光 + 时间闪烁 + 半透明
+**视觉构成**：全息效果 = Fresnel 边缘透明 + 扫描线 + 随机噪点闪烁 + 半透明
 
-**片元着色器**：
+**片元着色器**（与课程 `lessons/13` 的 `holoFragmentShader` 一致）：
 ```glsl
 uniform float uTime;
+uniform float uFresnelPower;   // Fresnel 衰减指数（课程默认 2.0）
+uniform float uScanSpeed;      // 扫描线移动速度（课程默认 3.0）
+uniform float uScanDensity;    // 扫描线密度（课程默认 80.0）
+
+varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vViewDir;
 
+// random 为第 12 课定义的噪声工具函数（课程里通过字符串拼接注入）
+
 void main() {
-  // 1. Fresnel 边缘发光
-  float fresnel = pow(1.0 - abs(dot(vNormal, vViewDir)), 2.0);
+  // 1. Fresnel 边缘发光：正对时 dot ≈ 1，掠射时 dot ≈ 0，边缘越亮
+  float fresnel = pow(1.0 - abs(dot(vNormal, vViewDir)), uFresnelPower);
 
-  // 2. 扫描线
-  float scanline = sin(vUv.y * 200.0 + uTime * 5.0) * 0.5 + 0.5;
-  scanline = smoothstep(0.4, 0.6, scanline);
+  // 2. 扫描线：水平条纹随时间移动，smoothstep 让线条更清晰
+  float scan = sin(vUv.y * uScanDensity - uTime * uScanSpeed) * 0.5 + 0.5;
+  scan = smoothstep(0.3, 0.7, scan) * 0.3;
 
-  // 3. 时间闪烁
-  float flicker = sin(uTime * 10.0) * 0.1 + 0.9;
+  // 3. 闪烁：随机噪点——step(0.98, ...) 只有小概率位置被点亮，
+  //    第二个参数 uTime * 10.0 让噪点每帧换位置，模拟信号干扰的"卡顿"
+  float flicker = step(0.98, random(vec2(vUv.x * 100.0, uTime * 10.0))) * 0.15;
 
-  // 4. 合成
-  vec3 holoColor = vec3(0.0, 1.0, 1.0);
-  float alpha = fresnel * 0.8 + scanline * 0.2;
-  alpha *= flicker;
+  // 4. 合成：青色全息，透明度由三层叠加（+0.05 保证整体隐约可见）
+  vec3 holoColor = vec3(0.0, 0.9, 1.0);
+  float alpha = fresnel * 0.6 + scan + flicker + 0.05;
+  vec3 color = holoColor * (fresnel + scan + flicker);
 
-  gl_FragColor = vec4(holoColor, alpha);
+  gl_FragColor = vec4(color, alpha);
 }
 ```
 
@@ -99,9 +122,11 @@ void main() {
 | 层 | 效果 | 变化频率 |
 |----|------|----------|
 | Fresnel | 边缘亮、中间暗 | 随视角变化 |
-| 扫描线 | 水平亮暗条纹 | 随时间快速上移 |
-| 闪烁 | 整体亮度波动 | 低频随机感 |
+| 扫描线 | 水平亮暗条纹上移 | 随时间匀速 |
+| 闪烁 | 随机噪点点亮 | 每帧随机位置 |
 | 半透明 | 透过去看到背面 | — |
+
+**两种闪烁写法的取舍**：全局正弦闪烁（`sin(uTime * 10.0) * 0.1 + 0.9`）让整个画面同步变亮变暗，节奏均匀显得"假"；随机噪点闪烁（本课写法）只在少数位置、少数帧点亮，更像真实全息投影的信号干扰。
 
 ---
 
@@ -187,10 +212,10 @@ pos += normal * n * uDistortionStrength;
 
 ### 1. Dissolve 效果要点
 
-**噪声纹理选择**：
-- 推荐使用 Perlin Noise 灰度图（连续、平滑）
-- 不要用白噪声（太碎，消融效果不自然）
-- 分辨率 256×256 或 512×512 足够
+**噪声来源选择**：
+- 本课用 FBM 程序生成（零资产、参数即风格），与第 12 课的噪声工具函数复用
+- 纹理方案（Perlin Noise 灰度图）是备用方案，适合需要美术手绘特定消融形状的场合；若用纹理，256×256 或 512×512 足够
+- 无论哪种来源，噪声都要连续平滑；白噪声太碎，消融效果不自然
 
 **阈值动画**：
 ```javascript

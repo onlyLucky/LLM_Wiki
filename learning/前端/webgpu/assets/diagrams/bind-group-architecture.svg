@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">绑定组的三层分组策略</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Bind Groups · 按更新频率分层，换哪一层就只换哪一层</text>
+
+  <!-- 管线布局：三个组布局的有序元组 -->
+  <rect x="240" y="106" width="480" height="54" rx="8" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="480" y="130" font-size="13" fill="#1F2430" text-anchor="middle" font-weight="600">GPUPipelineLayout = [g0Layout, g1Layout, g2Layout]</text>
+  <text x="480" y="150" font-size="11" fill="#5B6472" text-anchor="middle">createRenderPipeline 时定死；layout:'auto' 时由 WGSL 用法推导</text>
+  <line x1="480" y1="160" x2="480" y2="182" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- 三层面板 -->
+  <rect x="36" y="186" width="888" height="300" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+
+  <!-- Group 0：帧级 -->
+  <rect x="60" y="204" width="100" height="78" rx="8" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="110" y="240" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">Group 0</text>
+  <text x="110" y="262" font-size="11" fill="#5B6472" text-anchor="middle">帧级</text>
+
+  <rect x="184" y="204" width="290" height="78" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="329" y="230" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">Layout：uniform buffer</text>
+  <text x="329" y="250" font-size="11" fill="#5B6472" text-anchor="middle">binding 0 · visibility vertex|fragment</text>
+  <text x="329" y="268" font-size="11" fill="#5B6472" text-anchor="middle">内容：相机矩阵 · 时间</text>
+
+  <line x1="474" y1="243" x2="504" y2="243" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+  <text x="489" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">实例化</text>
+
+  <rect x="508" y="204" width="394" height="78" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="705" y="228" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">每帧 1 个 BindGroup</text>
+  <text x="705" y="248" font-size="11" fill="#5B6472" text-anchor="middle">writeBuffer 更新 time 与相机，组不重建</text>
+  <text x="705" y="266" font-size="11" fill="#5B6472" text-anchor="middle">绑定一次，整帧有效（一帧零换绑）</text>
+
+  <!-- Group 1：物体级 -->
+  <rect x="60" y="300" width="100" height="78" rx="8" fill="#F0EBFC" stroke="#8B5CF6" stroke-width="1.5"/>
+  <text x="110" y="336" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">Group 1</text>
+  <text x="110" y="358" font-size="11" fill="#5B6472" text-anchor="middle">物体级</text>
+
+  <rect x="184" y="300" width="290" height="78" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="329" y="326" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">Layout：uniform buffer</text>
+  <text x="329" y="346" font-size="11" fill="#5B6472" text-anchor="middle">binding 0 · visibility vertex|fragment</text>
+  <text x="329" y="364" font-size="11" fill="#5B6472" text-anchor="middle">内容：模型矩阵 · 物体参数</text>
+
+  <line x1="474" y1="339" x2="504" y2="339" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+  <text x="489" y="328" font-size="10.5" fill="#5B6472" text-anchor="middle">实例化</text>
+
+  <rect x="508" y="300" width="394" height="78" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="705" y="324" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">每物体 1 个（或共享 + 动态偏移）</text>
+  <text x="705" y="344" font-size="11" fill="#5B6472" text-anchor="middle">动态偏移：单 buffer 存 n 个矩阵</text>
+  <text x="705" y="362" font-size="11" fill="#5B6472" text-anchor="middle">每块 256B 对齐，setBindGroup(1, g, [n×256])</text>
+
+  <!-- Group 2：材质级 -->
+  <rect x="60" y="396" width="100" height="78" rx="8" fill="#DDF5F0" stroke="#2DD4BF" stroke-width="1.5"/>
+  <text x="110" y="432" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">Group 2</text>
+  <text x="110" y="454" font-size="11" fill="#5B6472" text-anchor="middle">材质级</text>
+
+  <rect x="184" y="396" width="290" height="78" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="329" y="422" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">Layout：texture + sampler</text>
+  <text x="329" y="442" font-size="11" fill="#5B6472" text-anchor="middle">binding 0 纹理 · binding 1 采样器</text>
+  <text x="329" y="460" font-size="11" fill="#5B6472" text-anchor="middle">内容：贴图 · 过滤与寻址设置</text>
+
+  <line x1="474" y1="435" x2="504" y2="435" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+  <text x="489" y="424" font-size="10.5" fill="#5B6472" text-anchor="middle">实例化</text>
+
+  <rect x="508" y="396" width="394" height="78" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="705" y="420" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">每材质 1 个，静态创建</text>
+  <text x="705" y="440" font-size="11" fill="#5B6472" text-anchor="middle">纹理与采样器一起换绑</text>
+  <text x="705" y="458" font-size="11" fill="#5B6472" text-anchor="middle">材质不变的帧零换绑</text>
+
+  <!-- 底部注释 -->
+  <text x="480" y="516" font-size="14" fill="#1F2430" text-anchor="middle">验证一次、整组换绑：换物体只动 Group 1，相机与材质互不干扰</text>
+  <text x="480" y="534" font-size="11" fill="#5B6472" text-anchor="middle">Validate once, swap only the group that changed</text>
+</svg>

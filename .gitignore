@@ -1,10 +1,33 @@
 # Obsidian
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+*.conflict*
 
 # macOS
 .DS_Store
+._*
+.Spotlight-V100
+.Trashes
 
-# 临时文件
+# Windows
+Thumbs.db
+desktop.ini
+
+# IDE
+.trae/
+.idea/
+.vscode/
+
+# 临时文件 / 备份
 *.tmp
+*.bak
 *~
+*.swp
+*.swo
+
+# Node / Web 项目
+node_modules/
+dist/
+*.log

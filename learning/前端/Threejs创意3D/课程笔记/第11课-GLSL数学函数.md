@@ -9,11 +9,12 @@
 ## 课程内容
 
 ### 学习目标
-1. 掌握 GLSL 内置数学函数（mix/step/smoothstep/sin/cos/pow）
+1. 掌握 GLSL 内置数学函数（mix/step/smoothstep/sin/cos/pow/clamp/atan/exp）
 2. 理解向量运算（dot/cross/normalize/length/distance）
-3. 学会用数学函数画基本形状（圆形/矩形/六边形）
+3. 学会用数学函数画基本形状（圆形/矩形/六边形/三角形）
 4. 理解坐标系变换和 UV 映射
 5. 掌握 fract/mod 等周期函数
+6. 初识 mat2 旋转矩阵的构造（列主序）与矩阵乘向量
 
 ---
 
@@ -22,6 +23,15 @@
 ### 1. 数学函数概览
 
 GLSL 提供了丰富的内置数学函数，分为几大类：
+
+**先建立直觉**——六个高频函数各配一句人话，先记住感觉再看公式：
+
+- `mix(a, b, t)`：两点之间的滑杆。t 从 0 拨到 1，值就从 a 滑到 b（lerp 的滑动版，一切渐变动画的基础）。
+- `step(edge, x)`：一刀切的阈值开关。x 过了 edge 就是 1，没过就是 0，没有中间状态。
+- `smoothstep(a, b, x)`：带缓冲的 step。切换瞬间有一段平滑过渡，「硬边」和「柔边」的区别就在这一行。
+- `fract(x)`：永远只取小数部分，结果在 0-1 之间周而复始——循环动画和网格重复的周期性来源。
+- `mod(x, y)`：会折返的 fract。不是在 0-1 循环，而是在 0-y 之间循环（到 y 就折回来），控制重复间距用它。
+- `atan`：把直角坐标折成极坐标（算出点相对原点的角度），光芒、漩涡、圆环这类径向效果的入口。
 
 **标量函数**（作用于单个值）：
 | 函数 | 用途 | 公式 | 示例 |
@@ -159,6 +169,21 @@ float hexagon(vec2 uv, vec2 center, float radius) {
     d.x
   );
   return smoothstep(radius, radius - 0.01, result);
+}
+```
+
+#### 4.4 三角形
+
+**原理**：三条边各是一个半平面（`dot(p, 外法线) - 偏移`），图形内部三个条件同时满足，取最大距离。「半平面组合」是第 16 课 Ray Marching 组合复杂形状的基础
+
+```glsl
+float triangle(vec2 uv, vec2 center, float size) {
+  vec2 p = uv - center;
+  float d1 = -p.y - size * 0.5;                       // 底边（法线朝下）
+  float d2 = dot(p, vec2(-0.866, 0.5)) - size * 0.5;  // 左斜边（0.866 ≈ √3/2）
+  float d3 = dot(p, vec2(0.866, 0.5)) - size * 0.5;   // 右斜边
+  float d = max(d1, max(d2, d3));  // 内部 d < 0、外部 d > 0
+  return smoothstep(0.01, -0.01, d);  // edge0 > edge1 反向过渡，内部填色
 }
 ```
 
@@ -308,6 +333,33 @@ float checkerPattern = mod(checker.x + checker.y, 2.0);
 vec2 hexUV = fract(uv * 5.0);
 float hex = hexagon(hexUV, vec2(0.5), 0.4);
 ```
+
+### 5. 函数演示面板 — 六函数轮播 + mat2 旋转
+
+课程最右侧新增第五个面板（x = 10），用「时间分派」自动轮播七种效果，无需额外滑块：
+
+```glsl
+// selector 每 1/0.35 ≈ 2.9 秒切换一次，20 秒一个完整轮播
+float selector = mod(uTime * 0.35, 7.0);
+if (selector < 1.0) { /* clamp */ }
+else if (selector < 2.0) { /* atan */ }
+// ... 依次分派到七个分支
+```
+
+| 效果 | 核心写法 | 要点 |
+|------|---------|------|
+| clamp | `clamp(sin(uv.x * 12.0) * 1.8, 0.0, 1.0)` | 波形超出 [0, 1] 的部分被压平成平台 |
+| atan | `pow(max(0.0, sin(angle * 8.0 + uTime * 0.5)), 20.0)` | 极坐标光芒（作业太阳的写法），配合 smoothstep 画环限位 |
+| pow | `pow(clamp(uv.x + 0.5, 0.0, 1.0), 0.4545)` | 指数 ≈ 1/2.2 是显示器伽马，与线性对比上下分屏 |
+| exp | `exp(-d * 6.0)` | 指数衰减光晕，发光体标配曲线，乘 sin 做呼吸 |
+| cross | `normalize(cross(edge1, edge2)) * 0.5 + 0.5` | 叉积求法线，映射到颜色可视化方向 |
+| sign | `sign(sin(uv.x * 12.0 - uTime * 2.0)) * 0.5 + 0.5` | 硬边分界，正负区间填双色 |
+| mat2 | `mat2(c, s, -s, c) * uv` | 旋转整个坐标系，矩形跟着转 |
+
+mat2 易错点：
+
+- **列主序填数**：构造参数按「列」排列，第一列是 (c, s)，第二列是 (-s, c)，得到标准旋转矩阵
+- **矩阵乘向量**：必须写 `rot * uv`（矩阵在左），写反 `uv * rot` 相当于乘转置矩阵，旋转方向相反
 
 ---
 

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B5CF6"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">一帧的生命周期</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Frame Lifecycle · 从 requestAnimationFrame 到像素上屏</text>
+
+  <!-- CPU 面板：同步录制 -->
+  <rect x="36" y="104" width="888" height="232" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="60" y="132" font-size="15" fill="#1F2430" font-weight="600">CPU · JavaScript（同步：只做录制与上传）</text>
+  <text x="900" y="132" font-size="11" fill="#5B6472" text-anchor="end">时间 →</text>
+
+  <rect x="60" y="152" width="132" height="120" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="126" y="180" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">RAF</text>
+  <text x="126" y="200" font-size="10.5" fill="#5B6472" text-anchor="middle">requestAnimationFrame</text>
+  <text x="126" y="216" font-size="10.5" fill="#5B6472" text-anchor="middle">浏览器 vsync 触发</text>
+  <text x="126" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">拿到 now 时间戳</text>
+
+  <line x1="192" y1="212" x2="202" y2="212" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="204" y="152" width="132" height="120" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="270" y="180" font-size="13" fill="#1F2430" text-anchor="middle" font-weight="600">writeBuffer</text>
+  <text x="270" y="200" font-size="10.5" fill="#5B6472" text-anchor="middle">queue.writeBuffer</text>
+  <text x="270" y="216" font-size="10.5" fill="#5B6472" text-anchor="middle">上传 uniform 数据</text>
+  <text x="270" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">立即排进队列</text>
+
+  <line x1="336" y1="212" x2="346" y2="212" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="348" y="152" width="132" height="120" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="414" y="180" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">getCurrentTexture</text>
+  <text x="414" y="200" font-size="10.5" fill="#5B6472" text-anchor="middle">取画布后台纹理</text>
+  <text x="414" y="216" font-size="10.5" fill="#5B6472" text-anchor="middle">双缓冲轮换</text>
+  <text x="414" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">本帧的渲染目标</text>
+
+  <line x1="480" y1="212" x2="490" y2="212" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="492" y="152" width="132" height="120" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="558" y="180" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">Encoder</text>
+  <text x="558" y="200" font-size="10.5" fill="#5B6472" text-anchor="middle">createCommandEncoder</text>
+  <text x="558" y="216" font-size="10.5" fill="#5B6472" text-anchor="middle">创建命令录制器</text>
+  <text x="558" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">只录不执行</text>
+
+  <line x1="624" y1="212" x2="634" y2="212" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="636" y="152" width="132" height="120" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="702" y="174" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">Render Pass 命令</text>
+  <text x="702" y="194" font-size="10.5" fill="#5B6472" text-anchor="middle">beginRenderPass()</text>
+  <text x="702" y="208" font-size="10.5" fill="#5B6472" text-anchor="middle">setPipeline / setBindGroup</text>
+  <text x="702" y="222" font-size="10.5" fill="#5B6472" text-anchor="middle">setVertexBuffer · draw()</text>
+  <text x="702" y="236" font-size="10.5" fill="#5B6472" text-anchor="middle">end() 封闭通道</text>
+  <text x="702" y="258" font-size="10.5" fill="#4C6FFF" text-anchor="middle">全部只是录制</text>
+
+  <line x1="768" y1="212" x2="778" y2="212" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="780" y="152" width="132" height="120" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="846" y="180" font-size="14" fill="#1F2430" text-anchor="middle" font-weight="600">submit</text>
+  <text x="846" y="200" font-size="10.5" fill="#5B6472" text-anchor="middle">queue.submit</text>
+  <text x="846" y="216" font-size="10.5" fill="#5B6472" text-anchor="middle">[encoder.finish()]</text>
+  <text x="846" y="232" font-size="10.5" fill="#5B6472" text-anchor="middle">JS 侧即刻返回</text>
+
+  <text x="60" y="306" font-size="11.5" fill="#5B6472">以上全部同步完成、成本极低——真正的图形工作发生在 submit 之后的 GPU 队列里</text>
+
+  <!-- 异步边界 -->
+  <line x1="36" y1="356" x2="924" y2="356" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="480" y="349" font-size="12.5" fill="#8B5CF6" text-anchor="middle">异步边界：submit() 返回不等于 GPU 开始执行——命令先在队列里排队</text>
+  <line x1="846" y1="336" x2="846" y2="372" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow-violet)"/>
+
+  <!-- GPU 面板：异步执行 -->
+  <rect x="36" y="376" width="888" height="116" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="60" y="404" font-size="15" fill="#1F2430" font-weight="600">GPU · 硬件（异步：按提交顺序执行命令缓冲）</text>
+
+  <rect x="60" y="416" width="192" height="56" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="156" y="438" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">命令出队</text>
+  <text x="156" y="456" font-size="10.5" fill="#5B6472" text-anchor="middle">command processor 消费</text>
+
+  <line x1="252" y1="444" x2="272" y2="444" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="276" y="416" width="192" height="56" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="372" y="438" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">执行管线</text>
+  <text x="372" y="456" font-size="10.5" fill="#5B6472" text-anchor="middle">vertex → 光栅化 → fragment</text>
+
+  <line x1="468" y1="444" x2="488" y2="444" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="492" y="416" width="192" height="56" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="588" y="438" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">写入画布纹理</text>
+  <text x="588" y="456" font-size="10.5" fill="#5B6472" text-anchor="middle">片元颜色进后台纹理</text>
+
+  <line x1="684" y1="444" x2="704" y2="444" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="708" y="416" width="192" height="56" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="804" y="438" font-size="12.5" fill="#1F2430" text-anchor="middle" font-weight="600">present 上屏</text>
+  <text x="804" y="456" font-size="10.5" fill="#5B6472" text-anchor="middle">浏览器合成并显示</text>
+
+  <!-- 底部注释 -->
+  <text x="480" y="516" font-size="14" fill="#1F2430" text-anchor="middle">JS 录制、GPU 执行、浏览器上屏——三段各干各的，靠队列衔接而互不等待</text>
+  <text x="480" y="534" font-size="11" fill="#5B6472" text-anchor="middle">Record on the CPU, execute on the GPU, present to the screen</text>
+</svg>

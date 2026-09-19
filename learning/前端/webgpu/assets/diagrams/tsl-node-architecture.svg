@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B5CF6"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">TSL 节点系统：一份节点图，两个后端</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Node System Architecture · three/webgpu 从场景到硬件的四层接力</text>
+
+  <!-- L1 应用层 -->
+  <rect x="50" y="98" width="860" height="74" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="66" y="120" font-size="12" fill="#4C6FFF" font-weight="600">L1</text>
+  <text x="92" y="120" font-size="13" fill="#1F2430" font-weight="600">应用层</text>
+  <text x="142" y="120" font-size="12" fill="#5B6472">你亲手组装的部分：场景 / 网格 / 相机 / 后处理链</text>
+  <rect x="70" y="134" width="260" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="148" font-size="13" fill="#1F2430">Scene · Camera · Lights</text>
+  <text x="82" y="161" font-size="11" fill="#5B6472">场景图 + 相机 + 两盏灯</text>
+  <rect x="350" y="134" width="260" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="362" y="148" font-size="13" fill="#1F2430">Mesh + NodeMaterial</text>
+  <text x="362" y="161" font-size="11" fill="#5B6472">几何挂材质节点图</text>
+  <rect x="630" y="134" width="260" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="642" y="148" font-size="13" fill="#1F2430">PostProcessing</text>
+  <text x="642" y="161" font-size="11" fill="#5B6472">pass() + bloom() 后处理链</text>
+
+  <!-- L2 节点系统 -->
+  <rect x="50" y="198" width="860" height="74" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="66" y="220" font-size="12" fill="#4C6FFF" font-weight="600">L2</text>
+  <text x="92" y="220" font-size="13" fill="#1F2430" font-weight="600">节点系统</text>
+  <text x="142" y="220" font-size="12" fill="#5B6472">TSL 节点图：材质 / 函数 / 数据统一为节点，链式调用即构图</text>
+  <rect x="70" y="234" width="260" height="32" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="82" y="248" font-size="13" fill="#1F2430">材质节点</text>
+  <text x="82" y="261" font-size="11" fill="#5B6472">positionNode · colorNode · normalNode</text>
+  <rect x="350" y="234" width="260" height="32" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="362" y="248" font-size="13" fill="#1F2430">函数节点 Fn</text>
+  <text x="362" y="261" font-size="11" fill="#5B6472">Fn(([p, t]) =&gt; …) 可复用逻辑</text>
+  <rect x="630" y="234" width="260" height="32" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="642" y="248" font-size="13" fill="#1F2430">数据节点</text>
+  <text x="642" y="261" font-size="11" fill="#5B6472">time · uniform() · positionLocal</text>
+
+  <!-- L3 后端转译层 -->
+  <rect x="50" y="298" width="860" height="74" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="66" y="320" font-size="12" fill="#4C6FFF" font-weight="600">L3</text>
+  <text x="92" y="320" font-size="13" fill="#1F2430" font-weight="600">后端转译层</text>
+  <text x="168" y="320" font-size="12" fill="#5B6472">NodeBuilder 遍历节点图，生成对应语言的着色器源码</text>
+  <rect x="70" y="334" width="330" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="348" font-size="13" fill="#1F2430">WGSL</text>
+  <text x="82" y="361" font-size="11" fill="#5B6472">WebGPU 后端着色器源码</text>
+  <rect x="560" y="334" width="330" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="572" y="348" font-size="13" fill="#1F2430">GLSL ES</text>
+  <text x="572" y="361" font-size="11" fill="#5B6472">WebGL2 后端着色器源码</text>
+  <text x="480" y="354" font-size="11" fill="#8B5CF6" text-anchor="middle">同一份节点图</text>
+
+  <!-- L4 硬件后端 -->
+  <rect x="50" y="398" width="860" height="74" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="66" y="420" font-size="12" fill="#4C6FFF" font-weight="600">L4</text>
+  <text x="92" y="420" font-size="13" fill="#1F2430" font-weight="600">硬件后端</text>
+  <text x="154" y="420" font-size="12" fill="#5B6472">渲染器把源码与资源对接到实际图形 API</text>
+  <rect x="70" y="434" width="330" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="448" font-size="13" fill="#1F2430">WebGPUBackend</text>
+  <text x="82" y="461" font-size="11" fill="#5B6472">navigator.gpu · GPUDevice</text>
+  <rect x="560" y="434" width="330" height="32" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="572" y="448" font-size="13" fill="#1F2430">WebGL2Backend</text>
+  <text x="572" y="461" font-size="11" fill="#5B6472">WebGL2RenderingContext</text>
+  <!-- 自动回退路径 -->
+  <line x1="415" y1="450" x2="545" y2="450" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow-violet)"/>
+  <text x="480" y="440" font-size="11" fill="#8B5CF6" text-anchor="middle">无 WebGPU 自动回退</text>
+
+  <!-- 层间主线 -->
+  <line x1="480" y1="174" x2="480" y2="194" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <line x1="480" y1="274" x2="480" y2="294" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <line x1="480" y1="374" x2="480" y2="394" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- 底部注释 -->
+  <text x="480" y="502" font-size="14" fill="#1F2430" text-anchor="middle">场景在应用层组装，材质与逻辑写成节点图，转译层按后端生成 WGSL 或 GLSL——回退发生在最底层，业务代码零改动</text>
+  <text x="480" y="522" font-size="11" fill="#5B6472" text-anchor="middle">One node graph compiles to WGSL or GLSL — WebGL2 fallback is automatic</text>
+</svg>

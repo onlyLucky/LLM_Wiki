@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="map-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">原生 WebGPU 与 Three.js 的概念映射</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Concept Mapping · Day 1–2 的手写零件，在 Day 3 由谁接管</text>
+
+  <!-- 左列：原生 WebGPU -->
+  <rect x="50" y="100" width="400" height="380" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="250" y="130" font-size="20" fill="#1F2430" text-anchor="middle" font-weight="600">原生 WebGPU</text>
+  <text x="250" y="150" font-size="12" fill="#5B6472" text-anchor="middle">Day 1–2 · 每一层亲手搭</text>
+
+  <!-- 右列：Three.js / TSL -->
+  <rect x="510" y="100" width="400" height="380" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="710" y="130" font-size="20" fill="#1F2430" text-anchor="middle" font-weight="600">Three.js / TSL</text>
+  <text x="710" y="150" font-size="12" fill="#5B6472" text-anchor="middle">Day 3 · 引擎接管仪式代码</text>
+
+  <!-- 行 1：渲染管线 ↔ 节点材质 -->
+  <rect x="70" y="170" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="187" font-size="13" fill="#1F2430">GPURenderPipeline</text>
+  <text x="82" y="202" font-size="11" fill="#5B6472">createRenderPipeline：布局 + 顶点 + 片元描述</text>
+  <rect x="530" y="170" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="187" font-size="13" fill="#1F2430">NodeMaterial</text>
+  <text x="542" y="202" font-size="11" fill="#5B6472">MeshStandardNodeMaterial 等节点材质</text>
+  <line x1="436" y1="190" x2="524" y2="190" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 行 2：绑定组 ↔ uniform()/texture() -->
+  <rect x="70" y="220" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="237" font-size="13" fill="#1F2430">BindGroup + GPUBuffer</text>
+  <text x="82" y="252" font-size="11" fill="#5B6472">createBindGroup · 手动对齐与打包</text>
+  <rect x="530" y="220" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="237" font-size="13" fill="#1F2430">uniform() / texture()</text>
+  <text x="542" y="252" font-size="11" fill="#5B6472">节点自动生成 buffer 与绑定组</text>
+  <line x1="436" y1="240" x2="524" y2="240" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 行 3：渲染通道 ↔ pass() -->
+  <rect x="70" y="270" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="287" font-size="13" fill="#1F2430">RenderPassEncoder</text>
+  <text x="82" y="302" font-size="11" fill="#5B6472">beginRenderPass · setPipeline · draw</text>
+  <rect x="530" y="270" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="287" font-size="13" fill="#1F2430">pass()</text>
+  <text x="542" y="302" font-size="11" fill="#5B6472">PostProcessing 的场景节点（常规路径 renderer.render）</text>
+  <line x1="436" y1="290" x2="524" y2="290" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 行 4：计算管线 ↔ compute() -->
+  <rect x="70" y="320" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="337" font-size="13" fill="#1F2430">ComputePipeline</text>
+  <text x="82" y="352" font-size="11" fill="#5B6472">createComputePipeline · dispatchWorkgroups</text>
+  <rect x="530" y="320" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="337" font-size="13" fill="#1F2430">Fn(...).compute(count)</text>
+  <text x="542" y="352" font-size="11" fill="#5B6472">ComputeNode · renderer.compute 每帧调度</text>
+  <line x1="436" y1="340" x2="524" y2="340" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 行 5：writeBuffer ↔ 节点赋值 -->
+  <rect x="70" y="370" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="387" font-size="13" fill="#1F2430">queue.writeBuffer</text>
+  <text x="82" y="402" font-size="11" fill="#5B6472">每帧手动打包 Float32Array 上传</text>
+  <rect x="530" y="370" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="387" font-size="13" fill="#1F2430">uniform().value 赋值</text>
+  <text x="542" y="402" font-size="11" fill="#5B6472">JS 侧赋值即自动上传，storage 更新同理</text>
+  <line x1="436" y1="390" x2="524" y2="390" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 行 6：画布上下文 ↔ WebGPURenderer -->
+  <rect x="70" y="420" width="360" height="40" rx="6" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="82" y="437" font-size="13" fill="#1F2430">canvas.getContext('webgpu')</text>
+  <text x="82" y="452" font-size="11" fill="#5B6472">context.configure + format 协商</text>
+  <rect x="530" y="420" width="360" height="40" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="542" y="437" font-size="13" fill="#1F2430">new WebGPURenderer()</text>
+  <text x="542" y="452" font-size="11" fill="#5B6472">构造 + await renderer.init() 选定后端</text>
+  <line x1="436" y1="440" x2="524" y2="440" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="6 5" marker-start="url(#map-dim)" marker-end="url(#map-dim)"/>
+
+  <!-- 底部注释 -->
+  <text x="480" y="508" font-size="14" fill="#1F2430" text-anchor="middle">左列的手艺没有作废：引擎收走的是仪式代码，概念一一对应——排查问题时仍能顺着映射挖回底层</text>
+  <text x="480" y="528" font-size="11" fill="#5B6472" text-anchor="middle">Hand-written concepts map one-to-one — dig down to the metal when it breaks</text>
+</svg>

@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B5CF6"/>
+    </marker>
+    <!-- workgroup 内部 8×8 invocation 格子 -->
+    <pattern id="cells" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="5" height="5" fill="#EEF0F6" stroke="#B9C0CF" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">计算着色器全景：dispatch 与双缓冲</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Compute Pipeline · dispatchWorkgroups × @workgroup_size → storage → 顶点着色器</text>
+
+  <!-- ============ 面板一：dispatch 网格 ============ -->
+  <rect x="50" y="105" width="400" height="250" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="70" y="130" font-size="15" fill="#1F2430" font-weight="600">① dispatch 网格</text>
+  <text x="70" y="150" font-size="11.5" fill="#5B6472">dispatchWorkgroups(4,1,1) × @workgroup_size(64) → 256 个 invocation</text>
+
+  <!-- 四个 workgroup：各含 8×8 示意格子（实际 64 线程） -->
+  <g>
+    <rect x="70" y="163" width="82" height="88" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="87" y="173" width="47" height="47" fill="url(#cells)"/>
+    <text x="111" y="236" font-size="11" fill="#1F2430" text-anchor="middle">wg 0</text>
+
+    <rect x="162" y="163" width="82" height="88" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="179" y="173" width="47" height="47" fill="url(#cells)"/>
+    <text x="203" y="236" font-size="11" fill="#1F2430" text-anchor="middle">wg 1</text>
+
+    <rect x="254" y="163" width="82" height="88" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="271" y="173" width="47" height="47" fill="url(#cells)"/>
+    <!-- 高亮一个 invocation：wg 2 的 local 17 -->
+    <rect x="301" y="185" width="5" height="5" fill="#4C6FFF"/>
+    <text x="295" y="236" font-size="11" fill="#1F2430" text-anchor="middle">wg 2</text>
+
+    <rect x="346" y="163" width="82" height="88" rx="6" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+    <rect x="363" y="173" width="47" height="47" fill="url(#cells)"/>
+    <text x="387" y="236" font-size="11" fill="#1F2430" text-anchor="middle">wg 3</text>
+  </g>
+
+  <text x="250" y="272" font-size="11.5" fill="#5B6472" text-anchor="middle">每个 workgroup 固定 64 个 invocation（8×8 仅为示意）</text>
+  <text x="250" y="298" font-size="13" fill="#1F2430" text-anchor="middle">global_id = workgroup_id × 64 + local_id</text>
+  <text x="250" y="324" font-size="12" fill="#4C6FFF" text-anchor="middle">高亮：workgroup 2 · local 17 → global 145</text>
+
+  <!-- ============ 面板二：双缓冲交替 ============ -->
+  <rect x="480" y="105" width="430" height="250" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="500" y="130" font-size="15" fill="#1F2430" font-weight="600">② 双缓冲交替（ping-pong）</text>
+  <text x="500" y="150" font-size="11.5" fill="#5B6472">读 A 写 B，下一帧读 B 写 A——数据永远单向流动</text>
+
+  <!-- 帧标签 -->
+  <text x="700" y="167" font-size="11" fill="#5B6472" text-anchor="middle">帧 N</text>
+
+  <!-- 状态 A -->
+  <rect x="500" y="175" width="110" height="64" rx="8" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="555" y="200" font-size="13" fill="#1F2430" text-anchor="middle">状态 A</text>
+  <text x="555" y="218" font-size="10.5" fill="#5B6472" text-anchor="middle">pos + vel</text>
+
+  <!-- compute -->
+  <rect x="648" y="175" width="104" height="64" rx="8" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="700" y="200" font-size="13" fill="#1F2430" text-anchor="middle">compute</text>
+  <text x="700" y="218" font-size="10.5" fill="#5B6472" text-anchor="middle">update()</text>
+
+  <!-- 状态 B -->
+  <rect x="790" y="175" width="110" height="64" rx="8" fill="#EEF0F6" stroke="#1F2430" stroke-width="1.5"/>
+  <text x="845" y="200" font-size="13" fill="#1F2430" text-anchor="middle">状态 B</text>
+  <text x="845" y="218" font-size="10.5" fill="#5B6472" text-anchor="middle">pos + vel</text>
+
+  <!-- 读 A / 写 B -->
+  <line x1="612" y1="198" x2="644" y2="198" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="628" y="188" font-size="11" fill="#4C6FFF" text-anchor="middle">读</text>
+  <line x1="754" y1="198" x2="786" y2="198" stroke="#8B5CF6" stroke-width="2" marker-end="url(#arrow-violet)"/>
+  <text x="770" y="188" font-size="11" fill="#8B5CF6" text-anchor="middle">写</text>
+
+  <!-- 下一帧：读 B 写 A -->
+  <polyline points="845,243 845,272 555,272 555,245" fill="none" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow-violet)"/>
+  <text x="700" y="266" font-size="12" fill="#8B5CF6" text-anchor="middle">下一帧（N+1）：读 B 写 A</text>
+
+  <text x="695" y="305" font-size="12" fill="#1F2430" text-anchor="middle">交换的不是 buffer，是绑定组里指向谁的「指针」</text>
+  <text x="695" y="330" font-size="12" fill="#5B6472" text-anchor="middle">渲染只读刚写完的那组，数据全程不离开显存</text>
+
+  <!-- ============ 面板三：一帧的数据流 ============ -->
+  <rect x="50" y="380" width="860" height="80" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+  <text x="70" y="405" font-size="15" fill="#1F2430" font-weight="600">③ 一帧的数据流</text>
+
+  <rect x="160" y="412" width="140" height="44" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="230" y="431" font-size="12.5" fill="#1F2430" text-anchor="middle">JS writeBuffer</text>
+  <text x="230" y="448" font-size="10.5" fill="#5B6472" text-anchor="middle">时间 / 鼠标 uniform</text>
+
+  <line x1="302" y1="434" x2="336" y2="434" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <rect x="340" y="412" width="180" height="44" rx="6" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="1.5"/>
+  <text x="430" y="431" font-size="12.5" fill="#1F2430" text-anchor="middle">Compute Pass</text>
+  <text x="430" y="448" font-size="10.5" fill="#5B6472" text-anchor="middle">dispatchWorkgroups 更新状态</text>
+
+  <line x1="522" y1="434" x2="556" y2="434" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <rect x="560" y="412" width="180" height="44" rx="6" fill="#F0EBFB" stroke="#8B5CF6" stroke-width="1.5"/>
+  <text x="650" y="431" font-size="12.5" fill="#1F2430" text-anchor="middle">Render Pass</text>
+  <text x="650" y="448" font-size="10.5" fill="#5B6472" text-anchor="middle">vs 直读 storage 绘制</text>
+
+  <line x1="742" y1="434" x2="776" y2="434" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <rect x="780" y="412" width="120" height="44" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="840" y="431" font-size="12.5" fill="#1F2430" text-anchor="middle">画布</text>
+  <text x="840" y="448" font-size="10.5" fill="#5B6472" text-anchor="middle">getCurrentTexture</text>
+
+  <!-- 底部注释 -->
+  <text x="480" y="495" font-size="14" fill="#1F2430" text-anchor="middle">一帧的分工：JS 只写 uniform，GPU 上 dispatch 更新状态、渲染直读同一份 storage，中间零拷贝</text>
+  <text x="480" y="517" font-size="11" fill="#5B6472" text-anchor="middle">Dispatch grid, ping-pong buffers, and the compute-to-render data flow</text>
+</svg>

@@ -1,0 +1,19 @@
+{
+  "name": "webgpu-3day-course",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "WebGPU 三天实战课程 —— 讲义 / demo / 作业统一工程",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@webgpu/types": "0.1.72",
+    "typescript": "7.0.2",
+    "vite": "8.3.0"
+  },
+  "dependencies": {
+    "three": "0.186.0"
+  }
+}

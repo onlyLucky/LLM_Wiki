@@ -291,3 +291,10 @@
 - 关键点: 模型配置层级确认——顶层 model.default 为生效值，custom_providers 内 model 仅兜底，记忆中 deepseek-v4-flash 信息已过时
 - 总计 2 个用户会话，8 条用户消息
 - 更新: index.md（Last updated: 2026-09-09, Total pages: 34→35, 新增 Daily Summaries 条目 2026-09-09）
+
+## [2026-09-14] create | 每日会话汇总 - 2026-09-13
+- 文件: daily/2026-09-13.md
+- 会话来源: 飞书 (1 session, 78 messages, 5 条用户消息; assistant profile; default 仅 cron 任务)
+- 主题: webHugo 博客一天 3 次部署（备份只留一份，dist_20260913_1435/1652/1953 依次轮换）+ 360/搜狗/神马站长验证上线（commits 29f8b8f、3d77d10）+ 神马验证文件远端直改（..._1789300600，HTTP 200 验证）
+- 关键点: ① 远端备份需 sudo（/data/www/HugoBlog/ 父目录 root 所有，已并入记忆）；② 删除远端 dist_* 触发安全检查拦截、等用户确认后继续；③ 神马验证码源码层面 meta 与验证文件值不一致 + 远端又被直改为第三处值，本地 static/ 仍旧值——再次部署会覆盖，已列入待跟进
+- 更新: index.md（Last updated: 2026-09-14, Total pages: 35→36, 新增 Daily Summaries 条目 2026-09-13）

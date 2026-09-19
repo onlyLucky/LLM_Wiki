@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B5CF6"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">从模型坐标到屏幕像素</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Coordinate Spaces · 顶点在 MVP 管线中的坐标接力</text>
+
+  <!-- 第一行：模型空间 → 世界空间 → 相机空间 -->
+  <g>
+    <rect x="70" y="115" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="265" y="137" font-size="11" fill="#8B5CF6" text-anchor="end">01</text>
+    <text x="175" y="148" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">模型空间</text>
+    <text x="175" y="164" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">MODEL SPACE</text>
+    <line x1="88" y1="173" x2="262" y2="173" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="175" y="194" font-size="11.5" fill="#5B6472" text-anchor="middle">物体原生坐标 · 右手系</text>
+    <text x="175" y="212" font-size="11.5" fill="#5B6472" text-anchor="middle">y 向上 · 原点在物体自身</text>
+    <text x="175" y="231" font-size="10.5" fill="#4C6FFF" text-anchor="middle">in.position @location(0)</text>
+  </g>
+  <g>
+    <rect x="375" y="115" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="570" y="137" font-size="11" fill="#8B5CF6" text-anchor="end">02</text>
+    <text x="480" y="148" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">世界空间</text>
+    <text x="480" y="164" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">WORLD SPACE</text>
+    <line x1="393" y1="173" x2="567" y2="173" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="480" y="194" font-size="11.5" fill="#5B6472" text-anchor="middle">场景摆放后的绝对坐标</text>
+    <text x="480" y="212" font-size="11.5" fill="#5B6472" text-anchor="middle">光源 · 相机 · 地面都在这</text>
+    <text x="480" y="231" font-size="10.5" fill="#4C6FFF" text-anchor="middle">u.model · 手写 mat4</text>
+  </g>
+  <g>
+    <rect x="680" y="115" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="875" y="137" font-size="11" fill="#8B5CF6" text-anchor="end">03</text>
+    <text x="785" y="148" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">相机空间</text>
+    <text x="785" y="164" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">VIEW SPACE</text>
+    <line x1="698" y1="173" x2="872" y2="173" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="785" y="194" font-size="11.5" fill="#5B6472" text-anchor="middle">相机移到原点 · 看向 −z</text>
+    <text x="785" y="212" font-size="11.5" fill="#5B6472" text-anchor="middle">右手系 · 推导见笔记 3.9</text>
+    <text x="785" y="231" font-size="10.5" fill="#4C6FFF" text-anchor="middle">u.view · lookAt()</text>
+  </g>
+
+  <!-- 第二行：屏幕空间 ← NDC ← 裁剪空间（从右往左接力） -->
+  <g>
+    <rect x="680" y="300" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="875" y="322" font-size="11" fill="#8B5CF6" text-anchor="end">04</text>
+    <text x="785" y="333" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">裁剪空间</text>
+    <text x="785" y="349" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">CLIP SPACE</text>
+    <line x1="698" y1="358" x2="872" y2="358" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="785" y="379" font-size="11.5" fill="#5B6472" text-anchor="middle">齐次坐标 · w ≠ 1</text>
+    <text x="785" y="397" font-size="11.5" fill="#5B6472" text-anchor="middle">x, y, z ∈ [−w, w] 直接裁</text>
+    <text x="785" y="416" font-size="10.5" fill="#4C6FFF" text-anchor="middle">vs 输出 @builtin(position)</text>
+  </g>
+  <g>
+    <rect x="375" y="300" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="570" y="322" font-size="11" fill="#8B5CF6" text-anchor="end">05</text>
+    <text x="480" y="333" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">规范化设备坐标</text>
+    <text x="480" y="349" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">NDC</text>
+    <line x1="393" y1="358" x2="567" y2="358" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="480" y="379" font-size="11.5" fill="#5B6472" text-anchor="middle">x, y ∈ [−1, 1] · y 向上</text>
+    <text x="480" y="397" font-size="11.5" fill="#5B6472" text-anchor="middle">z ∈ [0, 1]（WebGPU 特有）</text>
+    <text x="480" y="416" font-size="10.5" fill="#4C6FFF" text-anchor="middle">硬件自动 ÷ w 后插值</text>
+  </g>
+  <g>
+    <rect x="70" y="300" width="210" height="125" rx="8" fill="#F6F7FB" stroke="#1F2430" stroke-width="2"/>
+    <text x="265" y="322" font-size="11" fill="#8B5CF6" text-anchor="end">06</text>
+    <text x="175" y="333" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">屏幕空间</text>
+    <text x="175" y="349" font-size="10" fill="#5B6472" text-anchor="middle" letter-spacing="1.5">SCREEN SPACE</text>
+    <line x1="88" y1="358" x2="262" y2="358" stroke="#DCE0EA" stroke-width="1"/>
+    <text x="175" y="379" font-size="11.5" fill="#5B6472" text-anchor="middle">像素坐标 · 原点左上</text>
+    <text x="175" y="397" font-size="11.5" fill="#5B6472" text-anchor="middle">y 向下 · 画布尺寸 × DPR</text>
+    <text x="175" y="416" font-size="10.5" fill="#4C6FFF" text-anchor="middle">fs 输入 @builtin(position)</text>
+  </g>
+
+  <!-- 第一行两支接力：Model / View 矩阵（你写的 uniform） -->
+  <line x1="290" y1="177" x2="365" y2="177" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="327" y="169" font-size="12" fill="#4C6FFF" text-anchor="middle" font-weight="600">M model</text>
+  <text x="327" y="194" font-size="10.5" fill="#5B6472" text-anchor="middle">旋转·平移·缩放</text>
+
+  <line x1="595" y1="177" x2="670" y2="177" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="632" y="169" font-size="12" fill="#4C6FFF" text-anchor="middle" font-weight="600">M view</text>
+  <text x="632" y="194" font-size="10.5" fill="#5B6472" text-anchor="middle">手写 lookAt 函数</text>
+
+  <!-- 右侧折下：Projection 矩阵 -->
+  <line x1="845" y1="244" x2="845" y2="296" stroke="#4C6FFF" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="830" y="265" font-size="12" fill="#4C6FFF" text-anchor="end" font-weight="600">M projection</text>
+  <text x="830" y="281" font-size="10.5" fill="#5B6472" text-anchor="end">fov · aspect · near · far</text>
+
+  <!-- 第二行两支接力：透视除法 / 视口变换（硬件固定功能） -->
+  <line x1="672" y1="362" x2="598" y2="362" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow-violet)"/>
+  <text x="635" y="354" font-size="12" fill="#8B5CF6" text-anchor="middle" font-weight="600">透视除法 ÷ w</text>
+  <text x="635" y="379" font-size="10.5" fill="#5B6472" text-anchor="middle">硬件 · 固定功能</text>
+
+  <line x1="365" y1="362" x2="291" y2="362" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow-violet)"/>
+  <text x="328" y="354" font-size="12" fill="#8B5CF6" text-anchor="middle" font-weight="600">viewport 变换</text>
+  <text x="328" y="379" font-size="10.5" fill="#5B6472" text-anchor="middle">硬件 · 画布尺寸</text>
+
+  <!-- 底部：图例与 uniform 打包 -->
+  <line x1="70" y1="458" x2="98" y2="458" stroke="#4C6FFF" stroke-width="2"/>
+  <text x="106" y="462" font-size="12" fill="#1F2430">着色器 uniform 矩阵（你写）</text>
+  <line x1="70" y1="480" x2="98" y2="480" stroke="#8B5CF6" stroke-width="1.8" stroke-dasharray="6 5"/>
+  <text x="106" y="484" font-size="12" fill="#1F2430">硬件固定功能（自动完成）</text>
+
+  <text x="890" y="462" font-size="12" fill="#5B6472" text-anchor="end">uniform：3 × mat4 = 192 B · 每帧 writeBuffer</text>
+  <text x="890" y="484" font-size="12" fill="#5B6472" text-anchor="end">列主序 Float32Array(16)</text>
+
+  <text x="480" y="514" font-size="14" fill="#1F2430" text-anchor="middle">顶点的旅程：三个手写矩阵连乘，加上透视除法与视口变换；片元着色器拿到的已经是像素坐标</text>
+  <text x="480" y="534" font-size="11" fill="#5B6472" text-anchor="middle">Model · View · Projection · Perspective Divide · Viewport — one vertex, six spaces</text>
+</svg>

@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6472"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B5CF6"/>
+    </marker>
+  </defs>
+
+  <!-- 白底与标题 -->
+  <rect width="960" height="540" fill="#FFFFFF"/>
+  <text x="50" y="52" font-size="28" fill="#1F2430" font-weight="600">图形渲染管线的五个阶段</text>
+  <text x="50" y="78" font-size="14" fill="#5B6472">Graphics Pipeline · WGSL 入口点与各阶段的输入输出契约</text>
+
+  <!-- 顶部输入与图例 -->
+  <rect x="50" y="108" width="210" height="40" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="155" y="133" font-size="12" fill="#1F2430" text-anchor="middle">Vertex Buffer / Index Buffer</text>
+  <line x1="155" y1="148" x2="155" y2="164" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="565" y="108" width="220" height="40" rx="6" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <text x="675" y="133" font-size="12" fill="#1F2430" text-anchor="middle">Uniforms · Textures</text>
+  <line x1="675" y1="148" x2="675" y2="164" stroke="#5B6472" stroke-width="1.8" marker-end="url(#arrow-dim)"/>
+
+  <rect x="806" y="114" width="64" height="20" rx="10" fill="#4C6FFF"/>
+  <text x="838" y="128" font-size="11" fill="#FFFFFF" text-anchor="middle">可编程</text>
+  <rect x="806" y="140" width="64" height="20" rx="10" fill="#5B6472"/>
+  <text x="838" y="154" font-size="11" fill="#FFFFFF" text-anchor="middle">固定功能</text>
+
+  <!-- 阶段一：Vertex（可编程） -->
+  <rect x="50" y="166" width="158" height="262" rx="8" fill="#E9EDFB" stroke="#4C6FFF" stroke-width="2"/>
+  <rect x="62" y="180" width="60" height="20" rx="10" fill="#4C6FFF"/>
+  <text x="92" y="194" font-size="11" fill="#FFFFFF" text-anchor="middle">可编程</text>
+  <text x="129" y="228" font-size="17" fill="#1F2430" text-anchor="middle" font-weight="600">Vertex</text>
+  <text x="129" y="250" font-size="12" fill="#4C6FFF" text-anchor="middle">@vertex fn vs()</text>
+  <text x="62" y="282" font-size="11" fill="#5B6472" font-weight="600">输入</text>
+  <text x="62" y="300" font-size="11" fill="#5B6472">· 顶点属性 @location(n)</text>
+  <text x="62" y="316" font-size="11" fill="#5B6472">· @builtin(vertex_index)</text>
+  <text x="62" y="332" font-size="11" fill="#5B6472">· uniform / 纹理</text>
+  <text x="62" y="362" font-size="11" fill="#5B6472" font-weight="600">输出</text>
+  <text x="62" y="380" font-size="11" fill="#5B6472">· @builtin(position)</text>
+  <text x="62" y="396" font-size="11" fill="#5B6472">· @location(n) 变量</text>
+  <text x="62" y="412" font-size="11" fill="#5B6472">（交给光栅化插值）</text>
+
+  <line x1="208" y1="296" x2="230" y2="296" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <!-- 阶段二：图元装配（固定） -->
+  <rect x="232" y="166" width="158" height="262" rx="8" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <rect x="244" y="180" width="72" height="20" rx="10" fill="#5B6472"/>
+  <text x="280" y="194" font-size="11" fill="#FFFFFF" text-anchor="middle">固定功能</text>
+  <text x="311" y="228" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">图元装配</text>
+  <text x="311" y="250" font-size="11" fill="#5B6472" text-anchor="middle">Primitive Assembly</text>
+  <text x="244" y="282" font-size="11" fill="#5B6472" font-weight="600">输入</text>
+  <text x="244" y="300" font-size="11" fill="#5B6472">· 顶点序列（可走索引）</text>
+  <text x="244" y="330" font-size="11" fill="#5B6472" font-weight="600">配置</text>
+  <text x="244" y="348" font-size="11" fill="#5B6472">· topology 图元类型</text>
+  <text x="244" y="364" font-size="11" fill="#5B6472">（triangle-list 等）</text>
+  <text x="244" y="394" font-size="11" fill="#5B6472" font-weight="600">输出</text>
+  <text x="244" y="412" font-size="11" fill="#5B6472">· 三角形 / 线段 / 点</text>
+
+  <line x1="390" y1="296" x2="412" y2="296" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <!-- 阶段三：光栅化（固定） -->
+  <rect x="414" y="166" width="158" height="262" rx="8" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <rect x="426" y="180" width="72" height="20" rx="10" fill="#5B6472"/>
+  <text x="462" y="194" font-size="11" fill="#FFFFFF" text-anchor="middle">固定功能</text>
+  <text x="493" y="228" font-size="16" fill="#1F2430" text-anchor="middle" font-weight="600">光栅化</text>
+  <text x="493" y="250" font-size="11" fill="#5B6472" text-anchor="middle">Rasterizer</text>
+  <text x="426" y="282" font-size="11" fill="#5B6472" font-weight="600">输入</text>
+  <text x="426" y="300" font-size="11" fill="#5B6472">· 三角形（3 个顶点）</text>
+  <text x="426" y="330" font-size="11" fill="#5B6472" font-weight="600">行为</text>
+  <text x="426" y="348" font-size="11" fill="#5B6472">· 并行覆盖测试</text>
+  <text x="426" y="364" font-size="11" fill="#5B6472">· @location 变量插值</text>
+  <text x="426" y="394" font-size="11" fill="#5B6472" font-weight="600">输出</text>
+  <text x="426" y="412" font-size="11" fill="#5B6472">· 片元（候选像素）</text>
+
+  <line x1="572" y1="296" x2="594" y2="296" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <!-- 阶段四：Fragment（可编程） -->
+  <rect x="596" y="166" width="158" height="262" rx="8" fill="#F0EBFC" stroke="#8B5CF6" stroke-width="2"/>
+  <rect x="608" y="180" width="60" height="20" rx="10" fill="#8B5CF6"/>
+  <text x="638" y="194" font-size="11" fill="#FFFFFF" text-anchor="middle">可编程</text>
+  <text x="675" y="228" font-size="17" fill="#1F2430" text-anchor="middle" font-weight="600">Fragment</text>
+  <text x="675" y="250" font-size="12" fill="#8B5CF6" text-anchor="middle">@fragment fn fs()</text>
+  <text x="608" y="282" font-size="11" fill="#5B6472" font-weight="600">输入</text>
+  <text x="608" y="300" font-size="11" fill="#5B6472">· 插值 @location(n)</text>
+  <text x="608" y="316" font-size="11" fill="#5B6472">· @builtin(position)</text>
+  <text x="608" y="332" font-size="11" fill="#5B6472">（屏幕像素坐标）</text>
+  <text x="608" y="362" font-size="11" fill="#5B6472" font-weight="600">输出</text>
+  <text x="608" y="380" font-size="11" fill="#5B6472">· @location(0) 颜色</text>
+  <text x="608" y="396" font-size="11" fill="#5B6472">（对应 attachment 0）</text>
+
+  <line x1="754" y1="296" x2="776" y2="296" stroke="#5B6472" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+  <!-- 阶段五：Output Merger（固定） -->
+  <rect x="778" y="166" width="158" height="262" rx="8" fill="#EEF0F6" stroke="#5B6472" stroke-width="1.2"/>
+  <rect x="790" y="180" width="72" height="20" rx="10" fill="#5B6472"/>
+  <text x="826" y="194" font-size="11" fill="#FFFFFF" text-anchor="middle">固定功能</text>
+  <text x="857" y="228" font-size="15" fill="#1F2430" text-anchor="middle" font-weight="600">Output Merger</text>
+  <text x="857" y="250" font-size="11" fill="#5B6472" text-anchor="middle">输出合并</text>
+  <text x="790" y="282" font-size="11" fill="#5B6472" font-weight="600">输入</text>
+  <text x="790" y="300" font-size="11" fill="#5B6472">· 颜色 + 深度</text>
+  <text x="790" y="330" font-size="11" fill="#5B6472" font-weight="600">配置</text>
+  <text x="790" y="348" font-size="11" fill="#5B6472">· blend 混合</text>
+  <text x="790" y="364" font-size="11" fill="#5B6472">· depth 测试（Day 2）</text>
+  <text x="790" y="394" font-size="11" fill="#5B6472" font-weight="600">输出</text>
+  <text x="790" y="412" font-size="11" fill="#5B6472">· 写入画布纹理</text>
+
+  <!-- 底部注释 -->
+  <text x="480" y="472" font-size="14" fill="#1F2430" text-anchor="middle">可编程阶段用 WGSL 编写，固定阶段用描述符配置——管线创建后不可变，一帧内反复绑定提交</text>
+  <text x="480" y="494" font-size="11" fill="#5B6472" text-anchor="middle">Programmable stages are written in WGSL, fixed stages are configured by descriptors</text>
+  <text x="480" y="516" font-size="12" fill="#5B6472" text-anchor="middle">demo 01 的对照：vs 里摆三个顶点并调色 → triangle-list 装配 → 光栅化插值颜色 → fs 收到插值后的 vec3f → 写入画布</text>
+</svg>
