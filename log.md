@@ -305,3 +305,17 @@
 - 技术路线: Day1 原生 WebGL2 + GLSL 语法（四支柱：语法/管线/动画/交互）→ Day2 fragment shader 视觉算法（SDF/噪声/调色/光感/电影感）→ Day3 Three.js ShaderMaterial 实战（hover 失真/滚动驱动/粒子/后期）；GLSL 之外的知识经「理论对照」链接 webgpu / Threejs创意3D / GAMES101 课程，不重复展开
 - 验证: npm install / tsc --noEmit / vite build 全部通过；浏览器实测 demo 01（140 FPS、DPR 2、无 console 错误、入场淡入正常）；GLSL 编译错误注入测试通过（报错行号 19 精确命中、错误面板中文修复指引完整）后已还原
 - 更新: index.md（Last updated: 2026-09-19, Total pages: 36→37, Learning 节新增 GLSL_Shader 条目）
+
+## [2026-09-20] create | GLSL Shader 三天实战课程 · 批1–批8 全量生成完成
+- 目录: learning/前端/GLSL_Shader/
+- 批1: Day1 讲义 7 篇（1.1–1.7 六段式：语法/管线/动画/交互）+ SVG 6 张（shader-pipeline / glsl-data-flow / uv-coordinate / animation-easing / interaction-event-bridge / simt-parallel）
+- 批2: Day1 demo 02–06（全屏四边形与UV / 时间的画面 / 光标的追随 / 点击的涟漪 / 滚轮的浪潮）+ 作业 3 套（脉动的画布/追光的萤火/极坐标曼陀罗）+ 答案 3 套
+- 批3: Day2 讲义 8 篇（2.1–2.8：SDF/坐标变换/随机与voronoi/噪声与domain warping/余弦调色板/伪3D光感/纹理/电影感配方）+ SVG 4 张（sdf-distance-field / noise-fbm-composition / domain-warping / palette-cosine）
+- 批4: Day2 demo 6 个（SDF动物园 / voronoi细胞 / fbm云海 / 域扭曲流场 / 调色板实验室 / 霓虹辉光与电影感）+ 作业 3 套（SDF徽章/流动的丝绸/霓虹辉光艺术）+ 答案 3 套
+- 批5: Day3 讲义 5 篇（3.1–3.5：ShaderMaterial迁移/图片失真与鼠标视差/滚动驱动shader/粒子场/后期处理工作坊）+ SVG 2 张（threejs-uniform-mapping / postprocess-chain）
+- 批6: Day3 demo 3 个（ShaderMaterial初见 / hover失真图卡 / 粒子星云与bloom）+ 作业 3 套（渐变海报平面/失真图卡墙/滚动驱动的英雄时刻）+ 答案 3 套；新装 @types/three@0.186.0 修复 15 处 TS7016
+- 批7: 根级文档 5 份（README / 00-课程计划与学习地图 / 01-环境准备 / 参考资料 / 实例网站清单）——学习地图采用 20 篇讲义真实时长与 demo 映射 + 双 mermaid（学习路径/作业递进）；环境准备含 WebGL2 支持表与 Node 20.19+/22.12+（Vite 8 要求，经搜索核实）；参考资料五层分级；实例清单 10 站点含三步观察法与观察伦理
+- 批8: 门户 index.html 全部链接补全（15 demo + 9 作业共 24 条行链接 + 3 条讲义链接，pending 占位清零）
+- 验收: 每批禁用词 grep 清零；tsc --noEmit 零报错；内部链接经 Glob 核实全部指向真实文件；总纲第 13 节七条总验收通过（结构四件套齐全 / 交叉引用可达 / 风格合规 / 可运行 / 设计质量 / 先验链接真实 / 知识库合规）
+- 更新: index.md（Last updated: 2026-09-20，Learning 节 GLSL_Shader 条目转完成态）
+- 备注: 由执行模型按 _制作计划/00-制作总纲.md 八批次连续推进，git 提交由用户自行完成

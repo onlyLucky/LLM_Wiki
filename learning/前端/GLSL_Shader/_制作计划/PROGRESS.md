@@ -3,13 +3,17 @@
 | 批次 | 内容 | 状态 | 日期 | 备注 |
 |------|------|------|------|------|
 | 批0 · 地基 | 计划书 5 份 / Vite 工程 / shared chrome / 门户 / 黄金样例 demo 01 / 目录骨架 | ✅ 完成 | 2026-09-19 | 由高级模型制作并验证（浏览器实测渲染通过） |
-| 批1 | Day1 讲义 7 篇 + SVG 6 张 | ⬜ 待生成 | | 规格：_制作计划/01-day1-规格.md |
-| 批2 | Day1 demo 02–06 + 作业 3 套 + 答案 3 套 | ⬜ 待生成 | | demo 结构范本：demos/day1/01-渐变三角形/ |
-| 批3 | Day2 讲义 8 篇 + SVG 4 张 | ⬜ 待生成 | | 规格：_制作计划/02-day2-规格.md |
-| 批4 | Day2 demo 6 个 + 作业 3 套 + 答案 3 套 | ⬜ 待生成 | | |
-| 批5 | Day3 讲义 5 篇 + SVG 2 张 | ⬜ 待生成 | | 规格：_制作计划/03-day3-规格.md（three 0.186 / lenis / gsap 已装） |
-| 批6 | Day3 demo 3 个 + 作业 3 套 + 答案 3 套 | ⬜ 待生成 | | |
-| 批7 | 根级文档 5 份（README / 00 / 01 / 参考资料 / 实例网站清单） | ⬜ 待生成 | | 参考资料底稿：_制作计划/04-参考资源与实例清单规格.md |
-| 批8 | 门户链接补全 + 知识库 index.md 登记 + log.md 追加 | ⬜ 待生成 | | 门户中的 pending 行替换为真实链接 |
+| 批1 | Day1 讲义 7 篇 + SVG 6 张 | ✅ 完成 | 2026-09-20 | 7 篇行数 251/250/283/301 + 1.5–1.7 均达标（250–400 纪律）；SVG 6 张齐全；禁用词自查清零（修复 1 处）；1.5–1.7 指向 demo 02–06 的 5 条链接为批2 前向引用，随批2 兑现；day1 README 已转正式版 |
+| 批2 | Day1 demo 02–06 + 作业 3 套 + 答案 3 套 | ✅ 完成 | 2026-09-20 | demo 02–06 五件套 25 文件；homework/day1 三档（B 脉动的画布 / A 追光的萤火 / C 极坐标曼陀罗）+ day 级 README；solutions/day1 三套四段式；demo.css 增量 .hero-head 页头类；验收：禁用词清零、tsc 零报错（修复帧循环 throw 致 unreachable 丢收窄的 2 处）、浏览器实测 6 页（B/A 骨架错误面板指向 TODO，C 骨架页头渲染，三答案画面点亮 1.17MB/321KB/1.06MB） |
+| 批3 | Day2 讲义 8 篇 + SVG 4 张 | ✅ 完成 | 2026-09-20 | 8 篇全部六段式（2.1–2.8），每篇 ≥3 个可运行代码段；SVG 4 张（sdf-distance-field / noise-fbm-composition / domain-warping / palette-cosine，噪声三联用 feTurbulence numOctaves 直接演示倍频）；day2 讲义 README 转正式版；禁用词自查清零；先验链接经 Glob 核实（GAMES101 04/03/05、webgpu 2.1/2.3/2.4） |
+| 批4 | Day2 demo 6 个 + 作业 3 套 + 答案 3 套 | ✅ 完成 | 2026-09-20 | demo 01–06 五件套 30 文件（SDF 动物园 / voronoi / fbm 云海 / 域扭曲流场 / 调色板实验室 / 霓虹辉光）；homework/day2 三档（B SDF徽章 / A 流动的丝绸 / C 霓虹辉光艺术）+ day README（占位透传挖空新设计）；solutions/day2 三套；验收：禁用词清零、tsc 修复 1 处索引类型后零报错、浏览器抽验 4 页（demo 03/05/06 画面 5.98/3.13/7.22MB + 开关 HUD 正常，C 答案 6.63MB + 页头正常） |
+| 批5 | Day3 讲义 5 篇 + SVG 2 张 | ✅ 完成 | 2026-09-20 | 5 篇六段式（3.1–3.5）：3.1 内置注入表 + 「3.1 版 GLSL 风格差异」硬约束五处对照（不写 #version/gl_FragColor/texture2D）+ 行数对账 87→34；3.2 flow 三方案表 + hover lerp 纪律；3.3 分段 smoothstep + Lenis 五行 + GSAP 取舍表（不配独立 demo，实现进批6 challenge 与 solution——前向引用）；3.4 无状态顶点粒子 + 透视衰减 + additive/depthWrite 成对纪律；3.5 composer 三 pass + bloom 三参数 + 装配清单克制原则；SVG 2 张（threejs-uniform-mapping / postprocess-chain）；day3 讲义 README 转正式版；禁用词自查清零；先验链接 Glob 核实（Threejs创意3D 第3/5/6/14/15/17课、webgpu 3.1/3.3/3.4） |
+| 批6 | Day3 demo 3 个 + 作业 3 套 + 答案 3 套 | ✅ 完成 | 2026-09-20 | demo 01–03 五件套 15 文件（ShaderMaterial初见 / hover失真图卡 / 粒子星云与bloom）；homework/day3 三档（B 渐变海报平面 / A 失真图卡墙 / C 滚动驱动的英雄时刻）+ day README；solutions/day3 三套四段式（A 含加分项 sdBox 描边 glow + hoverAtLeave 字段设计，C 额外含性能调档表与 3.5 装配对照表）；demos/day3 README 转正式版（3.3 不设独立 demo、由作业 C 兑现——批5 前向引用兑现）；验收：禁用词清零、tsc 零报错（新装 @types/three@0.186.0 修复 15 处 TS7016——three 包不自带类型，批6 首次在 three 代码上跑 tsc 暴露）、修复 homework day README 1 处 3.3 坏链接（文件名误写「滚动驱动叙事」）、讲义链接 Glob 核实 |
+| 批7 | 根级文档 5 份（README / 00 / 01 / 参考资料 / 实例网站清单） | ✅ 完成 | 2026-09-20 | README 门面六节（定位导语/三天路线/快速开始/目录导航/与 webgpu·Threejs创意3D·GAMES101 配合/通关标准）；00 学习地图含三天时刻表（采用 20 篇讲义真实头标注时长）+ 讲义↔demo 映射表（含「1.7 一拖三」「2.7 唯一不设独立 demo」「3.3 由作业 C 兑现」三处说明）+ 学习路径/作业递进双 mermaid（Day1 玫红 / Day2 天青 / Day3 琥珀）；01 环境准备（WebGL2 全平台默认开启表 + Vite 8→Node 20.19+/22.12+ 经搜索核实 + 控制台能力检测脚本 + 常见问题 6 行含 @types/three 修复）；参考资料按 04 底稿五层分级（入门/系统/深入/工具/社区）+「离答案的距离」使用策略；实例清单 10 站点总览 + 逐站四件拆解（技术拆解标注据公开访谈/case study）+ 三步观察法 + 观察伦理；禁用词清零；链接目标 Glob 核实 |
+| 批8 | 门户链接补全 + 知识库 index.md 登记 + log.md 追加 | ✅ 完成 | 2026-09-20 | 门户 14 demo + 9 作业 pending 行全部替换为真实 a.row 链接（链接名与 demos/、homework/ 目录 Glob 结果逐一比对），pending CSS 规则与批8 注释同步移除；wiki/index.md 头部日期更新至 2026-09-20、Learning 节条目由「制作中」转完成态（指向课程 README）；log.md 追加批1–8 全量生成记录（逐批清单 + 验收结论）；总纲第 13 节七条总验收通过（tsc --noEmit 零报错） |
+
+| 修复 · P0 | 审计修复：Day3 全部 8 个损坏页恢复运行 | ✅ 完成 | 2026-09-20 | 依据 _制作计划/05-完整度与质量审计报告：demo 02 片元补 `varying vec2 v_uv;` 声明；demo 03 与 solution C 内联 gradePass 补 `uniform sampler2D tDiffuse;` 声明（solution C 为审计后新发现的同款问题，一并修复）；day3 六个作业/答案 main.ts 的 `let renderer`（solution C 另含 `let composer`）上移至 createChrome 之前（onResize 同步回调读 TDZ 变量的崩溃根治）；shared/chrome.ts 的 failInternal 改为直写 panel——初始化期报错不再连带炸掉错误面板。复验：tsc 零报错 + 34 页浏览器巡检全绿（FLAG 0）+ 像素统计 4 个此前死页全部点亮（d3-03 uniq 139→4408 / lumStd 2.2→54.5，sol-d3-ch uniq 1→3202，hw-d3-ch uniq 1→622，d3-02 lumStd 2.8→10.2）。P1/P2（10 处坏链、讲义高危 4 处、长度纪律 11 篇）待后续批次 |
+
+| 修复 · P1+P2 | 审计遗留全量修复：坏链 10 处 + 讲义技术错误约 40 处 + 11 篇讲义补写 + 总纲豁免注记 | ✅ 完成 | 2026-09-20 | 坏链：GAMES101 ×5 补一级 ../、讲义文件名简写 ×5 补全；技术错误全量修正——Day1（mat2 旋转方向、vec3 构造器断言、precision/递归/#version 口径、量纲、c4 归因、aspect×0.5、尾焰方向等）、Day2（smoothstep 逆序、网格 y 偏移、居中域写法、窗灯 mix 遮罩化、voronoi 补 F2、abs(sd)、vignette 平方版对齐 demo、gamma 口径互注等）、Day3（注入表补 modelMatrix/viewMatrix、?raw 默认导入、pos 先声明、三 pass→四 pass ×3 等）+ demo 01 网格偏移连带修复；11 篇讲义补写至 211–240 行（三子代理插入式扩充：坑表 +3 行/篇、完整可运行代码段补足、Checkpoint 扩充、数值对照表、3.4 补 sizeAttenuation 对照）；总纲第 5 节补 Day3 GLSL1 豁免注记。复验：tsc 零报错 + 禁用词段首零命中 + 34 页巡检 FLAG 0 + 像素无回归 + 20 篇讲义全部 211–302 行 |
 
 > 执行入口：从「_制作计划/00-制作总纲.md」开始读，按批次推进；每批完成先跑一遍总纲第 6 节的禁用词自查。

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>噪声三联灰度图：单倍频 value noise、三倍频叠加、fbm 五倍频，每联下方标注 octave 与 amplitude 参数</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <defs>
+    <!-- 三档倍频数：同一 filter 家族，只改 numOctaves -->
+    <filter id="nz1" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="1" seed="42" result="t"/>
+      <feColorMatrix in="t" type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1"/>
+    </filter>
+    <filter id="nz3" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="42" result="t"/>
+      <feColorMatrix in="t" type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1"/>
+    </filter>
+    <filter id="nz5" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="5" seed="42" result="t"/>
+      <feColorMatrix in="t" type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1"/>
+    </filter>
+  </defs>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">噪声的塔：一个倍频到五个倍频</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">value noise → 多倍频相加 → fbm —— 讲义 2.4，低频给形体、高频给细节</text>
+
+  <!-- 联 1：单倍频 -->
+  <rect x="40" y="90" width="200" height="200" rx="6" filter="url(#nz1)"/>
+  <rect x="40" y="90" width="200" height="200" rx="6" fill="none" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="140" y="316" text-anchor="middle" font-size="13" fill="#FF4D6D">octaves = 1</text>
+  <text x="140" y="336" text-anchor="middle" font-size="12" fill="#8A93A6">amplitude 1.0</text>
+  <text x="140" y="356" text-anchor="middle" font-size="12" fill="#8A93A6">大团块：形体有了，细节没有</text>
+
+  <!-- 联 2：三倍频 -->
+  <rect x="260" y="90" width="200" height="200" rx="6" filter="url(#nz3)"/>
+  <rect x="260" y="90" width="200" height="200" rx="6" fill="none" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="360" y="316" text-anchor="middle" font-size="13" fill="#4CC9F0">octaves = 3</text>
+  <text x="360" y="336" text-anchor="middle" font-size="12" fill="#8A93A6">amp 1.0 + 0.5 + 0.25</text>
+  <text x="360" y="356" text-anchor="middle" font-size="12" fill="#8A93A6">中细节进场：云的絮</text>
+
+  <!-- 联 3：五倍频 -->
+  <rect x="480" y="90" width="200" height="200" rx="6" filter="url(#nz5)"/>
+  <rect x="480" y="90" width="200" height="200" rx="6" fill="none" stroke="#FFC145" stroke-width="2"/>
+  <text x="580" y="316" text-anchor="middle" font-size="13" fill="#FFC145">octaves = 5（fbm）</text>
+  <text x="580" y="336" text-anchor="middle" font-size="12" fill="#8A93A6">amp 1.0 + 0.5 + 0.25 + 0.125 + 0.0625</text>
+  <text x="580" y="356" text-anchor="middle" font-size="12" fill="#8A93A6">全细节：背景层的封顶档</text>
+
+  <!-- 中部连接箭头：相加 -->
+  <line x1="243" y1="190" x2="257" y2="190" stroke="#8A93A6" stroke-width="2"/>
+  <path d="M257,185 L267,190 L257,195 Z" fill="#8A93A6"/>
+  <line x1="463" y1="190" x2="477" y2="190" stroke="#8A93A6" stroke-width="2"/>
+  <path d="M477,185 L487,190 L477,195 Z" fill="#8A93A6"/>
+  <text x="250" y="180" text-anchor="middle" font-size="11" fill="#8A93A6">+</text>
+  <text x="470" y="180" text-anchor="middle" font-size="11" fill="#8A93A6">+</text>
+
+  <!-- 底部：fbm 公式与性能账单 -->
+  <rect x="40" y="385" width="640" height="90" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="360" y="415" text-anchor="middle" font-size="13" fill="#E8ECF4">float fbm(vec2 p) { float v = 0.0, a = 0.5; for (int i = 0; i &lt; 5; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; } return v; }</text>
+  <text x="360" y="445" text-anchor="middle" font-size="12" fill="#8A93A6">每加一层贵一倍：背景 4–5 层封顶 —— 振幅减半、频率加倍，是「细节越来越弱、越来越细」的全部秘密</text>
+  <text x="360" y="500" text-anchor="middle" font-size="12" fill="#8A93A6">1080p 全屏 fbm(5) ≈ 200 万像素 × 每像素 20 次 hash 与插值 —— 性能账单写进视觉规格</text>
+</svg>

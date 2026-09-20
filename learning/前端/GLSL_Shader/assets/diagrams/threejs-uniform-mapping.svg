@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>Three.js 内置注入映射图：上半部为 ShaderMaterial 免费提供的 uniform（四个矩阵）与 attribute（position/normal/uv）清单，下半部为自定义 uniform 的对照写法与三个易忘点（varying 自写、DPR、y 翻转）</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">ShaderMaterial 的内置注入：免费拿到的名字</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">讲义 3.1 —— 你不声明它们，Three.js 在编译前替你写好</text>
+
+  <!-- 左面板：uniform 注入 -->
+  <rect x="40" y="90" width="310" height="230" rx="6" fill="#10151F" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="195" y="118" text-anchor="middle" font-size="13" fill="#4CC9F0">uniform（自动注入）</text>
+  <g font-size="12.5" fill="#E8ECF4">
+    <text x="60" y="148">projectionMatrix   mat4 → 裁剪空间投影</text>
+    <text x="60" y="176">modelViewMatrix   mat4 → 模型×视图</text>
+    <text x="60" y="204">normalMatrix      mat3 → 法线旋转</text>
+    <text x="60" y="232">cameraPosition    vec3 → 相机世界位</text>
+  </g>
+  <text x="60" y="266" font-size="12" fill="#8A93A6">用法：声明后直接乘，值由渲染器</text>
+  <text x="60" y="286" font-size="12" fill="#8A93A6">每帧更新——不进你的 uniforms 对象</text>
+  <text x="195" y="310" text-anchor="middle" font-size="12" fill="#FFC145">gl_Position = projectionMatrix</text>
+  <text x="195" y="308" text-anchor="middle" font-size="0" fill="#FFC145"></text>
+  <text x="225" y="308" text-anchor="middle" font-size="0"> </text>
+  <text x="260" y="308" text-anchor="middle" font-size="0"> </text>
+  <text x="195" y="308" text-anchor="middle" font-size="12" fill="#FFC145">* modelViewMatrix * vec4(position, 1.0)</text>
+
+  <!-- 右面板：attribute 注入 -->
+  <rect x="370" y="90" width="310" height="230" rx="6" fill="#10151F" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="525" y="118" text-anchor="middle" font-size="13" fill="#FF4D6D">attribute（自动注入）</text>
+  <g font-size="12.5" fill="#E8ECF4">
+    <text x="390" y="148">position    vec3 → 几何顶点位</text>
+    <text x="390" y="176">normal      vec3 → 顶点法线</text>
+    <text x="390" y="204">uv          vec2 → 顶点 UV 0–1</text>
+  </g>
+  <text x="390" y="240" font-size="12" fill="#8A93A6">ShaderMaterial 已是 GLSL1 风格转译：</text>
+  <text x="390" y="260" font-size="12" fill="#8A93A6">attribute / varying 关键字直接用，</text>
+  <text x="390" y="280" font-size="12" fill="#8A93A6">不写 #version（three 自动注入声明）</text>
+  <text x="525" y="310" text-anchor="middle" font-size="12" fill="#FFC145">varying vec2 v_uv; v_uv = uv;</text>
+
+  <!-- 下半部：自定义 uniform 对照 -->
+  <rect x="40" y="340" width="640" height="120" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="360" y="368" text-anchor="middle" font-size="13" fill="#E8ECF4">自定义 uniform：TS 声明 + 每帧写值（与原生 uniform1f 对照）</text>
+  <g font-size="12" fill="#8A93A6">
+    <text x="70" y="396">TS 侧：uniforms: { u_time: { value: 0 }, u_mouse: { value: new THREE.Vector2() } }</text>
+    <text x="70" y="418">帧循环：material.uniforms.u_time.value = t        （对照原生 gl.uniform1f）</text>
+    <text x="70" y="440">三个易忘点：v_uv 要自己 varying 一遍 · u_mouse 记得 y 翻转 · DPR 取 min(devicePixelRatio, 2)</text>
+  </g>
+
+  <!-- 底部通栏 -->
+  <text x="360" y="498" text-anchor="middle" font-size="12" fill="#8A93A6">第一次迁移最常见的失败：以为 uv 免费就忘了 varying —— attribute 只活在顶点着色器，片元要接还得交接</text>
+</svg>

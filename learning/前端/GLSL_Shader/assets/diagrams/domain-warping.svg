@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>域扭曲双联对比图：左侧规则网格上直接采样 fbm，右侧坐标先经 fbm 扰动再采样，中间箭头标注公式 p + fbm(p) * k 与 k 三档强度表</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">domain warping：先扭曲坐标，再采样噪声</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">双 fbm 的价格买一个丝绸质感 —— 讲义 2.4，lusion 背景的配方核心</text>
+
+  <!-- 左面板：规则网格采样 -->
+  <text x="170" y="100" text-anchor="middle" font-size="13" fill="#8A93A6">warp 前：规则坐标采样</text>
+  <rect x="50" y="115" width="240" height="240" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <!-- 规则网格：横平竖直 -->
+  <g stroke="#4A5263" stroke-width="1">
+    <line x1="50" y1="155" x2="290" y2="155"/><line x1="50" y1="195" x2="290" y2="195"/>
+    <line x1="50" y1="235" x2="290" y2="235"/><line x1="50" y1="275" x2="290" y2="275"/>
+    <line x1="50" y1="315" x2="290" y2="315"/>
+    <line x1="98" y1="115" x2="98" y2="355"/><line x1="146" y1="115" x2="146" y2="355"/>
+    <line x1="194" y1="115" x2="194" y2="355"/><line x1="242" y1="115" x2="242" y2="355"/>
+  </g>
+  <!-- 采样点与取值 -->
+  <circle cx="146" cy="195" r="5" fill="#FF4D6D"/>
+  <text x="146" y="185" text-anchor="middle" font-size="12" fill="#FF4D6D">p</text>
+  <text x="170" y="385" text-anchor="middle" font-size="12" fill="#8A93A6">fbm(p)：格子规规矩矩</text>
+  <text x="170" y="405" text-anchor="middle" font-size="12" fill="#8A93A6">噪声是动的，采样点是死的</text>
+
+  <!-- 中间：变换箭头 + 公式 -->
+  <line x1="300" y1="215" x2="400" y2="215" stroke="#FFC145" stroke-width="2.5"/>
+  <path d="M400,207 L416,215 L400,223 Z" fill="#FFC145"/>
+  <rect x="296" y="240" width="120" height="30" rx="6" fill="#141A24" stroke="#FFC145" stroke-width="1.5"/>
+  <text x="356" y="260" text-anchor="middle" font-size="13" fill="#FFC145">p' = p + fbm(p)·k</text>
+  <!-- k 三档表 -->
+  <rect x="288" y="285" width="136" height="112" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="356" y="308" text-anchor="middle" font-size="12" fill="#8A93A6">k 强度三档：</text>
+  <text x="356" y="330" text-anchor="middle" font-size="12" fill="#4CC9F0">0.3 · 微澜</text>
+  <text x="356" y="352" text-anchor="middle" font-size="12" fill="#FF4D6D">0.8 · 丝绸</text>
+  <text x="356" y="374" text-anchor="middle" font-size="12" fill="#FFC145">1.5 · 熔岩</text>
+
+  <!-- 右面板：warp 后网格 -->
+  <text x="550" y="100" text-anchor="middle" font-size="13" fill="#4CC9F0">warp 后：坐标先过一道扰动</text>
+  <rect x="430" y="115" width="240" height="240" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <!-- 扰动网格：同一拓扑、线条用二次曲线 -->
+  <g fill="none" stroke="#4CC9F0" stroke-width="1" opacity="0.75">
+    <path d="M430,155 Q550,135 670,160"/>
+    <path d="M430,195 Q545,215 670,190"/>
+    <path d="M430,235 Q555,255 670,230"/>
+    <path d="M430,275 Q545,258 670,278"/>
+    <path d="M430,315 Q555,338 670,312"/>
+    <path d="M98,115 Q80,235 100,355"/>
+    <path d="M146,115 Q165,235 140,355"/>
+    <path d="M194,115 Q180,235 200,355"/>
+    <path d="M242,115 Q265,235 245,355" transform="translate(336,0)"/>
+  </g>
+  <!-- 采样点被推走 -->
+  <circle cx="146" cy="195" r="3" fill="#4A5263" opacity="0.6" transform="translate(336,0)"/>
+  <circle cx="205" cy="228" r="5" fill="#FF4D6D" transform="translate(336,0)"/>
+  <text x="516" y="218" font-size="12" fill="#FF4D6D">p'</text>
+  <line x1="482" y1="195" x2="536" y2="226" stroke="#FF4D6D" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#warrow)"/>
+  <defs>
+    <marker id="warrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#FF4D6D"/>
+    </marker>
+  </defs>
+  <text x="550" y="385" text-anchor="middle" font-size="12" fill="#8A93A6">fbm(p + fbm(p)·k)</text>
+  <text x="550" y="405" text-anchor="middle" font-size="12" fill="#8A93A6">每个采样点被噪声推走 —— 丝绸的褶</text>
+
+  <!-- 底部通栏 -->
+  <rect x="50" y="425" width="620" height="60" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="360" y="450" text-anchor="middle" font-size="12" fill="#E8ECF4">嵌套即流动感：外层 fbm 决定「往哪推」，内层 fbm 决定「画什么」—— 推的力量随 k 增长</text>
+  <text x="360" y="470" text-anchor="middle" font-size="12" fill="#8A93A6">注意性能：warp 里再 warp 是指数爆炸，一层封顶（常见坑第 2 行）</text>
+  <text x="360" y="505" text-anchor="middle" font-size="12" fill="#8A93A6">「给坐标先过一道扰动函数再采样」—— 相当于先处理数据再渲染，这就是 domain warping 的全部</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>符号距离场图：左侧圆 SDF 的同心等值线（负值在形状内、零在边界、正值在外），右侧边界放大图示意 smoothstep 过渡带与 fwidth 抗锯齿</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">符号距离场：一个函数回答「离形状多远」</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">float sd = length(p) - r; —— 讲义 2.1，距离场相对布尔的三个优势都在这张图上</text>
+
+  <!-- 左面板：圆 SDF 等值线 -->
+  <text x="200" y="100" text-anchor="middle" font-size="13" fill="#FF4D6D">等值线：d 的取值地图</text>
+  <rect x="40" y="115" width="330" height="330" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+
+  <!-- 正值等值线（形状外）：天青虚线，越远越稀 -->
+  <circle cx="205" cy="280" r="175" fill="none" stroke="#4CC9F0" stroke-width="1" stroke-dasharray="5 4" opacity="0.45"/>
+  <circle cx="205" cy="280" r="150" fill="none" stroke="#4CC9F0" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.6"/>
+  <circle cx="205" cy="280" r="125" fill="none" stroke="#4CC9F0" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.75"/>
+
+  <!-- 形状本体：负域淡填充 -->
+  <circle cx="205" cy="280" r="100" fill="#1A2333" stroke="#FF4D6D" stroke-width="2.5"/>
+  <!-- 负值内部等值线：玫红弱虚线 -->
+  <circle cx="205" cy="280" r="66" fill="none" stroke="#FF4D6D" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.5"/>
+  <circle cx="205" cy="280" r="33" fill="none" stroke="#FF4D6D" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.35"/>
+
+  <!-- 标注：距离值 -->
+  <text x="205" y="285" text-anchor="middle" font-size="12" fill="#E8ECF4">d = -1.0</text>
+  <text x="205" y="216" text-anchor="middle" font-size="12" fill="#E8ECF4" opacity="0.85">d = -0.5</text>
+  <text x="205" y="172" text-anchor="middle" font-size="12" fill="#FF4D6D">d = 0（边界）</text>
+  <text x="205" y="150" text-anchor="middle" font-size="12" fill="#4CC9F0">d = +0.5</text>
+  <text x="205" y="126" text-anchor="middle" font-size="12" fill="#4CC9F0">d = +1.0</text>
+  <line x1="205" y1="280" x2="205" y2="180" stroke="#8A93A6" stroke-width="1"/>
+
+  <text x="205" y="470" text-anchor="middle" font-size="12" fill="#8A93A6">负值在形状内（淡填充）· 零在边界（实线）· 正值在外（虚线）</text>
+
+  <!-- 右面板：边界放大 + smoothstep 过渡带 -->
+  <text x="555" y="100" text-anchor="middle" font-size="13" fill="#FFC145">边界放大：1px 过渡带</text>
+  <rect x="410" y="115" width="280" height="180" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+
+  <!-- 形状内（左半，负距离淡填充）与形状外（右半）之间的过渡带 -->
+  <defs>
+    <linearGradient id="aa-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1A2333"/>
+      <stop offset="0.42" stop-color="#1A2333"/>
+      <stop offset="0.5" stop-color="#4A5263"/>
+      <stop offset="0.58" stop-color="#10151F"/>
+      <stop offset="1" stop-color="#10151F"/>
+    </linearGradient>
+  </defs>
+  <rect x="435" y="150" width="230" height="90" fill="url(#aa-grad)"/>
+  <line x1="550" y1="140" x2="550" y2="250" stroke="#FF4D6D" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- 过渡带范围指示 -->
+  <line x1="525" y1="262" x2="575" y2="262" stroke="#FFC145" stroke-width="1.5"/>
+  <line x1="525" y1="256" x2="525" y2="268" stroke="#FFC145" stroke-width="1.5"/>
+  <line x1="575" y1="256" x2="575" y2="268" stroke="#FFC145" stroke-width="1.5"/>
+  <text x="550" y="284" text-anchor="middle" font-size="12" fill="#FFC145">fwidth(d)：屏幕空间上 d 每像素走多远</text>
+
+  <text x="470" y="168" font-size="12" fill="#E8ECF4">形状内 d&lt;0</text>
+  <text x="600" y="168" font-size="12" fill="#8A93A6">形状外 d&gt;0</text>
+
+  <!-- 右下：填充公式 -->
+  <rect x="410" y="320" width="280" height="125" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="550" y="350" text-anchor="middle" font-size="13" fill="#E8ECF4">抗锯齿填充一行：</text>
+  <text x="550" y="376" text-anchor="middle" font-size="13" fill="#FFC145">fill = 1.0 - smoothstep(0.0,</text>
+  <text x="550" y="396" text-anchor="middle" font-size="13" fill="#FFC145">fwidth(d), d);</text>
+  <text x="550" y="425" text-anchor="middle" font-size="12" fill="#8A93A6">过渡带宽度 = 该像素处距离的变化率</text>
+
+  <!-- 底部通栏 -->
+  <text x="360" y="495" text-anchor="middle" font-size="12" fill="#8A93A6">布尔只能回答是与否，距离回答了有多近 —— 可插值 · 可缩放 · 可 smooth · 可发光</text>
+</svg>

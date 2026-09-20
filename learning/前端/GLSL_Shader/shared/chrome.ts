@@ -122,7 +122,15 @@ export function createChrome(opts: ChromeOptions): Chrome {
     failInternal('UNHANDLED REJECTION', String(e.reason));
   });
   function failInternal(title: string, detail: string, fix?: string) {
-    pointerChrome.fail(title, detail, fix);
+    // 直接写 panel 而不经 pointerChrome 转发：createChrome 执行期间若抛错
+    // （如 onResize 读到尚未初始化的变量），pointerChrome 还在暂时性死区里，
+    // 经它转发会把「报错面板」自身也炸掉——初始化期的错误就永远看不见。
+    panel.innerHTML =
+      `<h2>${escapeHtml(title)}</h2>` +
+      `<pre>${escapeHtml(detail)}</pre>` +
+      (fix ? `<div class="fix">${escapeHtml(fix)}</div>` : '');
+    panel.classList.add('show');
+    stage.classList.add('ready');
   }
 
   // ---- 交互状态桥：事件只更新状态，帧循环消费 -------------------

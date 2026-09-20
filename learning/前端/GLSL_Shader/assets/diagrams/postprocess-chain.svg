@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>后期处理链路图：场景渲染到 render target（离屏底片），依次过 bloom pass（提取亮部再模糊）、自定义 ShaderPass（Day 2 配方卡收尾），最后经 OutputPass（色彩空间）写上屏幕；旁注双 pass 的必要性与性能红线</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <defs>
+    <marker id="pp-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#8A93A6"/>
+    </marker>
+  </defs>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">后期处理链：先拍底片，再洗照片</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">讲义 3.5 —— 屏幕是直写靶，多 pass 必须「先落盘再加工」</text>
+
+  <!-- 链路：场景 → render target → bloom → shader pass → output → 屏幕 -->
+  <g font-size="13">
+    <rect x="30" y="150" width="120" height="70" rx="6" fill="#141A24" stroke="#FF4D6D" stroke-width="2"/>
+    <text x="90" y="180" text-anchor="middle" fill="#E8ECF4">场景渲染</text>
+    <text x="90" y="200" text-anchor="middle" fill="#8A93A6" font-size="11">RenderPass</text>
+
+    <rect x="190" y="150" width="130" height="70" rx="6" fill="#10151F" stroke="#4CC9F0" stroke-width="2"/>
+    <text x="255" y="180" text-anchor="middle" fill="#E8ECF4">render target</text>
+    <text x="255" y="200" text-anchor="middle" fill="#8A93A6" font-size="11">离屏「底片」</text>
+
+    <rect x="360" y="150" width="130" height="70" rx="6" fill="#141A24" stroke="#FFC145" stroke-width="2"/>
+    <text x="425" y="180" text-anchor="middle" fill="#E8ECF4">bloom pass</text>
+    <text x="425" y="200" text-anchor="middle" fill="#8A93A6" font-size="11">亮部提取+模糊</text>
+
+    <rect x="530" y="150" width="130" height="70" rx="6" fill="#141A24" stroke="#4CC9F0" stroke-width="2"/>
+    <text x="595" y="180" text-anchor="middle" fill="#E8ECF4">ShaderPass</text>
+    <text x="595" y="200" text-anchor="middle" fill="#8A93A6" font-size="11">配方卡收尾</text>
+  </g>
+
+  <!-- 箭头 -->
+  <g stroke="#8A93A6" stroke-width="2" fill="none">
+    <line x1="150" y1="185" x2="186" y2="185" marker-end="url(#pp-arrow)"/>
+    <line x1="320" y1="185" x2="356" y2="185" marker-end="url(#pp-arrow)"/>
+    <line x1="490" y1="185" x2="526" y2="185" marker-end="url(#pp-arrow)"/>
+    <line x1="660" y1="185" x2="696" y2="185" marker-end="url(#pp-arrow)"/>
+  </g>
+  <rect x="30" y="240" width="660" height="0" fill="none"/>
+
+  <!-- 屏幕 -->
+  <rect x="30" y="255" width="630" height="0" fill="none"/>
+  <g font-size="13">
+    <rect x="30" y="260" width="630" height="54" rx="6" fill="#141A24" stroke="#FF4D6D" stroke-width="2"/>
+    <text x="345" y="292" text-anchor="middle" fill="#E8ECF4">OutputPass（色彩空间 sRGB）→ 屏幕</text>
+  </g>
+  <line x1="595" y1="222" x2="595" y2="254" stroke="#8A93A6" stroke-width="2" marker-end="url(#pp-arrow)"/>
+
+  <!-- 参数卡 -->
+  <rect x="30" y="340" width="310" height="120" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="185" y="366" text-anchor="middle" font-size="13" fill="#FFC145">UnrealBloomPass 三参数</text>
+  <g font-size="12" fill="#8A93A6">
+    <text x="50" y="392">strength 1.2 · 发光强度（霓虹档）</text>
+    <text x="50" y="414">radius 0.6 · 光晕半径</text>
+    <text x="50" y="436">threshold 0.35 · 提亮门槛（0=全屏白）</text>
+  </g>
+
+  <rect x="380" y="340" width="280" height="120" rx="6" fill="#141A24" stroke="#3A4356" stroke-width="1"/>
+  <text x="520" y="366" text-anchor="middle" font-size="13" fill="#4CC9F0">性能红线</text>
+  <g font-size="12" fill="#8A93A6">
+    <text x="400" y="392">每 pass = 全屏再走一遍</text>
+    <text x="400" y="414">移动端：砍 bloom 或降 DPR</text>
+    <text x="400" y="436">配方 ShaderPass 取代每材质收尾</text>
+  </g>
+
+  <!-- 底部通栏 -->
+  <text x="360" y="498" text-anchor="middle" font-size="12" fill="#8A93A6">手写 glow 够用 90% 场景（单 pass）；bloom 是「亮的东西把整个画面照亮」的高光时刻重武器</text>
+</svg>
