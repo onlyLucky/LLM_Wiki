@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>交互事件桥全链路：浏览器事件 → JS 状态对象（chrome.pointer，内含 lerp 平滑）→ 每帧 uniform 写入 → shader 响应 → 画面；标注事件频率不等于帧率</title>
+  <rect width="900" height="520" fill="#0B0E14"/>
+
+  <defs>
+    <marker id="arrow-rose4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#FF4D6D"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="42" text-anchor="middle" font-size="18" fill="#E8ECF4">事件桥：浏览器世界 → GPU 世界的翻译官</text>
+  <text x="450" y="64" text-anchor="middle" font-size="12" fill="#8A93A6">讲义 1.7 —— 事件更新状态，帧循环消费状态</text>
+
+  <!-- 五个环节 -->
+  <g stroke="#FF4D6D" stroke-width="2" fill="#141A24">
+    <rect x="34"  y="170" width="148" height="110" rx="6"/>
+    <rect x="212" y="170" width="148" height="110" rx="6"/>
+    <rect x="390" y="170" width="148" height="110" rx="6"/>
+    <rect x="568" y="170" width="148" height="110" rx="6"/>
+    <rect x="746" y="170" width="148" height="110" rx="6" stroke="#4CC9F0"/>
+  </g>
+
+  <g text-anchor="middle" font-size="13" fill="#E8ECF4">
+    <text x="108" y="200">浏览器事件</text>
+    <text x="286" y="200">chrome.pointer</text>
+    <text x="464" y="200">uniform 写入</text>
+    <text x="642" y="200">shader 响应</text>
+    <text x="820" y="200">画面</text>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#8A93A6">
+    <text x="108" y="222">DOM 世界</text>
+    <text x="286" y="222">JS 状态对象</text>
+    <text x="464" y="222">每帧 · 帧循环内</text>
+    <text x="642" y="222">GPU 世界</text>
+    <text x="820" y="222">60 fps 连续帧</text>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#C8D0DE">
+    <text x="108" y="248">pointermove / down</text>
+    <text x="108" y="266">wheel · click · touch</text>
+    <text x="286" y="248">x/y · sx/sy · isDown</text>
+    <text x="286" y="266">wheel · clickTime</text>
+    <text x="464" y="248">uniform2f(u_mouse,</text>
+    <text x="464" y="266">  chrome.pointer.sx)</text>
+    <text x="642" y="248">距离场 · 波包</text>
+    <text x="642" y="266">视差 · 流动</text>
+  </g>
+
+  <!-- 环节间箭头 -->
+  <g stroke="#FF4D6D" stroke-width="2" marker-end="url(#arrow-rose4)">
+    <line x1="182" y1="225" x2="208" y2="225"/>
+    <line x1="360" y1="225" x2="386" y2="225"/>
+    <line x1="538" y1="225" x2="564" y2="225"/>
+    <line x1="716" y1="225" x2="742" y2="225"/>
+  </g>
+
+  <!-- lerp 平滑子节点（琥珀）挂在状态对象下 -->
+  <line x1="286" y1="280" x2="286" y2="318" stroke="#FFC145" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <rect x="206" y="320" width="160" height="56" rx="6" fill="none" stroke="#FFC145" stroke-width="1.5"/>
+  <text x="286" y="342" text-anchor="middle" font-size="12" fill="#FFC145">lerp 平滑（内建）</text>
+  <text x="286" y="362" text-anchor="middle" font-size="12" fill="#C8D0DE">sx += (x - sx) * 0.08</text>
+
+  <!-- 环节 1 下：事件频率 ≠ 帧率 -->
+  <text x="108" y="342" text-anchor="middle" font-size="12" fill="#FFC145">事件频率 ≠ 帧率</text>
+  <text x="108" y="362" text-anchor="middle" font-size="12" fill="#8A93A6">回调里直接画 = 掉帧根源</text>
+
+  <!-- 环节 3 下：每帧消费 -->
+  <text x="464" y="342" text-anchor="middle" font-size="12" fill="#FFC145">rAF 里读，不在回调里画</text>
+  <text x="464" y="362" text-anchor="middle" font-size="12" fill="#8A93A6">事件只改状态，渲染交给帧循环</text>
+
+  <!-- 底部金句 -->
+  <text x="450" y="452" text-anchor="middle" font-size="14" fill="#FF4D6D">事件更新状态，帧循环消费状态</text>
+  <text x="450" y="478" text-anchor="middle" font-size="12" fill="#8A93A6">这句话就是整个模式 —— 记住它，之后所有交互 demo 都是它的变奏</text>
+</svg>

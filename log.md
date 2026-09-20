@@ -298,3 +298,10 @@
 - 主题: webHugo 博客一天 3 次部署（备份只留一份，dist_20260913_1435/1652/1953 依次轮换）+ 360/搜狗/神马站长验证上线（commits 29f8b8f、3d77d10）+ 神马验证文件远端直改（..._1789300600，HTTP 200 验证）
 - 关键点: ① 远端备份需 sudo（/data/www/HugoBlog/ 父目录 root 所有，已并入记忆）；② 删除远端 dist_* 触发安全检查拦截、等用户确认后继续；③ 神马验证码源码层面 meta 与验证文件值不一致 + 远端又被直改为第三处值，本地 static/ 仍旧值——再次部署会覆盖，已列入待跟进
 - 更新: index.md（Last updated: 2026-09-14, Total pages: 35→36, 新增 Daily Summaries 条目 2026-09-13）
+
+## [2026-09-19] create | GLSL Shader 三天实战课程 · 地基与制作计划
+- 目录: learning/前端/GLSL_Shader/（新建）
+- 内容: ① 制作计划书 5 份（_制作计划/00-04：制作总纲、day1-day3 规格、参考资源与实例清单底稿；供 glm-5.3-flash 按批次生成本课程讲义 20 篇、demo 15 个、作业 9 套、SVG 12 张）；② Vite 工程地基（vite 8.3.0 + TS + three 0.186.0 + lenis + gsap，与 webgpu 课程同构）；③ shared/chrome.ts（WebGL2 版视觉外壳：GLSL 编译错误面板 + pointer 交互状态桥）+ demo.css（玫红 #FF4D6D / 天青 #4CC9F0 / 琥珀 #FFC145 色板）；④ 门户 index.html + 黄金样例 demo 01-渐变三角形 + 全目录骨架占位
+- 技术路线: Day1 原生 WebGL2 + GLSL 语法（四支柱：语法/管线/动画/交互）→ Day2 fragment shader 视觉算法（SDF/噪声/调色/光感/电影感）→ Day3 Three.js ShaderMaterial 实战（hover 失真/滚动驱动/粒子/后期）；GLSL 之外的知识经「理论对照」链接 webgpu / Threejs创意3D / GAMES101 课程，不重复展开
+- 验证: npm install / tsc --noEmit / vite build 全部通过；浏览器实测 demo 01（140 FPS、DPR 2、无 console 错误、入场淡入正常）；GLSL 编译错误注入测试通过（报错行号 19 精确命中、错误面板中文修复指引完整）后已还原
+- 更新: index.md（Last updated: 2026-09-19, Total pages: 36→37, Learning 节新增 GLSL_Shader 条目）

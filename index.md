@@ -2,7 +2,7 @@
 
 > Content catalog. Every wiki page listed under its type with a one-line summary.
 > Read this first to find relevant pages for any query.
-> Last updated: 2026-09-14 | Total pages: 36
+> Last updated: 2026-09-19 | Total pages: 37
 
 ---
 
@@ -95,6 +95,7 @@ wiki/
 <!-- 学习笔记 -->
 - [[learning/内容创作全流程SOP_从0到1到100]] — 内容创作全流程SOP：选题策划→大纲设计→文案撰写→脚本分镜→画面生成→话本稿→多平台输出 | 2026-06-10
 - [[learning/计算机图形学/GAMES101/README]] — GAMES101 现代计算机图形学课程笔记：8 章完整笔记（闫令琪 | UCSB） | 2026-07-05
+- [[learning/前端/GLSL_Shader/_制作计划/00-制作总纲]] — GLSL Shader 三天实战课程（制作中）：Vite 工程地基 + 五份制作计划书就绪（讲义/作业由执行模型按批次生成），黄金样例 demo 已可运行 | 2026-09-19
 
 ## 📝 Content Creation
 <!-- 内容创作中心 -->

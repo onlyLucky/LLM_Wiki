@@ -1,0 +1,21 @@
+{
+  "name": "glsl-shader-3day-course",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GLSL Shader 三天实战课程 —— 讲义 / demo / 作业统一工程（WebGL2 + GLSL ES 3.00 + Three.js）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.0"
+  },
+  "dependencies": {
+    "gsap": "3.12.5",
+    "lenis": "1.1.13",
+    "three": "0.186.0"
+  }
+}

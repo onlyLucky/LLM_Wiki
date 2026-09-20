@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>三种坐标域并列对比：gl_FragCoord 像素坐标（左下原点）、UV 归一化 0–1（左下原点）、居中域 -1..1（中心原点，含宽高比矫正前后对比）</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <defs>
+    <marker id="axis-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#8A93A6"/>
+    </marker>
+  </defs>
+
+  <text x="360" y="40" text-anchor="middle" font-size="18" fill="#E8ECF4">三种坐标域：一个像素的三张身份证</text>
+  <text x="360" y="62" text-anchor="middle" font-size="12" fill="#8A93A6">gl_FragCoord / UV / 居中域 —— 讲义 1.5，三者只差一次线性换算</text>
+
+  <!-- 面板 1：gl_FragCoord -->
+  <rect x="30" y="130" width="200" height="200" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <line x1="48" y1="312" x2="48" y2="150" stroke="#8A93A6" stroke-width="1" marker-end="url(#axis-arrow)"/>
+  <circle cx="48" cy="312" r="4" fill="#FF4D6D"/>
+  <text x="58" y="320" font-size="12" fill="#FF4D6D">(0,0) 左下原点</text>
+  <circle cx="148" cy="222" r="4" fill="#FFC145"/>
+  <text x="158" y="218" font-size="12" fill="#FFC145">(960,540)</text>
+  <text x="216" y="152" text-anchor="end" font-size="12" fill="#8A93A6">(1920,1080)</text>
+  <text x="130" y="418" text-anchor="middle" font-size="13" fill="#FF4D6D">gl_FragCoord</text>
+  <text x="130" y="440" text-anchor="middle" font-size="12" fill="#8A93A6">像素值 · 左下原点 · y 向上</text>
+  <text x="130" y="460" text-anchor="middle" font-size="12" fill="#8A93A6">除以 u_resolution 才有下一站</text>
+
+  <!-- 面板 2：UV -->
+  <rect x="260" y="130" width="200" height="200" rx="6" fill="#10151F" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="268" y="150" font-size="12" fill="#8A93A6">(0,1)</text>
+  <text x="452" y="150" text-anchor="end" font-size="12" fill="#8A93A6">(1,1)</text>
+  <text x="268" y="316" font-size="12" fill="#8A93A6">(0,0)</text>
+  <text x="452" y="316" text-anchor="end" font-size="12" fill="#8A93A6">(1,0)</text>
+  <circle cx="360" cy="230" r="4" fill="#4CC9F0"/>
+  <text x="372" y="226" font-size="12" fill="#4CC9F0">(0.5, 0.5)</text>
+  <text x="360" y="418" text-anchor="middle" font-size="13" fill="#FF4D6D">UV</text>
+  <text x="360" y="440" text-anchor="middle" font-size="12" fill="#8A93A6">归一化 0–1 · 左下原点</text>
+  <text x="360" y="460" text-anchor="middle" font-size="12" fill="#8A93A6">创意 shader 的主力坐标系</text>
+
+  <!-- 面板 3：居中域 -->
+  <rect x="490" y="130" width="200" height="200" rx="6" fill="#10151F" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="498" y="150" font-size="12" fill="#8A93A6">(-1,1)</text>
+  <text x="682" y="150" text-anchor="end" font-size="12" fill="#8A93A6">(1,1)</text>
+  <text x="498" y="316" font-size="12" fill="#8A93A6">(-1,-1)</text>
+  <text x="682" y="316" text-anchor="end" font-size="12" fill="#8A93A6">(1,-1)</text>
+  <circle cx="590" cy="230" r="4" fill="#4CC9F0"/>
+  <text x="602" y="226" font-size="12" fill="#4CC9F0">(0,0) 中心</text>
+  <!-- 宽高比矫正前后对比 -->
+  <ellipse cx="538" cy="286" rx="24" ry="12" fill="none" stroke="#FFC145" stroke-width="1.5"/>
+  <text x="538" y="318" text-anchor="middle" font-size="11" fill="#FFC145">未矫正</text>
+  <circle cx="642" cy="286" r="14" fill="none" stroke="#4CC9F0" stroke-width="1.5"/>
+  <text x="642" y="318" text-anchor="middle" font-size="11" fill="#4CC9F0">p.x *= aspect</text>
+  <text x="590" y="418" text-anchor="middle" font-size="13" fill="#4CC9F0">居中域 -1..1</text>
+  <text x="590" y="440" text-anchor="middle" font-size="12" fill="#8A93A6">uv * 2.0 - 1.0 · SDF 与旋转的主场</text>
+  <text x="590" y="460" text-anchor="middle" font-size="12" fill="#FFC145">宽屏拉伸 → p.x *= u_aspect 矫正</text>
+
+  <!-- 底部通栏 -->
+  <text x="360" y="500" text-anchor="middle" font-size="12" fill="#8A93A6">记住换算口诀：除以分辨率得 UV，乘 2 减 1 得居中域 —— 其余变体都从这里出发</text>
+</svg>

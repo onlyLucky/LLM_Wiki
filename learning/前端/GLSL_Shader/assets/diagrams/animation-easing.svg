@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>四条缓动曲线并列对比：linear 线性、easeInOutCubic 平滑加减速、easeOutElastic 弹性过冲、easeOutBack 回弹，横轴为归一化时间 t，纵轴为输出值，各标注适用场景</title>
+  <rect width="720" height="520" fill="#0B0E14"/>
+
+  <text x="360" y="36" text-anchor="middle" font-size="18" fill="#E8ECF4">四条缓动曲线：时间如何变成运动</text>
+  <text x="360" y="56" text-anchor="middle" font-size="12" fill="#8A93A6">讲义 1.6 · 横轴 t ∈ [0,1]，纵轴为输出值 —— GLSL 实现在讲义 How 节</text>
+
+  <!-- 格 1：linear -->
+  <rect x="20" y="72" width="310" height="213" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <text x="40" y="96" font-size="13" fill="#E8ECF4">linear <tspan fill="#8A93A6">/ 线性</tspan></text>
+  <g stroke="#3A4356" stroke-width="1">
+    <line x1="60" y1="108" x2="60" y2="268"/>
+    <line x1="60" y1="268" x2="320" y2="268"/>
+  </g>
+  <polyline points="60,268 320,108" fill="none" stroke="#8A93A6" stroke-width="2"/>
+  <text x="40" y="282" font-size="12" fill="#8A93A6">适用：进度底色 · 几乎不用</text>
+
+  <!-- 格 2：easeInOutCubic -->
+  <rect x="390" y="72" width="310" height="213" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <text x="410" y="96" font-size="13" fill="#E8ECF4">easeInOutCubic <tspan fill="#8A93A6">/ 平滑加减速</tspan></text>
+  <g stroke="#3A4356" stroke-width="1">
+    <line x1="430" y1="108" x2="430" y2="268"/>
+    <line x1="430" y1="268" x2="690" y2="268"/>
+  </g>
+  <polyline points="430,268 456,267 482,263 508,251 534,227 560,188 586,149 612,125 638,113 664,109 690,108" fill="none" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="410" y="282" font-size="12" fill="#8A93A6">适用：主元素转场 · 默认选它</text>
+
+  <!-- 格 3：easeOutElastic -->
+  <rect x="20" y="295" width="310" height="213" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <text x="40" y="319" font-size="13" fill="#E8ECF4">easeOutElastic <tspan fill="#8A93A6">/ 弹性过冲</tspan></text>
+  <g stroke="#3A4356" stroke-width="1">
+    <line x1="60" y1="331" x2="60" y2="491"/>
+    <line x1="60" y1="491" x2="320" y2="491"/>
+  </g>
+  <polyline points="60,491 73,417 86,348 99,336 112,362 125,387 138,391 151,382 164,373 177,372 190,375 216,378 242,376 268,377 294,377 320,376" fill="none" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="40" y="505" font-size="12" fill="#8A93A6">适用：小元素回弹 · 禁用于背景（眩晕）</text>
+
+  <!-- 格 4：easeOutBack -->
+  <rect x="390" y="295" width="310" height="213" rx="6" fill="#10151F" stroke="#3A4356" stroke-width="1.5"/>
+  <text x="410" y="319" font-size="13" fill="#E8ECF4">easeOutBack <tspan fill="#8A93A6">/ 回弹</tspan></text>
+  <g stroke="#3A4356" stroke-width="1">
+    <line x1="430" y1="331" x2="430" y2="491"/>
+    <line x1="430" y1="491" x2="690" y2="491"/>
+  </g>
+  <polyline points="430,491 456,434 482,393 508,365 534,348 560,340 586,338 612,341 638,346 664,350 690,352" fill="none" stroke="#FFC145" stroke-width="2"/>
+  <text x="410" y="505" font-size="12" fill="#8A93A6">适用：按压反馈、松手弹回（demo 04）</text>
+</svg>

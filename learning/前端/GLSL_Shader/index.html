@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GLSL · 三天实战课程</title>
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --frame: #1e2530;
+      --ink: #8a93a6;
+      --ink-dim: #4a5263;
+      --ink-hi: #c8d0de;
+      --accent: #ff4d6d;
+      --accent-2: #4cc9f0;
+      --amber: #ffc145;
+      --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--mono);
+      padding: 3rem 4rem 6rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header { margin-bottom: 4rem; }
+    header .kicker {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-dim); margin-bottom: 14px;
+    }
+    header h1 {
+      font-size: 22px; font-weight: normal; color: var(--ink-hi);
+      letter-spacing: 0.04em;
+    }
+    header h1 b { font-weight: normal; color: var(--accent); }
+    header p { margin-top: 12px; font-size: 12.5px; line-height: 1.8; max-width: 62ch; }
+
+    .day { margin-bottom: 3.5rem; }
+    .day-head {
+      display: flex; align-items: baseline; gap: 14px;
+      border-bottom: 1px solid var(--frame);
+      padding-bottom: 10px; margin-bottom: 6px;
+    }
+    .day-head .no { font-size: 11px; color: var(--accent); letter-spacing: 0.12em; }
+    .day-head h2 { font-size: 15px; font-weight: normal; color: var(--ink-hi); letter-spacing: 0.05em; }
+    .day-head .count { margin-left: auto; font-size: 11px; color: var(--ink-dim); }
+
+    .row {
+      display: grid;
+      grid-template-columns: 3.5rem 15rem 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 11px 6px;
+      border-bottom: 1px solid #141a24;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.15s ease, padding-left 0.15s ease;
+    }
+    a.row:hover { background: #10151f; padding-left: 12px; }
+    .row.pending { opacity: 0.38; }
+    .row.pending .name::after {
+      content: '· 待生成'; font-size: 10px; color: var(--ink-dim); margin-left: 8px;
+    }
+    .row .idx { font-size: 11px; color: var(--ink-dim); }
+    .row .name { font-size: 13px; color: var(--ink-hi); }
+    .row .desc { font-size: 11.5px; color: var(--ink-dim); }
+    .row .tag {
+      font-size: 10px; letter-spacing: 0.08em; color: var(--ink-dim);
+      border: 1px solid var(--frame); border-radius: 3px; padding: 2px 7px;
+      white-space: nowrap;
+    }
+    .row .tag.b { color: #4cc9f0; border-color: #1d3a37; }
+    .row .tag.a { color: #ff4d6d; border-color: #3a2430; }
+    .row .tag.c { color: #ffc145; border-color: #4a3a1c; }
+
+    .day-hw { margin-top: 10px; }
+    .day-hw .label {
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-dim); margin: 14px 0 4px;
+    }
+    .note {
+      margin-top: 5rem; padding-top: 1.4rem; border-top: 1px solid var(--frame);
+      font-size: 11.5px; line-height: 2; color: var(--ink-dim);
+    }
+    .note a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--frame); }
+    .note a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="kicker">FRONTEND / GLSL / THREE DAYS</div>
+    <h1>GLSL <b>·</b> 三天实战课程</h1>
+    <p>
+      从零手写 GLSL ES 3.00 与原生 WebGL2，经 SDF / 噪声 / 调色的 fragment shader
+      视觉算法，到 Three.js ShaderMaterial 实战，终点是 awwwards 获奖站一级的
+      shader 技术层次。每个页面都是可运行的设计作品：深色画框、角落标注、
+      实时 FPS、交互状态桥。讲义见 讲义/ 目录。
+    </p>
+  </header>
+
+  <!-- 批8：把所有 pending 行替换为 <a class="row" href="...">（结构照 demo 01 的写法） -->
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 1</span>
+      <h2>GLSL 语法与 WebGL2 管线</h2>
+      <span class="count">语法 / 管线 / 动画 / 交互 · 6 DEMOS</span>
+    </div>
+    <a class="row" href="demos/day1/01-渐变三角形/index.html">
+      <span class="idx">01</span><span class="name">渐变三角形</span>
+      <span class="desc">attribute / varying 插值 / uniform 时间与鼠标</span>
+      <span class="tag">DEMO</span>
+    </a>
+    <div class="row pending"><span class="idx">02</span><span class="name">全屏四边形与UV</span><span class="desc">fullscreen quad + UV 调色板 + 坐标仪表盘</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">03</span><span class="name">时间的画面</span><span class="desc">u_time 循环动画 + GLSL 缓动函数四格</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">04</span><span class="name">光标的追随</span><span class="desc">事件桥 + lerp 平滑 + 按压回弹</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">05</span><span class="name">点击的涟漪</span><span class="desc">click 脉冲 uniform + 扩散波包</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">06</span><span class="name">滚轮的浪潮</span><span class="desc">wheel 归一化 + 条纹相位推进</span><span class="tag">DEMO</span></div>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <div class="row pending"><span class="idx">B</span><span class="name">脉动的画布</span><span class="desc">uniform 时间 + 双色呼吸渐变</span><span class="tag b">BASIC</span></div>
+      <div class="row pending"><span class="idx">A</span><span class="name">追光的萤火</span><span class="desc">鼠标缓动跟随 + 拖拽视差 + 回弹</span><span class="tag a">ADVANCED</span></div>
+      <div class="row pending"><span class="idx">C</span><span class="name">极坐标曼陀罗</span><span class="desc">极坐标 + 旋转呼吸 + 鼠标扰动 + 点击涟漪</span><span class="tag c">CHALLENGE</span></div>
+    </div>
+  </section>
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 2</span>
+      <h2>片段着色器视觉算法</h2>
+      <span class="count">SDF / 噪声 / 色彩 / 光感 · 6 DEMOS</span>
+    </div>
+    <div class="row pending"><span class="idx">01</span><span class="name">SDF动物园</span><span class="desc">六种距离场形状陈列 + fwidth 抗锯齿</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">02</span><span class="name">voronoi细胞</span><span class="desc">随机格子 + F1/F2 细胞壁</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">03</span><span class="name">fbm云海</span><span class="desc">value noise → fbm → 调色板映射</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">04</span><span class="name">域扭曲流场</span><span class="desc">fbm(p + fbm(p)) 双层 warp 丝绸</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">05</span><span class="name">调色板实验室</span><span class="desc">余弦调色板四参数实时调节</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">06</span><span class="name">霓虹辉光与电影感</span><span class="desc">法线光感 + 双层 glow + 配方卡收尾</span><span class="tag">DEMO</span></div>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <div class="row pending"><span class="idx">B</span><span class="name">SDF徽章</span><span class="desc">圆角方 SDF + 描边 + 呼吸</span><span class="tag b">BASIC</span></div>
+      <div class="row pending"><span class="idx">A</span><span class="name">流动的丝绸</span><span class="desc">fbm + domain warping + 调色板</span><span class="tag a">ADVANCED</span></div>
+      <div class="row pending"><span class="idx">C</span><span class="name">霓虹辉光艺术</span><span class="desc">SDF 场景 + glow + 电影感配方（作品集级）</span><span class="tag c">CHALLENGE</span></div>
+    </div>
+  </section>
+
+  <section class="day">
+    <div class="day-head">
+      <span class="no">DAY 3</span>
+      <h2>Three.js 实战落地</h2>
+      <span class="count">ShaderMaterial / 滚动 / 粒子 / 后期 · 3 DEMOS</span>
+    </div>
+    <div class="row pending"><span class="idx">01</span><span class="name">ShaderMaterial初见</span><span class="desc">内置注入 + uniform 管理 + 行数对账</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">02</span><span class="name">hover失真图卡</span><span class="desc">纹理 + 波纹失真 + RGB shift + 视差</span><span class="tag">DEMO</span></div>
+    <div class="row pending"><span class="idx">03</span><span class="name">粒子星云与bloom</span><span class="desc">Points + 噪声位移 + 后期三 pass</span><span class="tag">DEMO</span></div>
+    <div class="day-hw">
+      <div class="label">Homework — 完成后对照 solutions/</div>
+      <div class="row pending"><span class="idx">B</span><span class="name">渐变海报平面</span><span class="desc">ShaderMaterial 最小闭环 + 呼吸</span><span class="tag b">BASIC</span></div>
+      <div class="row pending"><span class="idx">A</span><span class="name">失真图卡墙</span><span class="desc">三卡 hover 失真 + 视差层次（作品集级）</span><span class="tag a">ADVANCED</span></div>
+      <div class="row pending"><span class="idx">C</span><span class="name">滚动驱动的英雄时刻</span><span class="desc">u_scroll + Lenis + 转场遮罩 + 粒子（毕业作品）</span><span class="tag c">CHALLENGE</span></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    讲义：<a href="讲义/day1-GLSL语言与WebGL2管线/README.md">Day 1</a> ·
+    <a href="讲义/day2-片段着色器视觉算法/README.md">Day 2</a> ·
+    <a href="讲义/day3-Three.js实战落地/README.md">Day 3</a>
+    &nbsp;/&nbsp; 参考答案在 solutions/（先自己做完再看）。
+  </footer>
+</body>
+</html>

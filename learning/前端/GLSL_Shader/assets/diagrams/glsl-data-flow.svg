@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>GLSL 三条数据通路接线图：attribute 每顶点一次进入顶点着色器，经 varying 由光栅化插值后到达片元；uniform 全局广播从 JS 侧直达片元着色器</title>
+  <rect width="900" height="520" fill="#0B0E14"/>
+
+  <defs>
+    <marker id="arrow-rose3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#FF4D6D"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#4CC9F0"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="450" y="42" text-anchor="middle" font-size="18" fill="#E8ECF4">GLSL 三条数据通路</text>
+  <text x="450" y="64" text-anchor="middle" font-size="12" fill="#8A93A6">attribute / uniform / varying 各自怎么流进片元着色器 —— 讲义 1.5</text>
+
+  <!-- JS / CPU 侧 -->
+  <rect x="40" y="150" width="160" height="270" rx="6" fill="none" stroke="#3A4356" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="120" y="176" text-anchor="middle" font-size="12" fill="#8A93A6">JS / CPU 侧</text>
+  <rect x="54" y="196" width="132" height="52" rx="6" fill="#141A24" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="120" y="216" text-anchor="middle" font-size="12" fill="#E8ECF4">VBO</text>
+  <text x="120" y="236" text-anchor="middle" font-size="12" fill="#8A93A6">顶点数据</text>
+  <rect x="54" y="340" width="132" height="52" rx="6" fill="#141A24" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="120" y="360" text-anchor="middle" font-size="12" fill="#E8ECF4">uniforms</text>
+  <text x="120" y="380" text-anchor="middle" font-size="12" fill="#8A93A6">u_time / u_mouse</text>
+
+  <!-- 顶点着色器 -->
+  <rect x="280" y="196" width="150" height="90" rx="6" fill="#141A24" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="355" y="232" text-anchor="middle" font-size="14" fill="#E8ECF4">顶点着色器</text>
+  <text x="355" y="256" text-anchor="middle" font-size="12" fill="#8A93A6">VERTEX · 每顶点 1 次</text>
+
+  <!-- 光栅化插值 -->
+  <rect x="510" y="196" width="150" height="90" rx="6" fill="#141A24" stroke="#FFC145" stroke-width="2"/>
+  <text x="585" y="232" text-anchor="middle" font-size="14" fill="#E8ECF4">光栅化 · 插值</text>
+  <text x="585" y="256" text-anchor="middle" font-size="12" fill="#8A93A6">varying 免费平均</text>
+
+  <!-- 片元着色器 -->
+  <rect x="730" y="120" width="140" height="250" rx="6" fill="#141A24" stroke="#FF4D6D" stroke-width="2"/>
+  <text x="800" y="152" text-anchor="middle" font-size="14" fill="#E8ECF4">片元着色器</text>
+  <text x="800" y="174" text-anchor="middle" font-size="12" fill="#8A93A6">FRAGMENT</text>
+  <text x="800" y="194" text-anchor="middle" font-size="12" fill="#8A93A6">每像素 1 次</text>
+  <g text-anchor="middle" font-size="12">
+    <text x="800" y="300" fill="#C8D0DE">in  v_color（插值来的）</text>
+    <text x="800" y="326" fill="#C8D0DE">in  u_time（广播来的）</text>
+  </g>
+
+  <!-- attribute 通路：玫红 -->
+  <line x1="186" y1="222" x2="276" y2="222" stroke="#FF4D6D" stroke-width="2" marker-end="url(#arrow-rose3)"/>
+  <text x="233" y="206" text-anchor="middle" font-size="12" fill="#FF4D6D">attribute</text>
+
+  <!-- varying 通路：顶点 → 插值 → 片元 -->
+  <line x1="430" y1="240" x2="506" y2="240" stroke="#FF4D6D" stroke-width="2" marker-end="url(#arrow-rose3)"/>
+  <text x="470" y="224" text-anchor="middle" font-size="12" fill="#FF4D6D">varying</text>
+  <line x1="660" y1="240" x2="726" y2="240" stroke="#FF4D6D" stroke-width="2" marker-end="url(#arrow-rose3)"/>
+  <text x="695" y="224" text-anchor="middle" font-size="12" fill="#FF4D6D">插值结果</text>
+
+  <!-- uniform 通路：天青，直达片元底部 -->
+  <path d="M 186 366 L 760 366 L 760 374" fill="none" stroke="#4CC9F0" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+  <text x="450" y="352" text-anchor="middle" font-size="12" fill="#4CC9F0">uniform · 全局广播 —— 每次 draw，所有像素拿到同一个值</text>
+
+  <!-- 底部金句 -->
+  <text x="450" y="452" text-anchor="middle" font-size="14" fill="#FF4D6D">uniform 是广播，varying 是插值</text>
+  <text x="450" y="478" text-anchor="middle" font-size="12" fill="#8A93A6">传给所有像素同一个值，还是传三个顶点值让硬件帮你平均 —— 这就是两条通路的分工</text>
+</svg>

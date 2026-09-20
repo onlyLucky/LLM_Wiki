@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" font-family="ui-monospace, 'Cascadia Code', Consolas, 'Noto Sans Mono CJK SC', monospace">
+  <title>GLSL 渲染流水线五阶段：顶点着色器 → 图元装配 → 光栅化（varying 在这里插值）→ 片元着色器 → 输出合并，每阶段上方标注输入、下方标注输出</title>
+  <rect width="900" height="520" fill="#0B0E14"/>
+
+  <!-- 标题 -->
+  <text x="450" y="42" text-anchor="middle" font-size="18" fill="#E8ECF4">GLSL 渲染流水线 · 五阶段</text>
+  <text x="450" y="64" text-anchor="middle" font-size="12" fill="#8A93A6">数据从左到右流过 GPU —— 讲义 1.1 / 1.4</text>
+
+  <!-- uniform 总线：天青，从顶部供给顶点与片元两个可编程阶段 -->
+  <line x1="40" y1="112" x2="886" y2="112" stroke="#4CC9F0" stroke-width="2"/>
+  <text x="450" y="100" text-anchor="middle" font-size="12" fill="#4CC9F0">uniform：全局广播 —— 同一个值，顶点与片元都能读</text>
+  <line x1="104" y1="112" x2="104" y2="196" stroke="#4CC9F0" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="616" y1="112" x2="616" y2="196" stroke="#4CC9F0" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- 五个阶段节点 -->
+  <g stroke="#FF4D6D" stroke-width="2" fill="#141A24">
+    <rect x="34"  y="200" width="140" height="92" rx="6"/>
+    <rect x="212" y="200" width="140" height="92" rx="6"/>
+    <rect x="390" y="200" width="140" height="92" rx="6"/>
+    <rect x="568" y="200" width="140" height="92" rx="6"/>
+    <rect x="746" y="200" width="140" height="92" rx="6"/>
+  </g>
+
+  <g text-anchor="middle" fill="#E8ECF4" font-size="14">
+    <text x="104" y="238">顶点着色器</text>
+    <text x="282" y="238">图元装配</text>
+    <text x="460" y="238">光栅化</text>
+    <text x="638" y="238">片元着色器</text>
+    <text x="816" y="238">输出合并</text>
+  </g>
+  <g text-anchor="middle" fill="#8A93A6" font-size="12">
+    <text x="104" y="260">VERTEX SHADER</text>
+    <text x="282" y="260">ASSEMBLY</text>
+    <text x="460" y="260">RASTERIZATION</text>
+    <text x="638" y="260">FRAGMENT SHADER</text>
+    <text x="816" y="260">OUTPUT MERGE</text>
+  </g>
+
+  <!-- 阶段间主数据流：玫红箭头 -->
+  <defs>
+    <marker id="arrow-rose" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#FF4D6D"/>
+    </marker>
+  </defs>
+  <g stroke="#FF4D6D" stroke-width="2" marker-end="url(#arrow-rose)">
+    <line x1="174" y1="246" x2="208" y2="246"/>
+    <line x1="352" y1="246" x2="386" y2="246"/>
+    <line x1="530" y1="246" x2="564" y2="246"/>
+    <line x1="708" y1="246" x2="742" y2="246"/>
+  </g>
+
+  <!-- 每阶段输入（上方） -->
+  <g text-anchor="middle" font-size="12">
+    <text x="104" y="152" fill="#8A93A6"><tspan fill="#4CC9F0">IN</tspan> attribute × N</text>
+    <text x="282" y="152" fill="#8A93A6"><tspan fill="#4CC9F0">IN</tspan> 顶点流</text>
+    <text x="460" y="152" fill="#8A93A6"><tspan fill="#4CC9F0">IN</tspan> 图元（三角形）</text>
+    <text x="638" y="152" fill="#8A93A6"><tspan fill="#4CC9F0">IN</tspan> 插值后 varying</text>
+    <text x="816" y="152" fill="#8A93A6"><tspan fill="#4CC9F0">IN</tspan> fragColor + 深度</text>
+  </g>
+
+  <!-- 每阶段输出（下方） -->
+  <g text-anchor="middle" font-size="12">
+    <text x="104" y="316" fill="#8A93A6"><tspan fill="#FF4D6D">OUT</tspan> gl_Position + varying</text>
+    <text x="282" y="316" fill="#8A93A6"><tspan fill="#FF4D6D">OUT</tspan> 图元序列</text>
+    <text x="460" y="316" fill="#8A93A6"><tspan fill="#FF4D6D">OUT</tspan> 片元 + 插值 varying</text>
+    <text x="638" y="316" fill="#8A93A6"><tspan fill="#FF4D6D">OUT</tspan> fragColor (RGBA)</text>
+    <text x="816" y="316" fill="#8A93A6"><tspan fill="#FF4D6D">OUT</tspan> 屏幕像素</text>
+  </g>
+
+  <!-- 琥珀标注：varying 插值发生地 -->
+  <rect x="290" y="348" width="340" height="40" rx="6" fill="none" stroke="#FFC145" stroke-width="1.5"/>
+  <text x="460" y="366" text-anchor="middle" font-size="12" fill="#FFC145">varying 在这里插值 —— 三个顶点值，</text>
+  <text x="460" y="382" text-anchor="middle" font-size="12" fill="#FFC145">几十万次免费平均（讲义 1.5 展开）</text>
+  <line x1="460" y1="292" x2="460" y2="344" stroke="#FFC145" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- 底部注释 -->
+  <text x="450" y="452" text-anchor="middle" font-size="13" fill="#C8D0DE">一个三角形走完全程：顶点着色器跑 3 次，片元着色器跑几十万次</text>
+  <text x="450" y="478" text-anchor="middle" font-size="12" fill="#8A93A6">可编程阶段只有头尾两个，中间三站是硬件固定功能 —— 成本大头永远在右边</text>
+</svg>
