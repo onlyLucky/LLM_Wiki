@@ -67,7 +67,7 @@ const CHAPTERS: Array<[string, string]> = [
 
 const storyStyle = document.createElement('style');
 storyStyle.textContent = `
-  .story { position: relative; z-index: 1; }
+  .story { position: relative; z-index: 1; pointer-events: none; }
   .story section {
     height: 108vh; display: flex; flex-direction: column;
     justify-content: center; max-width: 21rem; pointer-events: none;
