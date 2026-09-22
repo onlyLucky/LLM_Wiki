@@ -26,7 +26,7 @@ context.configure({ device, format, alphaMode: 'opaque' });
 
 // ---- uniform buffer：时间 / 鼠标 / 宽高比 -----------------------
 // 8 个 float = 32 字节。uniform 地址空间要求 struct 按 16 字节对齐，
-// 这里把 4 个有效字段填进 32 字节，第 1.6 讲会解释为什么留这么多。
+// 4 个有效字段只占 20 字节，多出来的是对齐的代价——第 1.6 讲会解释为什么留这么多。
 const uniforms = new Float32Array(8);
 const uniformBuffer = device.createBuffer({
   size: 32,
@@ -63,10 +63,11 @@ chrome.canvas.addEventListener('pointermove', (e) => {
 const start = performance.now();
 chrome.startLoop((now) => {
   const t = (now - start) / 1000;
-  uniforms[0] = t; // time
-  uniforms[1] = mouse[0]; // mouse.x
-  uniforms[2] = mouse[1]; // mouse.y
-  uniforms[3] = chrome.width / chrome.height; // aspect
+  uniforms[0] = t; // time → 字节 0
+  // 索引 1 是填充槽：mouse 是 vec2f，必须落在 8 字节对齐上，time 后面留了 4 字节的洞（1.6 讲）
+  uniforms[2] = mouse[0]; // mouse.x → 字节 8
+  uniforms[3] = mouse[1]; // mouse.y → 字节 12
+  uniforms[4] = chrome.width / chrome.height; // aspect → 字节 16
   device.queue.writeBuffer(uniformBuffer, 0, uniforms);
 
   const encoder = device.createCommandEncoder();

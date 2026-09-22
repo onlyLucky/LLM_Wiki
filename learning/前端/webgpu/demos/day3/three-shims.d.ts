@@ -177,6 +177,8 @@ declare module 'three/tsl' {
   export const sin: any;
   export const cos: any;
   export const length: any;
+  export const sqrt: any;
+  export const step: any;
   export const mul: any;
   export const add: any;
   export const sub: any;

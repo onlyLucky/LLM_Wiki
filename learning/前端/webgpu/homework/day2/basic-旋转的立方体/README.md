@@ -1,6 +1,6 @@
-# Day 2 作业 basic · 旋转的立方体
+# Day 2 作业 basic · 深空信标（旋转的立方体）
 
-一颗六面各色的立方体在深空里绕斜轴自转。几何、管线、外壳、帧循环全部就位，你要补的是让它「站住」的三块地基：透视矩阵、视图矩阵、深度测试。完成后约 1 小时。
+一颗青紫渐变的八面体水晶，在反向旋转的线框立方笼里自转——实体与线框两种拓扑、两批 draw，深度测试的「遮挡」第一次看得见摸得着。几何、双管线、外壳、帧循环全部就位，你要补的是让它「站住」的三块地基：透视矩阵、视图矩阵、深度测试。完成后约 1 小时。
 
 ## 目标
 
@@ -9,22 +9,23 @@
 ## 前置讲义
 
 - 前置讲义 2.1（空间变换）：列主序约定、perspective / lookAt 的构造思路
-- 前置讲义 2.2（光栅化与片元插值）：为什么六面颜色要 24 个顶点
+- 前置讲义 2.2（光栅化与片元插值）：为什么六面颜色的立方体要 24 个顶点——以及为什么本作业的八面体只要 6 个
 
 ## 任务清单
 
 1. `perspective(fovY, aspect, near, far)`——手写透视投影矩阵（WebGPU 版：NDC z ∈ [0, 1]）
 2. `lookAt(eye, target, up)`——手写视图矩阵（相机搬到原点、-z 朝目标）
-3. 深度测试三件套——a) `ensureDepth` 创建 depth texture；b) `createRenderPipeline` 补 `depthStencil`；c) renderPass 补 `depthStencilAttachment`
-4. `modelMatrix(t)`——模型矩阵随时间旋转（绕斜轴）并每帧 `writeBuffer`
+3. 深度测试三件套——a) `ensureDepth` 创建 depth texture；b) `createRenderPipeline` 补 `depthStencil`（水晶与线框两条管线各补一份）；c) renderPass 补 `depthStencilAttachment`
+4. `modelMatrix(t)`——水晶的模型矩阵随时间旋转（绕斜轴）并每帧 `writeBuffer`
 
 每个 TODO 处脚手架直接 `throw new Error('TODO(day2-basic-n) 未完成')`，补完对应函数体（删掉 throw）即可。
 
 ## 验收标准
 
-- 透视正确：立方体近大远小，六个面没有拉伸变形
-- 六面颜色正确：电蓝 / 紫 / 青 / 琥珀 / 主白 / 浅蓝各归各面，背面剔除正常（看不到「里子」）
-- 无 z-fighting：自转全程面与面交叠处干净，没有闪烁的碎斑
+- 透视正确：水晶与立方笼都近大远小，轮廓没有拉伸变形
+- 渐变连续：一道青紫渐变从水晶的顶角贯穿到底角，跨面没有分界缝（想想为什么 6 个顶点就够）
+- 深度遮挡正确：水晶的棱在穿过线框笼横杆的前后被正确遮挡；两种拓扑互不穿透；无 z-fighting 闪烁
+- 线框笼反向慢转：转轴与水晶的斜轴错开，全程看不出两者共轴，有「陀螺仪内外环」感
 - 帧率稳定 60FPS（右下角 meta），画布缩放后画面不糊不裂
 
 ## 提示
@@ -32,13 +33,13 @@
 <details>
 <summary>第一档：思路</summary>
 
-perspective 的本质是把视锥压成立方体：x/y 除以 z 的思路藏在第 4 列的 `-1`（w = -z_view），近远平面负责把 z 压进 [0, 1]。lookAt 的本质是基变换：新坐标系的三个轴（右、上、后方）写成矩阵的前三列，把相机平移量的负值写进第四列。深度三件套的顺序：texture 的尺寸必须与画布物理像素一致；pipeline 声明格式与比较方式；renderPass 把 texture 的 view 挂上去并 clear 到 1.0（1 = 最远）。模型矩阵可以把绕 X 轴与绕 Y 轴两个旋转 mat4Multiply 起来，斜轴旋转就出来了。
+perspective 的本质是把视锥压成立方体：x/y 除以 z 的思路藏在第 4 列的 `-1`（w = -z_view），近远平面负责把 z 压进 [0, 1]。lookAt 的本质是基变换：新坐标系的三个轴（右、上、后方）写成矩阵的前三列，把相机平移量的负值写进第四列。深度三件套的顺序：texture 的尺寸必须与画布物理像素一致；**两条** pipeline 都声明格式与比较方式（线框没有「内外面」，但它照样要和实体比深度）；renderPass 把 texture 的 view 挂上去并 clear 到 1.0（1 = 最远）。水晶的模型矩阵可以把绕 X 轴与绕 Y 轴两个旋转 mat4Multiply 起来，斜轴旋转就出来了。
 </details>
 
 <details>
 <summary>第二档：API 名</summary>
 
-`GPUTextureUsage.RENDER_ATTACHMENT`；`depth24plus`；`depthStencil: { format, depthWriteEnabled: true, depthCompare: 'less' }`；`depthStencilAttachment: { view, depthClearValue: 1.0, depthLoadOp: 'clear', depthStoreOp: 'store' }`。矩阵参考 demos/day2/01-mvp-cube 的 `mat4Perspective` / `mat4LookAt`（注意：作业要求自己写，不要复制粘贴，照着公式敲一遍才算数）。WebGPU 透视矩阵的两个关键元素：`m[10] = far / (near - far)`、`m[14] = (near * far) / (near - far)`，与 OpenGL 版的差异点。
+`GPUTextureUsage.RENDER_ATTACHMENT`；`depth24plus`；`depthStencil: { format, depthWriteEnabled: true, depthCompare: 'less' }`；`depthStencilAttachment: { view, depthClearValue: 1.0, depthLoadOp: 'clear', depthStoreOp: 'store' }`；线框管线的拓扑是 `topology: 'line-list'`。矩阵参考 demos/day2/01-mvp-cube 的 `mat4Perspective` / `mat4LookAt`（注意：作业要求自己写，不要复制粘贴，照着公式敲一遍才算数）。WebGPU 透视矩阵的两个关键元素：`m[10] = far / (near - far)`、`m[14] = (near * far) / (near - far)`，与 OpenGL 版的差异点。
 </details>
 
 <details>
@@ -66,7 +67,7 @@ lookAt(eye, target, up):
 modelMatrix(t):
   rotY = 绕 Y 轴旋转 t * 0.5
   rotX = 绕 X 轴旋转 t * 0.23（周期不同步，轨迹才不呆板）
-  return multiply(rotX, rotY)   # 或再加一个绕 Z
+  return multiply(rotX, rotY)      # 线框笼那套已给全：rotX(0.32) + rotY(-t*0.16)
 
 ensureDepth(w, h):
   if depthTexture 尺寸 == (w, h): return

@@ -23,15 +23,15 @@ flowchart TD
 
 ## 为什么是这三题
 
-基础档选立方体，因为它是最小的「必须用深度测试」的形状——立方体一旦没有深度缓冲，自转时面会以绘制顺序盖来盖去，肉眼立刻可见；而三个矩阵（perspective、lookAt、model）是 Day 3 之前一切 3D 画面的地基，抄一遍 demo 再默写一遍，肌肉记忆才算建立。进阶档在同一颗立方体上叠加纹理与光照：纹理走「canvas 程序化生成 → GPU 上传」的完整链路，光照把 2.4 的 Blinn-Phong 公式亲手写一遍，色温切换练习 uniform 的交互联动——创意网站里「点击改变场景情绪」的交互原形。挑战档把渲染的地基抽掉：没有顶点缓冲、没有静态几何，一万颗粒子的位置每帧由 compute 算出，渲染管线直读 storage——这是 lusion 与 igloo 那类效果的最小完整闭环，也是通往 Day 3 TSL 计算节点的直路。
+基础档选深空信标（实体水晶 + 线框立方笼），因为它天生「必须用深度测试」——实体与线框两种拓扑要互相遮挡，一旦没有深度缓冲，后画的会直接盖在前画的上面，水晶棱与笼横杆的穿插关系立刻穿帮，肉眼立刻可见；而三个矩阵（perspective、lookAt、model）是 Day 3 之前一切 3D 画面的地基，抄一遍 demo 再默写一遍，肌肉记忆才算建立。进阶档在同一颗立方体上叠加纹理与光照：纹理走「canvas 程序化生成 → GPU 上传」的完整链路，光照把 2.4 的 Blinn-Phong 公式亲手写一遍，色温切换练习 uniform 的交互联动——创意网站里「点击改变场景情绪」的交互原形。挑战档把渲染的地基抽掉：没有顶点缓冲、没有静态几何，一万颗粒子的位置每帧由 compute 算出，渲染管线直读 storage——这是 lusion 与 igloo 那类效果的最小完整闭环，也是通往 Day 3 TSL 计算节点的直路。
 
 挑战档另附一道 SDF 替代题：不做粒子，改做 2.8 风格的 raymarching 场景。两题难度等价、知识点互不重叠，按兴趣二选一。
 
 ## 各档入口
 
-- [basic-旋转的立方体](./basic-旋转的立方体/)——`SPINNING CUBE`
+- [basic-旋转的立方体](./basic-旋转的立方体/)——`CRYSTAL GYRO`
 - [advanced-纹理与光照](./advanced-纹理与光照/)——`TEXTURE & LIGHT`
-- [challenge-GPGPU粒子星系](./challenge-GPGPU粒子星系/)——`PARTICLE GALAXY`（含 [SDF 替代题](./challenge-GPGPU粒子星系/#替代题sdf-场景)）
+- [challenge-GPGPU粒子星系](./challenge-GPGPU粒子星系/)——`EMBER RISE`（含 [SDF 替代题](./challenge-GPGPU粒子星系/#替代题sdf-场景)）
 
 运行方式与 demo 相同：
 

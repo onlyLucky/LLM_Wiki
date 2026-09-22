@@ -1,20 +1,20 @@
 # Day 1 作业 · 三档递进
 
-六个模块读完，是时候把管线握在自己手里了。三份骨架共用课程的视觉外壳：页面结构、初始化、帧循环全部就位，学习点以 `TODO(day1-x-N)` 的统一格式留空——打开页面，错误面板会告诉你第一件事做什么。三档考点递进：B 档只考 uniform，A 档组合顶点缓冲与矩阵，C 档把推导逻辑下沉到着色器。
+六个模块读完，是时候把管线握在自己手里了。三份骨架共用课程的视觉外壳：页面结构、初始化、帧循环全部就位，学习点以 `TODO(day1-x-N)` 的统一格式留空——打开页面，错误面板会告诉你第一件事做什么。三档考点递进：B 档只考 uniform，A 档用全屏 quad 把图形完全下沉到片元，C 档把推导逻辑下沉到着色器。
 
 ## 三档总览
 
 | 档 | 目录 | 考点 | 前置讲义 | 参考时长 |
 |----|------|------|---------|---------|
 | B 基础 | `basic-呼吸的渐变/` | uniform 全流程：struct 声明、buffer 创建、每帧上传 | 1.5 / 1.6 | 30 分钟 |
-| A 进阶 | `advanced-万花筒几何/` | interleaved + drawIndexed + 2D model 矩阵 | 1.5 / 1.6 | 60 分钟 |
-| C 挑战 | `challenge-星轨动画/` | line-list 图元 + 着色器内环号与相位推导 | 1.3 / 1.5 / 1.6 | 90 分钟 |
+| A 进阶 | `advanced-万花筒/` | 全屏 quad + drawIndexed + 片元极坐标折叠镜像 | 1.5 / 1.6 | 60 分钟 |
+| C 挑战 | `challenge-星轨动画/` | line-list 图元 + 8-float 数据组织 + 着色器内动效推导 | 1.3 / 1.5 / 1.6 | 90 分钟 |
 
-递进关系：B 的 uniform 是 A 的前置（model 矩阵要走同一套绑定），A 的索引绘制是 C 的前置（星轨的数据组织更密一档）。时间不够就只做 B，Day 2 照样能跟上；C 做不出来不要恋战，标记 TODO 第二天回来。
+递进关系：B 的 uniform 是 A 的前置（A 的时间与鼠标要走同一套上传），A 的索引绘制是 C 的前置（星轨的数据组织更密一档）。时间不够就只做 B，Day 2 照样能跟上；C 做不出来不要恋战，标记 TODO 第二天回来。
 
 ```mermaid
 flowchart LR
-    B["B 呼吸的渐变<br/>uniform 时间驱动"] --> A["A 万花筒几何<br/>索引绘制 + model 矩阵"] --> C["C 星轨动画<br/>line-list + shader 内推导"]
+    B["B 呼吸的渐变<br/>uniform 时间驱动"] --> A["A 万花筒<br/>全屏 quad + 极坐标折叠"] --> C["C 星轨动画<br/>line-list + shader 内推导"]
     style B fill:#141a24,stroke:#4c6fff,color:#c8d0de
     style A fill:#141a24,stroke:#8b5cf6,color:#c8d0de
     style C fill:#141a24,stroke:#2dd4bf,color:#c8d0de

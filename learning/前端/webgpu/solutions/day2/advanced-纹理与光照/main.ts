@@ -181,7 +181,12 @@ function createAlbedoTexture(): GPUTexture {
     size: [TEXTURE_SIZE, TEXTURE_SIZE],
     format: 'rgba8unorm',
     mipLevelCount: MIP_LEVELS,
-    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+    // RENDER_ATTACHMENT 必须带上：copyExternalImageToTexture 内部走渲染通路，
+    // 少了它 10 级 mip 拷贝全部验证失败，贴图永远全黑（报错只出在 console 警告里）。
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
   // 第 0 级：canvas 直接整张拷入

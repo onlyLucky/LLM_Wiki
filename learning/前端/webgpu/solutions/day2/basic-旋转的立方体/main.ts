@@ -1,10 +1,12 @@
-// Day 2 · 作业 basic —— 旋转的立方体（参考答案）
+// Day 2 · 作业 basic —— 旋转的立方体 / 深空信标（参考答案）
 // 对应讲义 2.1（空间变换）/ 2.2（光栅化与片元插值）：
 // 手写 perspective / lookAt / 模型旋转矩阵，并把深度测试三件套接通。
+// 场景：青紫渐变的八面体水晶，在反向旋转的线框立方笼里自转——
+// 实体与线框两种拓扑、两批 draw，让深度测试的「遮挡」看得见摸得着。
 
 import '../../../shared/demo.css';
 import { createChrome, initGPU } from '../../../shared/chrome.ts';
-import shader from './cube.wgsl?raw';
+import shader from './beacon.wgsl?raw';
 
 type Vec3 = [number, number, number];
 
@@ -14,9 +16,9 @@ let gpuReady = false;
 const chrome = createChrome({
   day: 2,
   index: 'B',
-  title: 'SPINNING CUBE',
+  title: 'CRYSTAL GYRO',
   tags: ['WEBGPU', 'MATRIX', 'DEPTH'],
-  hint: '完成后：立方体绕斜轴缓慢自转',
+  hint: '参考答案：水晶在反向旋转的线框笼中自转',
   onResize: (w, h) => {
     if (gpuReady) ensureDepth(w, h);
   },
@@ -52,7 +54,33 @@ function mat4Multiply(a: Float32Array, b: Float32Array): Float32Array {
   return out;
 }
 
-// ---- 透视与视图矩阵 ----------------------------------------------
+// ---- 已给全：两个旋转矩阵（列主序）-------------------------------
+// 读法：第 i 列就是「第 i 个基向量旋转后去了哪」——列主序最直观的证据
+function mat4RotateY(angle: number): Float32Array {
+  // 绕 Y 轴：x 基 → (c, 0, -s)，z 基 → (s, 0, c)，y 基不动
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  const m = new Float32Array(16);
+  m[0] = c; m[2] = -s; // 第 1 列
+  m[5] = 1;
+  m[8] = s; m[10] = c; // 第 3 列
+  m[15] = 1;
+  return m;
+}
+
+function mat4RotateX(angle: number): Float32Array {
+  // 绕 X 轴：y 基 → (0, c, s)，z 基 → (0, -s, c)，x 基不动
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  const m = new Float32Array(16);
+  m[0] = 1;
+  m[5] = c; m[6] = s; // 第 2 列
+  m[9] = -s; m[10] = c; // 第 3 列
+  m[15] = 1;
+  return m;
+}
+
+// ---- 任务 1：透视投影矩阵 ----------------------------------------
 
 function perspective(fovY: number, aspect: number, near: number, far: number): Float32Array {
   // WebGPU 的 NDC z ∈ [0, 1]（OpenGL 是 [-1, 1]）：
@@ -67,6 +95,8 @@ function perspective(fovY: number, aspect: number, near: number, far: number): F
   m[14] = (near * far) / (near - far);
   return m;
 }
+
+// ---- 任务 2：视图矩阵 --------------------------------------------
 
 function lookAt(eye: Vec3, target: Vec3, up: Vec3): Float32Array {
   // 基变换：新坐标系的三个轴（右、上、后方）写成前三列，
@@ -97,9 +127,9 @@ function lookAt(eye: Vec3, target: Vec3, up: Vec3): Float32Array {
   return m;
 }
 
-// ---- 深度测试三件套 ----------------------------------------------
-// a) 本函数创建 depth texture；b) 下方 pipeline 的 depthStencil；
-// c) 帧循环里 renderPass 的 depthStencilAttachment。
+// ---- 任务 3：深度测试三件套 --------------------------------------
+// a) 本函数创建 depth texture；b) 下方两个 pipeline 各补
+// depthStencil（实体与线框都要）；c) renderPass 的 depthStencilAttachment。
 
 let depthTexture: GPUTexture | null = null;
 
@@ -114,106 +144,128 @@ function ensureDepth(w: number, h: number) {
   });
 }
 
-// ---- 模型矩阵随时间旋转 -------------------------------------------
-
-// 绕 X 轴：列 1 = (0, c, s)、列 2 = (0, -s, c)
-function mat4RotateX(angle: number): Float32Array {
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  const m = new Float32Array(16);
-  m[0] = 1;
-  m[5] = c; m[6] = s;
-  m[9] = -s; m[10] = c;
-  m[15] = 1;
-  return m;
-}
-
-// 绕 Y 轴：列 0 = (c, 0, -s)、列 2 = (s, 0, c)
-function mat4RotateY(angle: number): Float32Array {
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  const m = new Float32Array(16);
-  m[0] = c; m[2] = -s;
-  m[5] = 1;
-  m[8] = s; m[10] = c;
-  m[15] = 1;
-  return m;
-}
+// ---- 任务 4：水晶的模型矩阵随时间旋转 -----------------------------
 
 function modelMatrix(t: number): Float32Array {
   // 两个轴各转一点 = 绕斜轴旋转；周期刻意不同步（0.5 / 0.23），轨迹不呆板
   return mat4Multiply(mat4RotateX(t * 0.23), mat4RotateY(t * 0.5));
 }
 
-// ---- 已给全：几何（24 顶点 + 36 索引，六面各一色）-----------------
-// 颜色属于「面」而角点被三面共享，所以按面展开成 24 顶点（讲义 2.2）。
-const CORNERS = [
+// ---- 已给全：线框笼的模型矩阵 -------------------------------------
+// 固定倾斜 0.32 rad 后绕 Y 反向慢转：转轴与水晶的斜轴错开，才有「陀螺仪」内外环感
+function cageMatrix(t: number): Float32Array {
+  return mat4Multiply(mat4RotateX(0.32), mat4RotateY(-t * 0.16));
+}
+
+// ---- 已给全：几何 A —— 八面体水晶（6 顶点 + 24 索引）--------------
+// 讲义 2.2 的活对照：立方体面色要展开 24 顶点，因为「颜色属于面」；
+// 这里渐变色只依赖角点高度 y——颜色属于「角点」，6 个顶点共享即可，
+// 插值跨面连续，一道渐变从顶贯穿到底。
+const CRYSTAL = [
+  [1, 0, 0], // 0 右
+  [-1, 0, 0], // 1 左
+  [0, 1, 0], // 2 上
+  [0, -1, 0], // 3 下
+  [0, 0, 1], // 4 前
+  [0, 0, -1], // 5 后
+] as const;
+
+// 底 #1B1440 → 赤道 #3E7BD6 → 顶 #8FF0FF：h = (y+1)/2 归一化后三段插值
+function crystalColor(y: number): Vec3 {
+  const lo: Vec3 = [0.106, 0.078, 0.251];
+  const mid: Vec3 = [0.243, 0.482, 0.839];
+  const hi: Vec3 = [0.561, 0.941, 1.0];
+  const h = (y + 1) / 2;
+  if (h < 0.5) {
+    const k = h * 2;
+    return [lo[0] + (mid[0] - lo[0]) * k, lo[1] + (mid[1] - lo[1]) * k, lo[2] + (mid[2] - lo[2]) * k];
+  }
+  const k = h * 2 - 1;
+  return [mid[0] + (hi[0] - mid[0]) * k, mid[1] + (hi[1] - mid[1]) * k, mid[2] + (hi[2] - mid[2]) * k];
+}
+
+// 8 个面 × 3 角，从外侧看逆时针（frontFace 默认 'ccw' + cullMode 'back'）
+const CRYSTAL_FACES = [
+  [2, 4, 0], [2, 1, 4], [2, 5, 1], [2, 0, 5], // 上四面
+  [3, 0, 4], [3, 4, 1], [3, 1, 5], [3, 5, 0], // 下四面（绕序反过来）
+];
+
+const crystalVertexData = new Float32Array(6 * 6); // 每顶点：position(3) + color(3)
+const crystalIndexData = new Uint16Array(24); // 8 个三角形
+CRYSTAL.forEach((p, i) => {
+  crystalVertexData.set([...p, ...crystalColor(p[1])], i * 6);
+});
+CRYSTAL_FACES.forEach((face, f) => {
+  crystalIndexData.set(face, f * 3);
+});
+
+// ---- 已给全：几何 B —— 线框立方笼（8 顶点 + 24 索引）--------------
+// line-list 拓扑画 12 条边：线没有「内外面」，天生不怕背面剔除，只怕深度
+const CAGE_SIZE = 1.5;
+const CAGE = [
   [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], // z = -1 的四个角
   [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], // z = +1 的四个角
 ] as const;
 
-function rgb(hex: string): Vec3 {
-  const n = parseInt(hex.slice(1), 16);
-  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
-}
-
-// ids 从外侧看逆时针：frontFace 默认 'ccw' + cullMode 'back' 才能正常剔除
-const FACES = [
-  { ids: [4, 5, 6, 7], color: rgb('#4C6FFF') }, // 前 +z 电蓝
-  { ids: [1, 0, 3, 2], color: rgb('#8B5CF6') }, // 后 -z 紫
-  { ids: [5, 1, 2, 6], color: rgb('#2DD4BF') }, // 右 +x 青
-  { ids: [0, 4, 7, 3], color: rgb('#F59E0B') }, // 左 -x 琥珀
-  { ids: [7, 6, 2, 3], color: rgb('#E8ECF4') }, // 上 +y 主白
-  { ids: [0, 1, 5, 4], color: rgb('#8FA5FF') }, // 下 -y 浅蓝
+const CAGE_EDGES = [
+  0, 1, 1, 2, 2, 3, 3, 0, // z = -1 面的四条边
+  4, 5, 5, 6, 6, 7, 7, 4, // z = +1 面的四条边
+  0, 4, 1, 5, 2, 6, 3, 7, // 四条竖边
 ];
 
-const vertexData = new Float32Array(24 * 6); // 每顶点：position(3) + color(3)
-const indexData = new Uint16Array(36); // 12 个三角形
-FACES.forEach((face, f) => {
-  face.ids.forEach((id, k) => {
-    vertexData.set([...CORNERS[id], ...face.color], (f * 4 + k) * 6);
+const cageColor: Vec3 = [0.365, 0.498, 0.659]; // #5D7FA8 暗青灰：笼是配角
+const cageVertexData = new Float32Array(8 * 6);
+const cageIndexData = new Uint16Array(CAGE_EDGES);
+CAGE.forEach((p, i) => {
+  cageVertexData.set([p[0] * CAGE_SIZE, p[1] * CAGE_SIZE, p[2] * CAGE_SIZE, ...cageColor], i * 6);
+});
+
+function makeBuffers(vd: Float32Array, id: Uint16Array) {
+  const vb = device.createBuffer({
+    size: vd.byteLength,
+    usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
   });
-  const b = f * 4; // 每面两个三角形，共享一条对角线
-  indexData.set([b, b + 1, b + 2, b, b + 2, b + 3], f * 6);
-});
+  device.queue.writeBuffer(vb, 0, vd);
+  const ib = device.createBuffer({
+    size: id.byteLength,
+    usage: GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST,
+  });
+  device.queue.writeBuffer(ib, 0, id);
+  return { vb, ib };
+}
 
-const vertexBuffer = device.createBuffer({
-  size: vertexData.byteLength,
-  usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-});
-device.queue.writeBuffer(vertexBuffer, 0, vertexData);
-const indexBuffer = device.createBuffer({
-  size: indexData.byteLength,
-  usage: GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST,
-});
-device.queue.writeBuffer(indexBuffer, 0, indexData);
+const crystal = makeBuffers(crystalVertexData, crystalIndexData);
+const cage = makeBuffers(cageVertexData, cageIndexData);
 
-// ---- uniform：mvp(64B) + params(16B) = 80B ------------------------
+// ---- uniform：mvp(64B) + params(16B) = 80B，水晶与笼各一份 --------
 // mat4x4f 在 uniform 地址空间天然 16 字节对齐，vec4f 收尾不用再补
-const uniforms = new Float32Array(20);
-const uniformBuffer = device.createBuffer({
-  size: 80,
-  usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-});
+function makeUniforms() {
+  const data = new Float32Array(20);
+  const buffer = device.createBuffer({
+    size: 80,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  });
+  return { data, buffer };
+}
 
-// ---- 管线：背面剔除 + 深度测试 ------------------------------------
+const crystalUniforms = makeUniforms();
+const cageUniforms = makeUniforms();
+
+// ---- 管线 ×2：同一个着色器，两种拓扑 ------------------------------
 const module = device.createShaderModule({ code: shader });
 
-const pipeline = device.createRenderPipeline({
+const vertexLayout: GPUVertexBufferLayout = {
+  arrayStride: 24, // position(12B) + color(12B)
+  attributes: [
+    { shaderLocation: 0, offset: 0, format: 'float32x3' },
+    { shaderLocation: 1, offset: 12, format: 'float32x3' },
+  ],
+};
+
+// 实体水晶：三角形 + 背面剔除
+const crystalPipeline = device.createRenderPipeline({
   layout: 'auto',
-  vertex: {
-    module,
-    entryPoint: 'vs',
-    buffers: [
-      {
-        arrayStride: 24, // position(12B) + color(12B)
-        attributes: [
-          { shaderLocation: 0, offset: 0, format: 'float32x3' },
-          { shaderLocation: 1, offset: 12, format: 'float32x3' },
-        ],
-      },
-    ],
-  },
+  vertex: { module, entryPoint: 'vs', buffers: [vertexLayout] },
   fragment: { module, entryPoint: 'fs', targets: [{ format }] },
   primitive: { topology: 'triangle-list', cullMode: 'back' },
   // 深度测试三件套之二：管线声明深度格式、开写入、'less' 比较
@@ -224,19 +276,36 @@ const pipeline = device.createRenderPipeline({
   },
 });
 
-const bindGroup = device.createBindGroup({
-  layout: pipeline.getBindGroupLayout(0),
-  entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
+// 线框笼：line-list 拓扑，其余与水晶管线一致
+const cagePipeline = device.createRenderPipeline({
+  layout: 'auto',
+  vertex: { module, entryPoint: 'vs', buffers: [vertexLayout] },
+  fragment: { module, entryPoint: 'fs', targets: [{ format }] },
+  primitive: { topology: 'line-list' },
+  // 线同样要参与深度测试，否则画不出「穿过」的遮挡关系
+  depthStencil: {
+    format: 'depth24plus',
+    depthWriteEnabled: true,
+    depthCompare: 'less',
+  },
 });
 
-// ---- 相机参数（固定视角，立方体自己转）---------------------------
+const crystalBindGroup = device.createBindGroup({
+  layout: crystalPipeline.getBindGroupLayout(0),
+  entries: [{ binding: 0, resource: { buffer: crystalUniforms.buffer } }],
+});
+const cageBindGroup = device.createBindGroup({
+  layout: cagePipeline.getBindGroupLayout(0),
+  entries: [{ binding: 0, resource: { buffer: cageUniforms.buffer } }],
+});
+
+// ---- 相机参数（固定视角，信标自己转）-----------------------------
 const FOV = (50 * Math.PI) / 180;
-const EYE: Vec3 = [2.6, 2.0, 4.2];
+const EYE: Vec3 = [2.9, 1.9, 4.9];
 const TARGET: Vec3 = [0, 0, 0];
 const UP: Vec3 = [0, 1, 0];
 
-// ---- 循环前把四个 TODO 各预演一次：未完成时错误面板报出编号，
-// 而不是等帧循环里每秒刷 60 个 uncaught error ----------------------
+// ---- 循环前把四个 TODO 各预演一次（与骨架保持同构，便于 diff）-----
 ensureDepth(chrome.width, chrome.height);
 void perspective(FOV, 1, 0.1, 40);
 void lookAt(EYE, TARGET, UP);
@@ -249,15 +318,19 @@ chrome.startLoop((now) => {
   const t = (now - start) / 1000;
   const aspect = chrome.width / chrome.height;
 
-  // P·V·M：向量最先被 M 作用（讲义 2.1 的组合顺序）
-  const mvp = mat4Multiply(
-    perspective(FOV, aspect, 0.1, 40),
-    mat4Multiply(lookAt(EYE, TARGET, UP), modelMatrix(t)),
-  );
+  const proj = perspective(FOV, aspect, 0.1, 40);
+  const view = lookAt(EYE, TARGET, UP);
 
-  uniforms.set(mvp, 0); // 整块列主序矩阵直接拷进 uniform
-  uniforms[16] = t;
-  device.queue.writeBuffer(uniformBuffer, 0, uniforms);
+  // P·V·M：向量最先被 M 作用（讲义 2.1 的组合顺序）
+  const mvpCrystal = mat4Multiply(proj, mat4Multiply(view, modelMatrix(t)));
+  const mvpCage = mat4Multiply(proj, mat4Multiply(view, cageMatrix(t)));
+
+  crystalUniforms.data.set(mvpCrystal, 0);
+  crystalUniforms.data[16] = t;
+  cageUniforms.data.set(mvpCage, 0);
+  cageUniforms.data[16] = t;
+  device.queue.writeBuffer(crystalUniforms.buffer, 0, crystalUniforms.data);
+  device.queue.writeBuffer(cageUniforms.buffer, 0, cageUniforms.data);
 
   ensureDepth(chrome.width, chrome.height);
   if (!depthTexture) return;
@@ -281,11 +354,18 @@ chrome.startLoop((now) => {
       depthStoreOp: 'store',
     },
   });
-  pass.setPipeline(pipeline);
-  pass.setBindGroup(0, bindGroup);
-  pass.setVertexBuffer(0, vertexBuffer);
-  pass.setIndexBuffer(indexBuffer, 'uint16');
-  pass.drawIndexed(36); // 12 个三角形 × 3 个角
+  // 同一个 renderPass 里两批 draw：实体与线框靠深度测试互相遮挡
+  pass.setPipeline(crystalPipeline);
+  pass.setBindGroup(0, crystalBindGroup);
+  pass.setVertexBuffer(0, crystal.vb);
+  pass.setIndexBuffer(crystal.ib, 'uint16');
+  pass.drawIndexed(24); // 8 个三角形 × 3 个角
+
+  pass.setPipeline(cagePipeline);
+  pass.setBindGroup(0, cageBindGroup);
+  pass.setVertexBuffer(0, cage.vb);
+  pass.setIndexBuffer(cage.ib, 'uint16');
+  pass.drawIndexed(24); // 12 条边 × 2 个端点
   pass.end();
   device.queue.submit([encoder.finish()]);
 });

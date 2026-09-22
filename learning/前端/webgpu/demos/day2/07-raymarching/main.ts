@@ -70,7 +70,7 @@ chrome.startLoop((now) => {
   const pass = encoder.beginRenderPass({
     colorAttachments: [{
       view: context.getCurrentTexture().createView(),
-      clearValue: { r: 0.043, g: 0.055, b: 0.078, a: 1 },
+      clearValue: { r: 0.008, g: 0.010, b: 0.020, a: 1 },
       loadOp: 'clear',
       storeOp: 'store',
     }],

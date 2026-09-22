@@ -37,6 +37,7 @@ npm run dev
 ├── solutions/                   参考答案，做完再看
 ├── assets/diagrams/             10 张 SVG 核心架构图
 ├── shared/                      所有页面共享的视觉外壳
+├── PROGRESS.md                  制作进度登记：修复与重设计批次
 ├── 参考资料.md                  权威资源分级清单
 └── 实例网站清单.md               值得逐帧拆解的创意网站
 ```

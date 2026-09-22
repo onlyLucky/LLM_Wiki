@@ -1,34 +1,26 @@
-# Day 2 作业 challenge 参考答案 · GPGPU 粒子星系
+# Day 2 答案 challenge · GPGPU 余烬升腾
 
-## 运行
-
-```bash
-npm run dev
-# http://localhost:5173/solutions/day2/challenge-GPGPU粒子星系/index.html
-```
+对应作业：[challenge-GPGPU粒子星系](../../homework/day2/challenge-GPGPU粒子星系/)——先自己敲，再对照读这份参考答案。
 
 ## 实现要点
 
-- 双缓冲（任务 1）：两个 `COUNT × 32` 的 `STORAGE` buffer；初始盘只写 `states[0]`——极坐标 `r = pow(random(), 0.62) × 1.75 + 0.04`（外疏内密），角度 `(i % 3) × 2π/3 + r × 2.2 + 高斯 × 0.16` 拼出三条对数旋臂，y 做薄薄一层高斯散布，切向初速度 `0.5 / sqrt(r + 0.12)` 让画面从第一帧就在转
-- compute 管线与力场（任务 2）：`layout: 'auto'` + entryPoint `update`；力场四件套——simplex 三次偏移采样拼向量场（×0.4）、切向推进 `0.55 / (0.3 + r)` + 向心束缚 `0.45 / (0.35 + r²)`、`-p.y × 1.1` 压回盘面、鼠标力场 `select(-0.10, 1.7, 按下) / (dm2 + 0.30)`；半隐式欧拉 `(v + a·dt) × exp(-1.6·dt)` 限速 2.4
-- 绑定组轮换（任务 3）：`computeBindGroups[i]` 读 `states[i]` 写 `states[1-i]`；帧循环里 compute 挂 `[cur]`、**渲染必须挂 `renderBindGroups[1 - cur]`**（刚写完的那个）、帧尾 `cur = 1 - cur`——一句话记：读旧写新、渲染读新、帧尾翻转
-- storage 直读渲染（任务 4）：渲染管线 `one / one` 加法混合（星星叠星星天然辉光且与顺序无关，无需深度）；vs 里 `var corners = array<vec2f, 6>` 六顶点 quad，`vertex_index` 取角、`instance_index` 取粒子，偏移在投影之后加且不乘 `clip.w`——粒子随距离自然变小
-- 速度色带（任务 5）：`t = clamp(speed / 2, 0, 1)`，四段 smoothstep 黑 `#030411` → 深蓝 `#0B176B` → 电蓝 `#4C6FFF` → 白 `#F6F9FF`；`mask = smoothstep(1.0, 0.15, length(uv))` 当亮度
+1. **初始火床**：`r = sqrt(random()) * 0.85`（sqrt 让圆盘面积均匀），角度全随机；y 从 `-1.42` 铺到 `1.48`（`-1.42 + random() * 2.9`）；初速度全部向上 `0.25 + random() * 0.45`。与星系版「三条旋臂 + 切向轨道」是两种完全相反的分布哲学
+2. **力场五件套**：snoise 湍流（`p * 1.1`、时间项 `t * 0.25`、幅度 0.55）→ 浮力 `+1.25` → 烟囱束缚 `-p.xz * 0.35`（拢回轴心）→ 鼠标风 `select(0.0, 2.6, u.mouse.w > 0.5) / (dm2 + 0.40)` 沿 `(p - mouse)` 方向**外推**（与星系引力井语义相反）→ 出界重生
+3. **hash11 重生**：`fract(sin(n) * 43758.5453123)`；seed = `f32(i) * 0.618 + t * 7.13`，三次采样（seed / seed+91.7 / seed+43.1）分别决定重生 x / z / 初速；重生位置 `y = -1.42`，宽 `±0.85`——粒子出烟囱口即回炉
+4. **积分与限速**：半隐式欧拉 `nv = (v + accel * dt) * exp(-1.0 * dt)`（阻尼比星系版 1.6 轻，火苗需要惯性甩尾），限速 1.8——浮力终端速度 1.25 恰好冲进色带的金/白热段，核心粒子偶尔触顶限速、白热闪烁
+5. **双缓冲与渲染**：compute 读 `states[cur]` 写 `states[1-cur]`，渲染读 `renderBindGroups[1 - cur]`，帧尾翻转；quad 展开（`var corners = array<vec2f, 6>` 动态索引本地数组）+ 加法混合
 
 ## 与骨架的差异
 
-- `createParticleStates()`：两个 STORAGE buffer + 初始星系盘写入（任务 1）
-- `createComputePipeline()` / `createRenderPipeline()`：compute 与加法混合渲染管线（任务 2 / 4 的 main.ts 侧）
-- `createComputeBindGroups()` / `createRenderBindGroups()`：两组镜像绑定组（任务 3 / 4 的 main.ts 侧）
-- 帧循环三处：`cpass.setBindGroup(0, computeBindGroups[cur])`、`rpass.setBindGroup(0, renderBindGroups[1 - cur])`、帧尾 `cur = 1 - cur`（任务 3）
-- `particles.wgsl` 的 `update`：占位搬运替换为力场 + 积分（任务 2 的 WGSL 侧），噪声函数与骨架逐字一致
-- `render.wgsl`：vs 补 quad 展开（任务 4 的 WGSL 侧），fs 占位替换为速度色带（任务 5），struct 与 VOut 与骨架一致
-- 其余脚手架（矩阵、鼠标射线求交、uniform 上传）与骨架逐字一致
+- `TODO(day2-challenge-1)`：火床三行初始化（半径 / 高度 / 初速），无旋臂公式
+- `TODO(day2-challenge-2)`：`particles.wgsl` 补 `hash11` + 力场五件套；管线 `layout: 'auto'` + `entryPoint: 'update'`
+- `TODO(day2-challenge-3)`：两组镜像 compute 绑定组 + 帧循环 `[cur]` / `[1 - cur]` / 帧尾翻转
+- `TODO(day2-challenge-4)`：加法混合管线 + 两组渲染绑定组；`render.wgsl` quad 展开
+- `TODO(day2-challenge-5)`：火色带四段 smoothstep
 
 ## 视觉规格
 
-- 色带：静息外缘近黑 `#030411`，盘心与被引力井加速的粒子依次过深蓝 `#0B176B`、电蓝 `#4C6FFF`，最快处发白 `#F6F9FF`
-- 星系：三条对数旋臂、半径至 1.75，薄盘（y 高斯 ±0.045）；粒子直径约 7 CSS 像素 × DPR，柔边圆点叠出辉光
-- 交互：按住鼠标粒子聚拢到光标（世界坐标由相机射线与 y=0 平面求交），松开轻微排斥扩散回盘面
-- 相机：缓慢方位漂移（±0.22 rad）+ 鼠标视差，俯角 0.62 rad
-- 底色：`clearValue` `#0B0E14`，加法混合下星系自发光
+- 色板：`#3B0D03`（暗红）→ `#E85C1F`（炽橙，smoothstep 0–0.40）→ `#FFC24D`（金，0.38–0.85）→ `#FFF7E8`（白热，0.80–1.0）；`mask = smoothstep(1.0, 0.2, length(uv))` 做软边辉光
+- 烟囱口 `y = 1.55` 出界重生，炉底线 `y = -1.42`，火床半径 `≤ 0.85`
+- 相机：平视 `el = 0.34`、半径 4.2、target `(0, 0.1, 0)`；`clearValue` 暖黑 `#0D0705`
+- 粒子直径 6 CSS px（`u.res.w = round(6 * dpr)`）；阻尼 `exp(-1.15·dt)`，限速 1.8

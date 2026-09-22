@@ -1,6 +1,6 @@
-// Day 2 · 作业 challenge —— GPGPU 粒子星系
+// Day 2 · 作业 challenge —— GPGPU 余烬升腾
 // 对应讲义 2.6（计算着色器入门）/ 2.7（GPGPU 粒子与动画模拟）：
-// 一万粒子的双缓冲状态机全链路，storage 直读渲染，速度映射色带。
+// 一万颗余烬的双缓冲状态机全链路，storage 直读渲染，速度映射色带。
 // 五个 TODO 见 README 任务清单，未完成时页面错误面板会报出编号。
 
 import '../../../shared/demo.css';
@@ -13,9 +13,9 @@ type Vec3 = [number, number, number];
 const chrome = createChrome({
   day: 2,
   index: 'C',
-  title: 'PARTICLE GALAXY',
+  title: 'EMBER RISE',
   tags: ['WEBGPU', 'COMPUTE', 'GPGPU'],
-  hint: '按住鼠标聚拢粒子，松开扩散',
+  hint: '按住鼠标掀起一阵风',
 });
 
 // ---- 初始化 -----------------------------------------------------
@@ -34,13 +34,13 @@ const STRIDE = 32; // 每粒子 vec4f pos + vec4f vel（对齐教训见讲义 2.
 
 function createParticleStates(): GPUBuffer[] {
   // TODO(day2-challenge-1): 创建两个 STORAGE buffer（各 COUNT × STRIDE 字节），
-  // 返回 [a, b]。初始星系盘只写进 states[0]：三条旋臂 + 高斯散布 +
-  // 切向初速度 vOrb = 0.5 / sqrt(r + 0.12)（伪代码见 README 提示三）。
+  // 返回 [a, b]。初始火床只写进 states[0]：底部圆盘（sqrt 均匀散布）+
+  // 高度铺满烟囱 + 向上的初速（伪代码见 README 提示三）。
   throw new Error('TODO(day2-challenge-1) 未完成：见 README');
 }
 
 // ---- TODO 2：compute 管线 -----------------------------------------
-// 力场本体（噪声漂移 + 涡旋 + 鼠标引力）在 particles.wgsl 的 TODO 处。
+// 力场本体（噪声湍流 + 浮力 + 烟囱束缚 + 鼠标风 + 出界重生）在 particles.wgsl 的 TODO 处。
 
 const simModule = device.createShaderModule({ code: particlesSim });
 
@@ -78,7 +78,7 @@ const renderModule = device.createShaderModule({ code: particlesRender });
 
 function createRenderPipeline(): GPURenderPipeline {
   // TODO(day2-challenge-4): 渲染管线（layout 'auto'，vs/fs 入口，
-  // blend 用加法混合 one / one——星星叠星星天然辉光，且与顺序无关）。
+  // blend 用加法混合 one / one——余烬叠余烬天然辉光，且与顺序无关）。
   throw new Error('TODO(day2-challenge-4) 未完成：见 README');
 }
 
@@ -144,7 +144,7 @@ function lookAt(eye: Vec3, target: Vec3, up: Vec3): Float32Array {
   ]);
 }
 
-// 沿相机射线与星系平面 (y=0) 求交，拿到鼠标的世界坐标
+// 沿相机射线与 y=0 平面求交，拿到鼠标的世界坐标（风的作用锚点）
 function ndcToPlane(
   nx: number, ny: number, eye: Vec3, fwd: Vec3, right: Vec3, up2: Vec3,
   halfW: number, halfH: number,
@@ -186,16 +186,16 @@ chrome.startLoop((now) => {
   const dt = Math.min((now - last) / 1000, 1 / 30);
   last = now;
 
-  // 相机：缓慢漂移 + 鼠标视差（幅度克制）
+  // 相机：低角度平视烟囱 + 缓慢漂移 + 鼠标视差（幅度克制）
   const aspect = chrome.width / chrome.height;
-  const az = -0.25 + 0.22 * Math.sin(t * 0.06) + mouseNdc[0] * 0.28;
-  const el = 0.62 + mouseNdc[1] * 0.14;
+  const az = -0.10 + 0.14 * Math.sin(t * 0.05) + mouseNdc[0] * 0.22;
+  const el = 0.34 + mouseNdc[1] * 0.10;
   const eye: Vec3 = [
-    Math.sin(az) * Math.cos(el) * 3.8,
-    Math.sin(el) * 3.8,
-    Math.cos(az) * Math.cos(el) * 3.8,
+    Math.sin(az) * Math.cos(el) * 4.2,
+    Math.sin(el) * 4.2,
+    Math.cos(az) * Math.cos(el) * 4.2,
   ];
-  const target: Vec3 = [0.0, 0.05, 0.0];
+  const target: Vec3 = [0.0, 0.1, 0.0];
   const up: Vec3 = [0.0, 1.0, 0.0];
   const vp = multiply(perspective(FOV, aspect, 0.1, 40), lookAt(eye, target, up));
 
@@ -227,7 +227,7 @@ chrome.startLoop((now) => {
   renderUniforms[16] = chrome.width;
   renderUniforms[17] = chrome.height;
   renderUniforms[18] = aspect;
-  renderUniforms[19] = Math.round(7 * dpr); // 粒子直径：CSS 像素 × DPR
+  renderUniforms[19] = Math.round(6 * dpr); // 粒子直径：CSS 像素 × DPR
   device.queue.writeBuffer(renderBuffer, 0, renderUniforms);
 
   const encoder = device.createCommandEncoder();
@@ -246,7 +246,7 @@ chrome.startLoop((now) => {
   const rpass = encoder.beginRenderPass({
     colorAttachments: [{
       view: context.getCurrentTexture().createView(),
-      clearValue: { r: 0.043, g: 0.055, b: 0.078, a: 1 },
+      clearValue: { r: 0.051, g: 0.027, b: 0.020, a: 1 }, // 暖黑 #0D0705
       loadOp: 'clear',
       storeOp: 'store',
     }],

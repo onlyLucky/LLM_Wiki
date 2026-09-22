@@ -39,7 +39,7 @@ TODO 1 / 2 / 4 的函数体是 `throw new Error('TODO(day2-advanced-n) 未完成
 <details>
 <summary>第二档：API 名</summary>
 
-`createTexture({ size: [512, 512], format: 'rgba8unorm', mipLevelCount: 10, usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST })`；`device.queue.copyExternalImageToTexture({ source: canvas }, { texture, mipLevel: n }, [w, h])`——mipLevel 就是各级的目的地；`device.createSampler({ magFilter: 'linear', minFilter: 'linear', mipmapFilter: 'linear' })`；bind group 的 entry 直接写 `{ binding: 1, resource: sampler }`（texture 的 resource 是 `texture.createView()`，不带参数的 view 就是整条 mip 链）。Blinn-Phong 参考 demos/day2/03-phong-lighting 的 `fs`——结构一样，但作业是单光源 + 采样贴图，别整段照抄。
+`createTexture({ size: [512, 512], format: 'rgba8unorm', mipLevelCount: 10, usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT })`——RENDER_ATTACHMENT 不是可选项，copyExternalImageToTexture 内部要过渲染通路，缺它整条 mip 链拷贝都会验证失败；`device.queue.copyExternalImageToTexture({ source: canvas }, { texture, mipLevel: n }, [w, h])`——mipLevel 就是各级的目的地；`device.createSampler({ magFilter: 'linear', minFilter: 'linear', mipmapFilter: 'linear' })`；bind group 的 entry 直接写 `{ binding: 1, resource: sampler }`（texture 的 resource 是 `texture.createView()`，不带参数的 view 就是整条 mip 链）。Blinn-Phong 参考 demos/day2/03-phong-lighting 的 `fs`——结构一样，但作业是单光源 + 采样贴图，别整段照抄。
 </details>
 
 <details>
@@ -48,7 +48,8 @@ TODO 1 / 2 / 4 的函数体是 `throw new Error('TODO(day2-advanced-n) 未完成
 ```text
 createAlbedoTexture:
   tex = createTexture(rgba8unorm, mipLevelCount: 10,
-                      TEXTURE_BINDING | COPY_DST, size 512)
+                      TEXTURE_BINDING | COPY_DST | RENDER_ATTACHMENT,
+                      size 512)
   src = drawTextureCanvas(512)         # 底色 + 网格 + 图形
   copyExternalImageToTexture(src → tex, mipLevel: 0, [512, 512])
   for level in 1..9:

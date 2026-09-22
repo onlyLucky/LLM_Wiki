@@ -17,7 +17,7 @@ struct Sim {
 @group(0) @binding(2) var<uniform> u: Sim;
 
 // ---- simplex noise 3D（Ashima Arts / Stefan Gustavson 版，完整可抄，
-// 与讲义 2.7 / demo 06 同款；要向量场就三次偏移采样拼 vec3f）-------
+// 与讲义 2.7 同款；要向量场就三次偏移采样拼 vec3f）--------------------
 
 fn mod289v3(x: vec3f) -> vec3f {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -102,14 +102,13 @@ fn update(@builtin(global_invocation_id) gid: vec3u) {
   let p = src[i].pos.xyz;
   let v = src[i].vel.xyz;
 
-  // TODO(day2-challenge-2): 力场与积分（参考讲义 2.7，伪代码见 README）：
-  //   1) 噪声漂移：snoise 三次偏移采样拼 vec3f，乘 0.4 左右
-  //   2) 涡旋：切向 tangent = (-p.z, 0, p.x) / r 推进 + 向心 radial 束缚，
-  //      再把 -p.y 轻轻压回盘面（星系才有「薄盘」的样子）
-  //   3) 鼠标力场：toMouse 方向，u.mouse.w > 0.5 时是引力井（力度 ~1.7），
-  //      否则轻微排斥（~-0.1），除以 (dm2 + 0.30) 衰减
-  //   4) 半隐式欧拉：nv = (v + accel * dt) * exp(-1.6 * dt)，限速 2.4，
-  //      np2 = p + nv * dt
+  // TODO(day2-challenge-2): 力场与积分（伪代码见 README 提示三）：
+  //   1) 噪声湍流：snoise 三次偏移采样拼 vec3f，乘 0.55 左右（火苗的摇曳）
+  //   2) 浮力 accel.y += 1.25；烟囱束缚 accel.xz += -p.xz * 0.35（拢回轴心）
+  //   3) 鼠标风：u.mouse.w > 0.5 时沿 (p - mouse) 方向外推（与引力井相反），
+  //      力度 ~2.6 / (dm2 + 0.40)；松开时完全无风
+  //   4) 半隐式欧拉：nv = (v + accel * dt) * exp(-1.0 * dt)，限速 1.8
+  //   5) 出界重生：np2.y > 1.55 时用 hash 重置回火床（位置和速度都要重置）
   // 占位：原样搬运，粒子静止——实现力场后替换下面这行。
   dst[i] = src[i];
 }

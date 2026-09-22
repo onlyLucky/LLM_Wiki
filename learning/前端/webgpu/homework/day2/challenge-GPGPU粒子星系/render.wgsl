@@ -40,11 +40,11 @@ fn vs(@builtin(vertex_index) vi: u32, @builtin(instance_index) ii: u32) -> VOut 
 
 @fragment
 fn fs(in: VOut) -> @location(0) vec4f {
-  // TODO(day2-challenge-5): 速度 → 颜色映射（讲义 2.7 有同款）：
-  //   t = clamp(in.speed / 2.0, 0.0, 1.0)
-  //   四段 smoothstep：黑 #030411 → 深蓝 #0B176B → 电蓝 #4C6FFF → 白 #F6F9FF
-  //   mask = smoothstep(1.0, 0.15, length(in.uv)) 作为亮度（配合加法混合即辉光）
-  // 占位：统一冷白色。
+  // TODO(day2-challenge-5): 速度 → 颜色映射（结构同讲义 2.7，色带换成火）：
+  //   t = clamp(in.speed / 1.4, 0.0, 1.0)
+  //   四段 smoothstep：暗红 #3B0D03 → 炽橙 #E85C1F → 金 #FFC24D → 白热 #FFF7E8
+  //   mask = smoothstep(1.0, 0.2, length(in.uv)) 作为亮度（配合加法混合即辉光）
+  // 占位：统一余烬暖橙。
   let mask = smoothstep(1.0, 0.15, max(length(in.uv), 0.0));
-  return vec4f(vec3f(0.55, 0.65, 1.0) * mask, mask);
+  return vec4f(vec3f(0.9, 0.4, 0.12) * mask, mask);
 }

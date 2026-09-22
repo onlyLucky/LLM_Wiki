@@ -1,6 +1,6 @@
 // Day 2 · 作业 challenge —— 粒子渲染着色器（参考答案）
 // 顶点着色器直读 storage（无顶点缓冲），6 顶点 quad 展开，
-// 颜色按速度映射：黑 → 深蓝 → 电蓝 → 白。
+// 颜色按速度映射：暗红 → 炽橙 → 金 → 白热。
 
 struct Particle {
   pos: vec4f,
@@ -42,13 +42,13 @@ fn vs(@builtin(vertex_index) vi: u32, @builtin(instance_index) ii: u32) -> VOut 
 
 @fragment
 fn fs(in: VOut) -> @location(0) vec4f {
-  // 速度色带：黑 #030411 → 深蓝 #0B176B → 电蓝 #4C6FFF → 白 #F6F9FF
-  let t = clamp(in.speed / 2.0, 0.0, 1.0);
-  var col = mix(vec3f(0.012, 0.016, 0.067), vec3f(0.043, 0.090, 0.420), smoothstep(0.0, 0.45, t));
-  col = mix(col, vec3f(0.298, 0.435, 1.000), smoothstep(0.40, 0.85, t));
-  col = mix(col, vec3f(0.965, 0.976, 1.000), smoothstep(0.80, 1.0, t));
+  // 速度色带：暗红 #3B0D03 → 炽橙 #E85C1F → 金 #FFC24D → 白热 #FFF7E8
+  let t = clamp(in.speed / 1.4, 0.0, 1.0);
+  var col = mix(vec3f(0.231, 0.051, 0.012), vec3f(0.910, 0.361, 0.122), smoothstep(0.0, 0.40, t));
+  col = mix(col, vec3f(1.000, 0.761, 0.302), smoothstep(0.38, 0.85, t));
+  col = mix(col, vec3f(1.000, 0.969, 0.910), smoothstep(0.80, 1.0, t));
 
   // 柔边圆点：mask 作为亮度，配合加法混合就是辉光
-  let mask = smoothstep(1.0, 0.15, length(in.uv));
+  let mask = smoothstep(1.0, 0.2, length(in.uv));
   return vec4f(col * mask, mask);
 }

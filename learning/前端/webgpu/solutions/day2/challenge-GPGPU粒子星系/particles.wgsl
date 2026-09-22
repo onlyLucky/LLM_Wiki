@@ -1,6 +1,6 @@
 // Day 2 · 作业 challenge —— 粒子计算着色器（参考答案）
 // 读 src 写 dst，两组绑定组轮换（讲义 2.7 的状态机）。
-// struct 与噪声函数骨架已给全；力场四件套 + 半隐式欧拉积分在 update 里。
+// struct 与噪声函数骨架已给全；力场五件套 + 半隐式欧拉积分 + 出界重生在 update 里。
 
 struct Particle {
   pos: vec4f, // xyz 位置；w 未用。std430 下 vec3f 按 16 字节对齐，
@@ -17,7 +17,7 @@ struct Sim {
 @group(0) @binding(2) var<uniform> u: Sim;
 
 // ---- simplex noise 3D（Ashima Arts / Stefan Gustavson 版，完整可抄，
-// 与讲义 2.7 / demo 06 同款；要向量场就三次偏移采样拼 vec3f）-------
+// 与讲义 2.7 同款；要向量场就三次偏移采样拼 vec3f）--------------------
 
 fn mod289v3(x: vec3f) -> vec3f {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -93,6 +93,12 @@ fn snoise(v: vec3f) -> f32 {
   return 42.0 * dot(m * m, vec4f(dot(n0, x0), dot(n1, x1), dot(n2, x2), dot(n3, x3)));
 }
 
+// ---- 小 hash：重生位置/初速的伪随机 --------------------------------
+// GPGPU 里没有 Math.random，sin hash 一行搞定；种子带上粒子索引和时间
+fn hash11(n: f32) -> f32 {
+  return fract(sin(n) * 43758.5453123);
+}
+
 @compute @workgroup_size(64)
 fn update(@builtin(global_invocation_id) gid: vec3u) {
   let i = gid.x;
@@ -102,36 +108,45 @@ fn update(@builtin(global_invocation_id) gid: vec3u) {
   let p = src[i].pos.xyz;
   let v = src[i].vel.xyz;
 
-  // 1) 噪声场：三次偏移采样合成一个随时间流动的扰动向量
-  let np = p * 0.85;
-  let drift = vec3f(
-    snoise(np + vec3f(0.0, 0.0, u.params.x * 0.18)),
-    snoise(np + vec3f(31.4, 47.2, u.params.x * 0.18)),
-    snoise(np + vec3f(-12.9, 88.3, u.params.x * 0.18)),
-  ) * 0.4;
+  // 1) 噪声湍流：三次偏移采样合成一个随时间流动的扰动向量
+  //    频率与幅度都比星系版高——火苗要的就是摇曳
+  let np = p * 1.1;
+  let turb = vec3f(
+    snoise(np + vec3f(0.0, 0.0, u.params.x * 0.25)),
+    snoise(np + vec3f(31.4, 47.2, u.params.x * 0.25)),
+    snoise(np + vec3f(-12.9, 88.3, u.params.x * 0.25)),
+  ) * 0.55;
 
-  // 2) 星系涡旋：切向推进（近快远慢）+ 向心束缚
-  let r = length(vec2f(p.x, p.z)) + 1e-4;
-  let tangent = vec3f(-p.z, 0.0, p.x) / r;
-  let radial = -vec3f(p.x, 0.0, p.z) / r;
-  var accel = drift;
-  accel += tangent * (0.55 / (0.3 + r));
-  accel += radial * (0.45 / (0.35 + r * r));
-  // 轻轻压回盘面，星系才有「薄盘」的样子
-  accel += vec3f(0.0, -p.y * 1.1, 0.0);
+  // 2) 浮力 + 烟囱束缚：恒定上升（终端速度 1.25 / 1.0 = 1.25，
+  //    恰好冲进色带的金/白热段——核心比外缘亮两档），水平方向被轻轻拢回轴心
+  var accel = turb;
+  accel += vec3f(0.0, 1.25, 0.0);
+  accel += vec3f(-p.x * 0.35, 0.0, -p.z * 0.35);
 
-  // 3) 鼠标力场：按住是引力井，松开后轻微排斥
-  let toMouse = u.mouse.xyz - p;
-  let dm2 = dot(toMouse, toMouse);
-  let pull = select(-0.10, 1.7, u.mouse.w > 0.5) / (dm2 + 0.30);
-  accel += toMouse / sqrt(dm2 + 1e-4) * pull;
+  // 3) 鼠标风：按住时从光标往外吹（方向与引力井正好相反），松开无风
+  let toP = p - u.mouse.xyz;
+  let dm2 = dot(toP, toP);
+  let gust = select(0.0, 2.6, u.mouse.w > 0.5) / (dm2 + 0.40);
+  accel += toP / (sqrt(dm2) + 1e-4) * gust;
 
-  // 4) 半隐式欧拉积分 + 速度阻尼（拖尾感）+ 限速
+  // 4) 半隐式欧拉积分 + 速度阻尼 + 限速
   let dt = u.params.y;
-  var nv = (v + accel * dt) * exp(-1.6 * dt);
+  var nv = (v + accel * dt) * exp(-1.0 * dt);
   let sp = length(nv);
-  if (sp > 2.4) { nv = nv * (2.4 / sp); }
-  let np2 = p + nv * dt;
+  if (sp > 1.8) { nv = nv * (1.8 / sp); }
+  var np2 = p + nv * dt;
+
+  // 5) 出界重生：飘出烟囱顶的余烬回到火床
+  //    GPGPU 状态机里也能编码生命周期——重置的是 dst 这一行的位置和速度
+  if (np2.y > 1.55) {
+    let seed = f32(i) * 0.618 + u.params.x * 7.13;
+    np2 = vec3f(
+      (hash11(seed) - 0.5) * 1.7,
+      -1.42,
+      (hash11(seed + 91.7) - 0.5) * 1.7,
+    );
+    nv = vec3f(0.0, 0.28 + hash11(seed + 43.1) * 0.4, 0.0);
+  }
 
   dst[i] = Particle(vec4f(np2, 0.0), vec4f(nv, 0.0));
 }
