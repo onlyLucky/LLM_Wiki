@@ -33,4 +33,4 @@ graph LR
 - 运行：`npm run dev` 后访问 `http://localhost:5174/homework/day2/<目录名>/index.html`。
 - TODO 编号：`TODO(day2-basic-N / day2-adv-N / day2-ch-N)` 与各作业 README 任务清单一一对应；A 档任务 5 与 C 档任务 6 各有一个 TS 半边，位置在 `main.ts` 里有标记。
 - 提示纪律：三档 `<details>` 卡住 15 分钟再开下一档；直接看第三档，这题就白做了。
-- 对答案：`solutions/day2/` 同构目录，四段式 README 讲清每处取舍——B 档「描边恒宽靠 fwidth 不靠写死」、A 档「占位透传」、C 档「背景对比度让给前景」。
+- 对答案：作业页右下角「答案参考 ↗」直达对页（答案页可一键返回）；`solutions/day2/` 同构目录，四段式 README 讲清每处取舍——B 档「描边恒宽靠 fwidth 不靠写死」、A 档「占位透传」、C 档「背景对比度让给前景」。

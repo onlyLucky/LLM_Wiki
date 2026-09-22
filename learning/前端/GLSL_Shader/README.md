@@ -12,7 +12,7 @@ webgpu 课教「GPU 怎么工作」，本课教「GLSL 怎么画出东西」：�
 | Day 2 | 片段着色器视觉算法 | SDF、voronoi、fbm 与域扭曲、余弦调色板、伪 3D 光感、纹理、电影感配方——fragment shader 的完整视觉算法箱 |
 | Day 3 | Three.js 实战落地 | ShaderMaterial、图片失真与视差、滚动驱动、粒子场、后期处理工作坊——把 GLSL 搬进 Three.js 工程，写出作品集级的 hero 片段 |
 
-每天上午偏概念、下午偏动手，讲授与实操大约四六开。每个模块都有配套 demo（完整参考实现，带视觉规格），每天收尾有三档作业：basic / advanced / challenge，做不完可以降级，做完了去 `solutions/` 对照。
+每天上午偏概念、下午偏动手，讲授与实操大约四六开。每个模块都有配套 demo（完整参考实现，带视觉规格），每天收尾有三档作业：basic / advanced / challenge，做不完可以降级，做完了去 `solutions/` 对照——作业页右下角的「答案参考 ↗」一键直达对页，答案页也能一键返回。
 
 ## 快速开始
 

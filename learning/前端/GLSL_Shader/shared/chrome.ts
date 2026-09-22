@@ -106,6 +106,26 @@ export function createChrome(opts: ChromeOptions): Chrome {
   if (opts.hint) label('tag--bl', opts.hint);
   const metaEl = label('tag--br', '— FPS');
 
+  // ---- 作业 ↔ 答案互跳：homework 与 solutions 同构目录树，按当前 URL 自动推断对页 ----
+  // 做完作业想对照答案，不该手动改地址栏；答案页也对称地能一步回作业。
+  // 存在性用 HEAD 验证（dev server / 静态托管均可；file:// 静默降级——没有导航不影响作业本身）。
+  const navMatch = location.pathname.match(/\/(homework|solutions)\/(day\d\/[^/]+)\/index\.html?$/);
+  if (navMatch) {
+    const from = navMatch[1];
+    const to = from === 'homework' ? 'solutions' : 'homework';
+    const target = location.pathname.replace(`/${from}/`, `/${to}/`);
+    fetch(target, { method: 'HEAD' }).then((r) => {
+      if (!r.ok) return;
+      const a = document.createElement('a');
+      a.className = 'tag tag--sol';
+      a.href = target;
+      a.innerHTML = from === 'homework'
+        ? '答案参考 <span class="arr">↗</span>'
+        : '返回作业 <span class="arr">↗</span>';
+      stage.appendChild(a);
+    }).catch(() => { /* 静默降级 */ });
+  }
+
   const panel = document.createElement('div');
   panel.className = 'error-panel';
   stage.appendChild(panel);

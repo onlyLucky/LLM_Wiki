@@ -71,6 +71,26 @@ export function createChrome(opts: ChromeOptions): Chrome {
   if (opts.hint) label('tag--bl', opts.hint);
   const metaEl = label('tag--br', '— FPS');
 
+  // ---- 作业 ↔ 答案互跳：homework 与 solutions 同构目录树，按当前 URL 自动推断对页 ----
+  // 做完作业想对照答案，不该手动改地址栏；答案页也对称地能一步回作业。
+  // 存在性用 HEAD 验证（dev server / 静态托管均可；file:// 静默降级——没有导航不影响作业本身）。
+  const navMatch = location.pathname.match(/\/(homework|solutions)\/(day\d\/[^/]+)\/index\.html?$/);
+  if (navMatch) {
+    const from = navMatch[1];
+    const to = from === 'homework' ? 'solutions' : 'homework';
+    const target = location.pathname.replace(`/${from}/`, `/${to}/`);
+    fetch(target, { method: 'HEAD' }).then((r) => {
+      if (!r.ok) return;
+      const a = document.createElement('a');
+      a.className = 'tag tag--sol';
+      a.href = target;
+      a.innerHTML = from === 'homework'
+        ? '答案参考 <span class="arr">↗</span>'
+        : '返回作业 <span class="arr">↗</span>';
+      stage.appendChild(a);
+    }).catch(() => { /* 静默降级 */ });
+  }
+
   const panel = document.createElement('div');
   panel.className = 'error-panel';
   stage.appendChild(panel);
@@ -87,7 +107,15 @@ export function createChrome(opts: ChromeOptions): Chrome {
     failInternal('UNHANDLED REJECTION', String(e.reason));
   });
   function failInternal(title: string, detail: string, fix?: string) {
-    chrome.fail(title, detail, fix);
+    // 直接写 panel 而不经 chrome 转发：createChrome 执行期间若抛错
+    // （如 onResize 读到尚未初始化的变量），chrome 还在暂时性死区里，
+    // 经它转发会把「报错面板」自身也炸掉——初始化期的错误就永远看不见。
+    panel.innerHTML =
+      `<h2>${escapeHtml(title)}</h2>` +
+      `<pre>${escapeHtml(detail)}</pre>` +
+      (fix ? `<div class="fix">${escapeHtml(fix)}</div>` : '');
+    panel.classList.add('show');
+    stage.classList.add('ready');
   }
 
   // ---- 尺寸 -----------------------------------------------------

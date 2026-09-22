@@ -67,6 +67,45 @@ body {
 .tag--br { bottom: 14px; right: 16px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-dim); }
 .tag em { font-style: normal; color: var(--accent); }
 
+/* 作业 ↔ 答案互跳 pill：tag 家族的交互成员，右下 meta 上方。
+   .tag 默认 pointer-events:none，导航是这个体系里唯一的例外 */
+.tag--sol {
+  bottom: 40px;
+  right: 16px;
+  z-index: 4; /* 高于错误面板（z-index 3）：骨架报错时导航仍可点——卡住时最需要的就是看答案 */
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 5px 12px;
+  border: 1px solid var(--frame);
+  border-radius: 999px;
+  background: rgba(30, 37, 48, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--ink);
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.6s ease 0.35s,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+.stage.ready .tag--sol { opacity: 1; }
+.tag--sol .arr { transition: transform 0.18s ease; }
+.tag--sol:hover,
+.tag--sol:focus-visible {
+  border-color: var(--accent);
+  color: #c8d0de;
+  background: rgba(30, 37, 48, 0.6);
+}
+.tag--sol:hover .arr,
+.tag--sol:focus-visible .arr { transform: translate(2px, -2px); }
+
 /* 错误面板：面向读者的报错，替代 console 堆栈 */
 .error-panel {
   position: absolute;

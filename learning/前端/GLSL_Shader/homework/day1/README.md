@@ -33,4 +33,4 @@ graph LR
 - 运行：`npm run dev` 后访问 `http://localhost:5174/homework/day1/<目录名>/index.html`。
 - TODO 编号：`TODO(day1-basic-1)` 里的 basic / adv / ch 对应三档目录，编号与各作业 README 的任务清单一一对应。
 - 提示的使用纪律：每题 README 末尾的三档 `<details>` 折叠，卡住 15 分钟再打开下一档；直接看第三档伪代码，这道题就白做了。
-- 对答案：做完一档再看 `solutions/day1/` 下的同构目录——四段式 README 讲清每处取舍，「与骨架的差异」逐 TODO 对照，方便你精确定位自己漏了什么。
+- 对答案：作业页右下角的「答案参考 ↗」一键直达对页（答案页同样能一键返回）；`solutions/day1/` 下的四段式 README 讲清每处取舍，「与骨架的差异」逐 TODO 对照，方便你精确定位自己漏了什么。
