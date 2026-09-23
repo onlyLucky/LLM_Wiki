@@ -1,5 +1,5 @@
-// Day 1 · Demo 03 —— 时间的画面
-// 对应讲义 1.6：u_time 是唯一的输入，四条动画曲线各自解释它。
+// Day 1 · Demo 03 —— 时间仪器馆
+// 对应讲义 1.6：u_time 是唯一的输入，四台仪器各自演示一条动画曲线。
 // 相位 = fract(u_time / 周期)：除法把秒换成圈数，fract 去整存零，
 // 一切循环动画都回到 [0,1] 这个一维跑道上。
 
@@ -11,9 +11,9 @@ import fsSource from './shaders/fragment.glsl?raw';
 const chrome = createChrome({
   day: 1,
   index: '03',
-  title: 'TIME & EASING',
+  title: 'TIME INSTRUMENTS',
   tags: ['WEBGL2', 'GLSL', 'ANIMATION'],
-  hint: '观察四格动画：呼吸、三角波、弹性、缓动',
+  hint: '四台仪器共用同一相位：呼吸灯 · 示波器 · 弹簧摆 · 进度弧',
 });
 
 // ---- 初始化：WebGL2 context + 着色器程序 -----------------------
@@ -48,7 +48,8 @@ const uTime = gl.getUniformLocation(program, 'u_time');
 // ---- 帧循环：每帧只喂秒数，全部动画逻辑都在 shader 里 -----------
 const start = performance.now();
 chrome.startLoop((now) => {
-  const t = (now - start) / 1000; // 秒，不是毫秒（讲义 1.6 的单位约定）
+  // 毫秒转秒（契约）；% 3600 防 float 尾数耗尽，且 3600 是 3/4.5/6 的公倍数，回卷无跳变
+  const t = ((now - start) / 1000) % 3600;
 
   gl.viewport(0, 0, chrome.width, chrome.height);
 

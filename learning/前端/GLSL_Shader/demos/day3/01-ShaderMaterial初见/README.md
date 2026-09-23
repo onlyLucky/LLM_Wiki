@@ -1,6 +1,8 @@
 # 01 · ShaderMaterial 初见
 
-> 对应讲义 [3.1 ShaderMaterial：从原生到 Three.js 的迁移](../../../讲义/day3-Three.js实战落地/3.1-ShaderMaterial：从原生到Three.js的迁移.md) · 交互说明：移动鼠标，徽章 ±3% 视差跟随（lerp 0.08）
+> 对应讲义 [3.1 ShaderMaterial：从原生到 Three.js 的迁移](../../../讲义/day3-Three.js实战落地/3.1-ShaderMaterial：从原生到Three.js的迁移.md) · 交互说明：移动鼠标，卡面 ±3% 视差跟随（lerp 0.08）
+
+同一张 Day 2 作业 B 的全息卡面搬进 three——视觉逐行同源，样板代码塌缩。
 
 ## 运行
 
@@ -11,7 +13,7 @@ npm run dev
 
 ## 行数对账
 
-讲义 3.1 的核心论证：**同一只徽章搬进 three，样板代码塌缩**。
+讲义 3.1 的核心论证：**同一张卡面搬进 three，样板代码塌缩**。
 
 | 版本 | 行数 | 说明 |
 | --- | --- | --- |
@@ -27,13 +29,13 @@ npm run dev
 - **GLSL1 风格五差异**：不写 `#version`（three 自动注入）、不声明 precision、`position/uv` 内置 attribute、`projectionMatrix/modelViewMatrix` 内置矩阵、出口写 `gl_FragColor`。shader 正文几乎零改动。
 - **渲染权交接**：chrome 管 canvas 的物理像素与 CSS 尺寸，three 只管「怎么画」——`WebGLRenderer({ canvas: chrome.canvas })` 挂上画布，`setPixelRatio(1)` 按 1:1 吃物理像素，`setSize(w, h, false)` 不碰 CSS。
 - **resize 时序守卫**：chrome 的 ResizeObserver 在 createChrome 内立即触发首次 applySize，早于 renderer 赋值——`syncSize` 必须 `if (!renderer) return`，renderer 建好后手动补调一次。
-- **视差三定标**：目标 `(pointer.sx - 0.5) * 0.06`（±3%）、lerp 0.08、域偏移 `p -= u_parallax * vec2(aspect, 1.0)` x 乘 aspect 保视觉等比。
+- **视差三定标**：目标 `(pointer.sx - 0.5) * 0.06`（±3%）、lerp 0.08、域偏移 `p -= u_parallax * vec2(aspect, 1.0)` x 乘 aspect 保视觉等比；视差作用在 `p` 上，流光与渐变跟着卡面整体移动，不会「背景先动卡后动」。
 
 ## 视觉规格
 
-- 色板：BG `#0B0E14` · ROSE `#FF4D6D` · CYAN `#4CC9F0`
-- 动效：徽章呼吸 3s 周期 ±4%（乘尺寸不乘颜色）；视差 lerp 0.08
-- 细节：45° 对角渐变玫红→天青；描边半宽 `fwidth(sd) * 2.0` 恒定视觉宽；vignette 15%
+- 色板：BG `#0B0E14` · ROSE `#FF4D6D` · CYAN `#4CC9F0` · 流光白青 `#D9F2FF`
+- 动效：卡面呼吸 3s 周期 ±4%（乘尺寸不乘颜色）；流光带约 2 rad/s 沿对角扫动、双带相位差 2.6；视差 lerp 0.08
+- 细节：45° 对角渐变玫红→天青；描边半宽 `fwidth(sd) * 2.0` 恒定视觉宽；压印内框线；vignette 15%
 - 性能：单 pass 全屏 quad，DPR 封顶 2，uniform 每帧 3 个写入
 
 ## 常见报错
@@ -41,7 +43,8 @@ npm run dev
 | 症状 | 原因 |
 | --- | --- |
 | 画布尺寸忽大忽小 | `setSize` 第三参没传 false，three 把 inline style 的 CSS 尺寸覆写了 |
-| 徽章被横向拉伸 | `u_resolution` 传了 CSS 尺寸而非物理像素，aspect 算错 |
+| 卡面被横向拉伸 | `u_resolution` 传了 CSS 尺寸而非物理像素，aspect 算错 |
 | 视差一卡一卡 | lerp 系数写成 1（直接赋值），丢了平滑 |
+| 流光满屏都在闪、卡外也有 | `shimmer` 忘了乘 `fill`——加色叠在了整屏上；乘 fill 才锁在卡面内 |
 | shader 报 `position` 重定义 | 手写 `attribute vec3 position`——three 已内置注入，重复声明即报错 |
 | 画布全黑且无报错 | 忘了 `renderer.render(scene, camera)`——ShaderMaterial 不会自己渲染 |

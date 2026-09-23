@@ -1,4 +1,4 @@
-// Day 3 · Demo 01 —— ShaderMaterial 初见：Day 2 徽章迁入 three（行数对账表见 README）
+// Day 3 · Demo 01 —— ShaderMaterial 初见：Day 2 全息卡面迁入 three（行数对账表见 README）
 import '../../../shared/demo.css';
 import * as THREE from 'three';
 import { createChrome } from '../../../shared/chrome.ts';
@@ -25,17 +25,19 @@ function syncSize(w: number, h: number) {
 
 const chrome = createChrome({
   day: 3, index: '01', title: 'SHADERMATERIAL', tags: ['THREE', 'GLSL', 'MIGRATE'],
-  hint: '移动鼠标：徽章视差跟随', onResize: syncSize,
+  hint: '移动鼠标：卡面视差跟随', onResize: syncSize,
 });
 renderer = new THREE.WebGLRenderer({ canvas: chrome.canvas, antialias: true });
 renderer.setPixelRatio(1); syncSize(chrome.width, chrome.height); // chrome 已把画布设为物理像素
 
 // 视差 3% + lerp 0.08（awwwards 手感默认档）；uniform 每帧写入后渲染
+const start = performance.now();
 let px = 0, py = 0;
 chrome.startLoop((now) => {
   px += ((chrome.pointer.sx - 0.5) * 0.06 - px) * 0.08;
   py += ((chrome.pointer.sy - 0.5) * 0.06 - py) * 0.08;
-  material.uniforms.u_time.value = now / 1000;
+  // 毫秒转秒（契约）；% 3600 防 float 尾数耗尽
+  material.uniforms.u_time.value = ((now - start) / 1000) % 3600;
   material.uniforms.u_parallax.value.set(px, py);
   renderer!.render(scene, camera);
 });

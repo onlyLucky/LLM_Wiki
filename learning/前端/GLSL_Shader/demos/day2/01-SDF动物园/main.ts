@@ -1,6 +1,6 @@
-// Day 2 · Demo 01 —— SDF 动物园
-// 对应讲义 2.1：六只形状陈列（圆/方/圆角方/线段/硬并/平滑并），
-// 滚轮切换高亮，底部角标显示当前形状的公式。
+// Day 2 · Demo 01 —— 形态标本馆
+// 对应讲义 2.1：六份形状标本陈列（圆/方/圆角方/线段/硬并/平滑并），
+// 滚轮推动射灯，底部角标显示当前标本的公式。
 
 import '../../../shared/demo.css';
 import { createChrome, initGL, createProgram } from '../../../shared/chrome.ts';
@@ -10,9 +10,9 @@ import fsSource from './shaders/fragment.glsl?raw';
 const chrome = createChrome({
   day: 2,
   index: '01',
-  title: 'SDF ZOO',
+  title: 'SPECIMEN HALL',
   tags: ['GLSL', 'SDF', 'SHAPE'],
-  hint: '滚动滚轮：切换高亮的形状',
+  hint: '滚动滚轮：推动射灯 · 移动鼠标：悬停预览',
 });
 
 // ---- 初始化：WebGL2 context + 着色器程序 -----------------------
@@ -43,8 +43,9 @@ gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 8, 0);
 const uResolution = gl.getUniformLocation(program, 'u_resolution');
 const uTime = gl.getUniformLocation(program, 'u_time');
 const uPick = gl.getUniformLocation(program, 'u_pick');
+const uMouse = gl.getUniformLocation(program, 'u_mouse');
 
-// ---- 底部角标复用为「公式标注」：滚动切换时显示当前形状的公式 ----
+// ---- 底部角标复用为「公式牌」：切换射灯时显示当前标本的公式 ----
 const FORMULAS = [
   'sdCircle(p, r) = length(p) - r',
   'sdBox(p, b) = length(max(abs(p)-b, 0)) + min(max(d.x,d.y), 0)',
@@ -56,8 +57,9 @@ const FORMULAS = [
 const hintEl = document.querySelector('.tag--bl');
 
 // ---- 帧循环 ------------------------------------------------------
+const start = performance.now();
 let lastPick = -1;
-chrome.startLoop(() => {
+chrome.startLoop((now) => {
   // 滚轮累积量 → 格号：每 120 单位（约一格）切换一次，负向也循环
   const pick = ((Math.floor(chrome.pointer.wheel / 120) % 6) + 6) % 6;
   if (pick !== lastPick && hintEl) {
@@ -69,8 +71,10 @@ chrome.startLoop(() => {
 
   gl.useProgram(program);
   gl.uniform2f(uResolution, chrome.width, chrome.height);
-  gl.uniform1f(uTime, performance.now() / 1000);
+  // 毫秒转秒（契约）；% 3600 防 float 尾数耗尽
+  gl.uniform1f(uTime, ((now - start) / 1000) % 3600);
   gl.uniform1f(uPick, pick);
+  gl.uniform2f(uMouse, chrome.pointer.nx, chrome.pointer.ny);
 
   gl.clearColor(0.043, 0.055, 0.078, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);

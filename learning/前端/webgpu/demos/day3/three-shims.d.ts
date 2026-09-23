@@ -68,6 +68,10 @@ declare module 'three/webgpu' {
     constructor(...args: any[]);
     [key: string]: any;
   }
+  export class IcosahedronGeometry {
+    constructor(...args: any[]);
+    [key: string]: any;
+  }
   export class Vector2 {
     constructor(x?: any, y?: any);
     [key: string]: any;

@@ -9,12 +9,12 @@
 | 档 | 目录 | 考点 | 前置讲义 | 参考时长 |
 |----|------|------|---------|---------|
 | B | [basic-脉动的画布](./basic-脉动的画布/) | uniform 三件套（u_time / u_colorA / u_colorB）、居中等比坐标域、mix + sin 呼吸、vignette | 1.5、1.6 | 30 min |
-| A | [advanced-追光的萤火](./advanced-追光的萤火/) | 事件桥全链路：chrome.pointer 打包、双坐标域换算、距离场 glow、easeOutBack 回弹、帧差速度向量 | 1.7（1.5、1.6 是弹药） | 60 min |
+| A | [advanced-暗场聚光](./advanced-暗场聚光/) | 事件桥全链路：chrome.pointer 采样、居中坐标域、聚光灯光池光照、easeOutBack 收束、帧差速度向量 | 1.7（1.5、1.6 是弹药） | 60 min |
 | C | [challenge-极坐标曼陀罗](./challenge-极坐标曼陀罗/) | 极坐标换算、N 重对称折叠、花瓣 SDF、呼吸与扰动、点击波包推瓣、challenge 页头 | 1.5–1.7 全部 | 90 min |
 
 ```mermaid
 graph LR
-    B["B · 脉动的画布<br/>uniform 时间"] --> A["A · 追光的萤火<br/>时间 + 交互双输入"] --> C["C · 极坐标曼陀罗<br/>全要素合成"]
+    B["B · 脉动的画布<br/>uniform 时间"] --> A["A · 暗场聚光<br/>时间 + 交互双输入"] --> C["C · 极坐标曼陀罗<br/>全要素合成"]
     style B fill:#141a24,stroke:#FF4D6D,stroke-width:2px
     style A fill:#141a24,stroke:#4CC9F0,stroke-width:2px
     style C fill:#141a24,stroke:#FFC145,stroke-width:2px
@@ -25,7 +25,7 @@ graph LR
 ## 为什么是这三题
 
 - **B · 脉动的画布**对标全屏渐变 hero 背景——每个品牌站首页都有的那块会呼吸的底图，本题把它压成「一个三角形几何 + 三个 uniform」的最小单元。
-- **A · 追光的萤火**对标 hover 光晕跟随——awwwards 获奖站的标准交互件：光点永远慢半拍、按压有回弹、拖动有形变。
+- **A · 暗场聚光**对标剧场追光 hero——awwwards 获奖站的标准氛围件：光池永远慢半拍、按压收束光圈、甩动拉长光斑，网格星屑只在光池内显形。
 - **C · 极坐标曼陀罗**对标极坐标图案背景——igloo、lusion 首页那类数学花纹铺满全屏的 hero 纹理，极坐标 + 对称折叠就是它的全部秘密。
 
 ## 目录说明

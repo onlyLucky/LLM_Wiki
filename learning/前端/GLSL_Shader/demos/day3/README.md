@@ -1,11 +1,11 @@
 # Day 3 · demos
 
-三个 demo = 三次「手法上屏」：把 Day 1/2 的 shader 存货装进 three 的世界。全部基于 Day 3 的 chrome（canvas + 顶栏 + 四角标注 + 帧循环），接线范本见 [./01-ShaderMaterial初见/](./01-ShaderMaterial初见/)。
+三个 demo = 三次「手法上屏」：把 Day 1/2 的 shader 存货装进 three 的世界。全部基于 Day 3 的 chrome（canvas + 顶栏 + 四角标注 + 帧循环），接线范本见 [全息卡面](./01-ShaderMaterial初见/)。
 
 | # | demo | 母题 | 对应讲义 |
 |---|------|------|---------|
-| 01 | [ShaderMaterial初见](./01-ShaderMaterial初见/) | Day 2 徽章迁移到 three | [3.1](../../讲义/day3-Three.js实战落地/3.1-ShaderMaterial：从原生到Three.js的迁移.md) |
+| 01 | [全息卡面](./01-ShaderMaterial初见/) | Day 2 全息卡面迁移到 three | [3.1](../../讲义/day3-Three.js实战落地/3.1-ShaderMaterial：从原生到Three.js的迁移.md) |
 | 02 | [hover失真图卡](./02-hover失真图卡/) | 纹理失真 + 状态机 + 三层视差 | [3.2](../../讲义/day3-Three.js实战落地/3.2-图片失真与鼠标视差.md) |
 | 03 | [粒子星云与bloom](./03-粒子星云与bloom/) | 粒子场 + 后期链 | [3.4](../../讲义/day3-Three.js实战落地/3.4-粒子场：Points、gl_PointSize与噪声粒子场.md) / [3.5](../../讲义/day3-Three.js实战落地/3.5-后期处理工作坊：装配作品集hero.md) |
 
-建议的观看节奏（对照时刻表）：读 3.1 时跑 01（同一枚徽章的「原生 → three」对照着看），读 3.2 时跑 02（hover 的双段手感和视差速度差都在这页），读 3.4–3.5 时跑 03（先关 bloom 看毛坯粒子，再逐步打开后期链——「毛坯」到「成片」的距离就是一条 composer）。3.3 的滚动手法不设独立 demo：它的完整工程实现就是作业 C「滚动驱动的英雄时刻」，solution 可对照。
+建议的观看节奏（对照时刻表）：读 3.1 时跑 01（同一张卡面的「原生 → three」对照着看），读 3.2 时跑 02（hover 的双段手感和视差速度差都在这页），读 3.4–3.5 时跑 03（先关 bloom 看毛坯粒子，再逐步打开后期链——「毛坯」到「成片」的距离就是一条 composer）。3.3 的滚动手法不设独立 demo：它的完整工程实现就是作业 C「滚动驱动的英雄时刻」，solution 可对照。
