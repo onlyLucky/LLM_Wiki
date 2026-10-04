@@ -30,9 +30,7 @@
 | `02-design/design-system.md` | UI 设计规范 | 02 | 高 | 草稿 |
 | `02-design/environments.md` | 环境与变量配置 | 02 | 中高 | 草稿 |
 | `02-design/adr/` | 架构决策记录 | 02 | 中 | 草稿 |
-| `03-execution/tasks.md` | 任务清单 | 03 | 极高 | 草稿 |
-| `03-execution/milestones.md` | 里程碑 | 03 | 中高 | 草稿 |
-| `03-execution/dev-log.md` | 开发日志 | 03 | 高 | 草稿 |
+| `03-plan-gate/quality-gate.md` | 质量门禁：阶段检查点（Gate） | 03 | 高 | 草稿 |
 | `04-quality/test-strategy.md` | 测试策略 | 04 | 高 | 草稿 |
 | `04-quality/test-cases.md` | 测试用例 | 04 | 高 | 草稿 |
 | `04-quality/acceptance-evidence.md` | 验收证据映射 | 04 | 高 | 草稿 |
@@ -51,5 +49,6 @@
 ## 维护约定
 
 - 新增 / 删除文档后**必须同步更新本索引**
+- 实施计划、任务清单与开发日志不在本索引范围内，分别见 [plans/README.md](../plans/README.md)、[tasks/README.md](../tasks/README.md)、[logs/README.md](../logs/README.md)
 - 文档状态取值：`草稿` / `评审中` / `已冻结` / `已废弃`
-- 「已冻结」的契约文档（如 `api-contract.md`）修改需走评审，见 `AGENTS.md` 质量门禁
+- 「已冻结」的契约文档（如 `api-contract.md`）修改需走评审，见 `03-plan-gate/quality-gate.md` 的 Gate 2

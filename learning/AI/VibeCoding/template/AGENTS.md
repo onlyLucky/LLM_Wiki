@@ -13,18 +13,21 @@
 ## 2. 读取顺序（必须遵守）
 
 1. `AGENTS.md`（本文件）
-2. `.ai/context.md` — 当前项目状态摘要
-3. `.ai/rules.md` — 编码 / 提交 / 测试规则
-4. `specs/INDEX.md` — 文档总索引
+2. `.agents/context.md` — 当前项目状态摘要
+3. `.agents/rules.md` — 编码 / 提交 / 测试规则
+4. `.agents/specs/INDEX.md` — 文档总索引
 5. 与任务相关的 spec（按 `INDEX.md` 中的读取优先级）
-6. `.ai/memory/decisions.md`、`.ai/memory/lessons.md`
+6. `.agents/memory/decisions.md`、`.agents/memory/lessons.md`
 
 ## 3. 目录导航
 
 | 路径 | 用途 |
 |------|------|
-| `specs/` | 规格契约层：AI 的单一事实来源 |
-| `.ai/` | Agent 专用上下文（状态、规则、提示词、记忆） |
+| `.agents/specs/` | 规格契约层：AI 的单一事实来源 |
+| `.agents/plans/` | 实施计划（里程碑），README 为入口 |
+| `.agents/tasks/` | 任务清单，开发时的唯一任务来源 |
+| `.agents/logs/` | 开发日志 |
+| `.agents/` | Agent 专用上下文（状态、规则、提示词、记忆） |
 | `src/` | 源码 |
 | `tests/` | 测试代码 |
 | `scripts/` | 脚本与自动化工具 |
@@ -35,22 +38,22 @@
 - 只改任务范围内的文件；超出范围先提问，不擅自扩大改动。
 - 不得提交密钥、Token、`.env` 内容或任何凭证。
 - 每完成一个功能就停止，解释变更，并运行相关测试、报告结果。
-- 动手前先读 `specs/` 中对应契约；契约与代码冲突时以契约为准，并显式指出冲突。
-- 遵循 `.ai/rules.md` 的编码、提交与测试规范。
+- 动手前先读 `.agents/specs/` 中对应契约；契约与代码冲突时以契约为准，并显式指出冲突。
+- 遵循 `.agents/rules.md` 的编码、提交与测试规范。
 
 ## 5. 禁止事项（MUST NOT）
 
-- 不臆造需求或架构；不确定时登记到 `specs/01-product/prd.md` 的「待解决问题」。
-- 不一次性生成大量未经审查的代码；按 `specs/03-execution/tasks.md` 小步执行。
+- 不臆造需求或架构；不确定时登记到 `.agents/specs/01-product/prd.md` 的「待解决问题」。
+- 不一次性生成大量未经审查的代码；按 `.agents/tasks/` 中的任务小步执行。
 - 不绕过质量门禁（Gate）与测试。
 - 不在未更新规格文档的情况下改变对外行为。
 
 ## 6. 完成定义（DoD）
 
 - [ ] 通过类型检查与 Lint
-- [ ] 相关测试通过，并同步 `specs/04-quality/`
-- [ ] 更新 `specs/03-execution/dev-log.md` 与 `.ai/context.md`
-- [ ] `specs/01-product/acceptance-criteria.md` 中的验收项逐条满足
+- [ ] 相关测试通过，并同步 `.agents/specs/04-quality/`
+- [ ] 更新 `.agents/logs/` 与 `.agents/context.md`
+- [ ] `.agents/specs/01-product/acceptance-criteria.md` 中的验收项逐条满足
 
 ## 7. 常用命令
 

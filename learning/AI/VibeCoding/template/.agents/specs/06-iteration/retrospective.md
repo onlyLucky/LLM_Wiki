@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 06 监控与迭代 | 中 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[dev-log.md](../03-execution/dev-log.md) ｜ **下游**：[roadmap.md](roadmap.md)
+**上游**：[logs/README.md](../../logs/README.md) ｜ **下游**：[roadmap.md](roadmap.md)
 
 ## 复盘：[迭代名称] — YYYY-MM-DD
 
@@ -38,8 +38,8 @@
 
 ### 6. 经验沉淀
 
-- 新增决策 → [decisions.md](../../.ai/memory/decisions.md)
-- 新增教训 → [lessons.md](../../.ai/memory/lessons.md)
+- 新增决策 → [decisions.md](../../memory/decisions.md)
+- 新增教训 → [lessons.md](../../memory/lessons.md)
 
 ## 历史复盘索引
 

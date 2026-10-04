@@ -4,9 +4,9 @@
 
 | 阶段 | 优先级 | 状态 | 负责人 | 最后更新 |
 |------|--------|------|--------|----------|
-| 03 开发与执行 | 极高 | 进行中 | [@角色] | YYYY-MM-DD |
+| 03 计划、任务与门禁 | 极高 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](../01-product/prd.md)、[architecture.md](../02-design/architecture.md) ｜ **下游**：`dev-log.md`
+**上游**：[prd.md](../specs/01-product/prd.md)、[architecture.md](../specs/02-design/architecture.md) ｜ **下游**：[template.md](../logs/template.md)
 
 ## 任务状态图例
 
@@ -42,5 +42,5 @@
 ## 拆分原则
 
 - 单个任务应能在 [半天内] 完成，可独立验证
-- 任务粒度对应 `user-stories.md` 的一个故事或一个接口
+- 任务粒度对应 `../specs/01-product/user-stories.md` 的一个故事或一个接口
 - 依赖关系必须显式标注，避免并行冲突

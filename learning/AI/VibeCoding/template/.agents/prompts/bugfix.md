@@ -8,13 +8,13 @@
 |------|------|
 | 现象描述 | [Issue 链接 / 复现步骤] |
 | 相关代码 | [文件路径] |
-| 相关测试 | `specs/04-quality/test-cases.md` |
-| 规则 | `.ai/rules.md` |
+| 相关测试 | `.agents/specs/04-quality/test-cases.md` |
+| 规则 | `.agents/rules.md` |
 
 ## 提示词模板
 
 ```text
-角色：你是本项目的编码 Agent，严格遵守 AGENTS.md 与 .ai/rules.md。
+角色：你是本项目的编码 Agent，严格遵守 AGENTS.md 与 .agents/rules.md。
 
 缺陷：[一句话描述现象]
 复现步骤：
@@ -38,5 +38,5 @@
 ## 完成后检查
 
 - [ ] 新增回归测试并已通过
-- [ ] 根因已记录到 `.ai/memory/lessons.md`
-- [ ] 若涉及契约变更，已同步 `specs/` 文档
+- [ ] 根因已记录到 `.agents/memory/lessons.md`
+- [ ] 若涉及契约变更，已同步 `.agents/specs/` 文档

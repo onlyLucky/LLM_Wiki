@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 06 监控与迭代 | 中 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[dev-log.md](../03-execution/dev-log.md) ｜ **下游**：[roadmap.md](roadmap.md)
+**上游**：[logs/README.md](../../logs/README.md) ｜ **下游**：[roadmap.md](roadmap.md)
 
 ## 约定
 

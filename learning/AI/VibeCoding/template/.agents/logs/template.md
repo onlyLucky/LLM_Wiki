@@ -4,9 +4,9 @@
 
 | 阶段 | 优先级 | 状态 | 负责人 | 最后更新 |
 |------|--------|------|--------|----------|
-| 03 开发与执行 | 高 | 进行中 | [@角色] | YYYY-MM-DD |
+| 03 计划、任务与门禁 | 高 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[tasks.md](tasks.md) ｜ **下游**：[changelog.md](../06-iteration/changelog.md)
+**上游**：[tasks/template.md](../tasks/template.md) ｜ **下游**：[changelog.md](../specs/06-iteration/changelog.md)
 
 ## 日志（倒序，最新在上）
 
@@ -30,4 +30,4 @@
 
 - 一条日志对应一个任务（或一次会话）
 - 只记"发生了什么、为什么"，不复制代码
-- 重要决策同步到 `.ai/memory/decisions.md`，踩坑同步到 `.ai/memory/lessons.md`
+- 重要决策同步到 `../memory/decisions.md`，踩坑同步到 `../memory/lessons.md`

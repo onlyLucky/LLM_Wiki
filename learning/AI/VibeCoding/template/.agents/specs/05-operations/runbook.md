@@ -25,7 +25,7 @@
 2. 查看最近变更：[命令 / 页面]
 3. 快速恢复：[重启 / 回滚命令]
 4. 定位根因：[日志查询命令]
-5. 记录到 [dev-log.md](../03-execution/dev-log.md)
+5. 记录到 [logs/README.md](../../logs/README.md)
 
 ### 2.2 错误率飙升
 

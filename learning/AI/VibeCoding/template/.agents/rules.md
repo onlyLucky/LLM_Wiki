@@ -61,5 +61,5 @@
 ## 6. 上下文管理
 
 - 会话过长时主动压缩上下文，避免"记忆过载"
-- 每完成一个任务更新 `.ai/context.md`
-- 重要决策写入 `.ai/memory/decisions.md`
+- 每完成一个任务更新 `.agents/context.md`
+- 重要决策写入 `.agents/memory/decisions.md`

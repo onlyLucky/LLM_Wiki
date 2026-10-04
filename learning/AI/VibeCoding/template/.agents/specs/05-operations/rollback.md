@@ -48,7 +48,7 @@
 ## 5. 回滚后动作
 
 - [ ] 确认服务恢复正常
-- [ ] 记录事故到 [dev-log.md](../03-execution/dev-log.md) 与 `.ai/memory/lessons.md`
+- [ ] 记录事故到 [logs/README.md](../../logs/README.md) 与 `.agents/memory/lessons.md`
 - [ ] 修复问题后重新走发布流程（不得直接重推同一版本）
 
 ## 6. 演练记录

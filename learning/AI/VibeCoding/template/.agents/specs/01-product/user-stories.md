@@ -1,12 +1,12 @@
 # 用户故事 — [项目名称]
 
-> **给 AI**：本文档把需求拆成"角色—目标—收益"粒度的故事，是任务拆分（`tasks.md`）与测试用例的中间层。实现功能前先确认对应的用户故事与验收标准。
+> **给 AI**：本文档把需求拆成"角色—目标—收益"粒度的故事，是任务拆分（`.agents/tasks/`）与测试用例的中间层。实现功能前先确认对应的用户故事与验收标准。
 
 | 阶段 | 优先级 | 状态 | 负责人 | 最后更新 |
 |------|--------|------|--------|----------|
 | 01 需求与规划 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](prd.md)、[brief.md](brief.md) ｜ **下游**：[acceptance-criteria.md](acceptance-criteria.md)、`../03-execution/tasks.md`
+**上游**：[prd.md](prd.md)、[brief.md](brief.md) ｜ **下游**：[acceptance-criteria.md](acceptance-criteria.md)、[tasks/README.md](../../tasks/README.md)
 
 ## 角色定义
 
