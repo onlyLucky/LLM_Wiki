@@ -43,7 +43,7 @@
 
 ## 5. 禁止事项（MUST NOT）
 
-- 不臆造需求或架构；不确定时登记到 `.agents/specs/01-product/prd.md` 的「待解决问题」。
+- 不臆造需求或架构；不确定时登记到 `.agents/specs/product/prd.md` 的「待解决问题」。
 - 不一次性生成大量未经审查的代码；按 `.agents/tasks/` 中的任务小步执行。
 - 不绕过质量门禁（Gate）与测试。
 - 不在未更新规格文档的情况下改变对外行为。
@@ -51,9 +51,9 @@
 ## 6. 完成定义（DoD）
 
 - [ ] 通过类型检查与 Lint
-- [ ] 相关测试通过，并同步 `.agents/specs/04-quality/`
+- [ ] 相关测试通过，并同步 `.agents/specs/quality/`
 - [ ] 更新 `.agents/logs/` 与 `.agents/context.md`
-- [ ] `.agents/specs/01-product/acceptance-criteria.md` 中的验收项逐条满足
+- [ ] `.agents/specs/product/acceptance-criteria.md` 中的验收项逐条满足
 
 ## 7. 常用命令
 

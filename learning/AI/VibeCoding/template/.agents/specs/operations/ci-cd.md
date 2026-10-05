@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 05 部署与上线 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[test-strategy.md](../04-quality/test-strategy.md) ｜ **下游**：[deployment.md](deployment.md)
+**上游**：[test-strategy.md](../quality/test-strategy.md) ｜ **下游**：[deployment.md](deployment.md)
 
 ## 1. 流水线阶段
 

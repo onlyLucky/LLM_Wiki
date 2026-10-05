@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 03 计划、任务与门禁 | 高 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[tasks/template.md](../tasks/template.md) ｜ **下游**：[changelog.md](../specs/06-iteration/changelog.md)
+**上游**：[tasks/template.md](../tasks/template.md) ｜ **下游**：[changelog.md](../specs/iteration/changelog.md)
 
 ## 日志（倒序，最新在上）
 

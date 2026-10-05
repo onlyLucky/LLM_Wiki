@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 05 部署与上线 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[performance.md](../04-quality/performance.md) ｜ **下游**：[runbook.md](runbook.md)
+**上游**：[performance.md](../quality/performance.md) ｜ **下游**：[runbook.md](runbook.md)
 
 ## 1. 可观测性三支柱
 

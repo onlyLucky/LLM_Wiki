@@ -5,7 +5,7 @@
 
 ## 项目结构
 
-推荐采用根目录入口 + docs/ 分阶段编号 + .agents/ 放 Agent 专用上下文的结构。规格文档统一收在 `.agents/specs/` 下，按阶段编号；实施计划、任务清单与开发日志分别抽到 `.agents/plans/`、`.agents/tasks/`、`.agents/logs/`，每个目录都配一个 README 作为入口。所有文档进 Git，与代码同仓库。
+推荐采用根目录入口 + docs/ 分阶段编号 + .agents/ 放 Agent 专用上下文的结构。规格文档统一收在 `.agents/specs/` 下，按阶段归类；实施计划、任务清单与开发日志分别抽到 `.agents/plans/`、`.agents/tasks/`、`.agents/logs/`，每个目录都配一个 README 作为入口。所有文档进 Git，与代码同仓库。
 
 ```
 project-root/
@@ -33,13 +33,13 @@ project-root/
 │   │   └── template.md           # 日志模版
 │   └── specs/                    # 规格契约层：AI 的单一事实来源
 │       ├── INDEX.md              # 文档总索引：路径、用途、状态、读取优先级
-│       ├── 01-product/           # 阶段一：需求与规划
+│       ├── product/              # 阶段一：需求与规划
 │       │   ├── brief.md          # 项目简报
 │       │   ├── scope.md          # 范围定义
 │       │   ├── prd.md            # 产品需求文档
 │       │   ├── user-stories.md   # 用户故事
 │       │   └── acceptance-criteria.md # 验收标准
-│       ├── 02-design/            # 阶段二：架构与设计
+│       ├── design/               # 阶段二：架构与设计
 │       │   ├── architecture.md   # 技术架构
 │       │   ├── data-model.md     # 数据模型
 │       │   ├── api-contract.md   # 接口契约
@@ -48,21 +48,21 @@ project-root/
 │       │   └── adr/              # 架构决策记录（ADR）
 │       │       ├── 0001-xxx.md   # 架构决策 0001
 │       │       └── 0002-xxx.md   # 架构决策 0002
-│       ├── 03-plan-gate/         # 阶段三：计划、任务与门禁
+│       ├── plan-gate/            # 阶段三：计划、任务与门禁
 │       │   └── quality-gate.md   # 质量门禁（Gate）
-│       ├── 04-quality/           # 阶段四：测试与质量
+│       ├── quality/              # 阶段四：测试与质量
 │       │   ├── test-strategy.md  # 测试策略
 │       │   ├── test-cases.md     # 测试用例
 │       │   ├── acceptance-evidence.md # 验收证据映射
 │       │   ├── security-checklist.md # 安全清单
 │       │   └── performance.md    # 性能报告
-│       ├── 05-operations/        # 阶段五：部署与上线
+│       ├── operations/           # 阶段五：部署与上线
 │       │   ├── deployment.md     # 部署文档
 │       │   ├── ci-cd.md          # CI/CD 说明
 │       │   ├── monitoring.md     # 监控与告警
 │       │   ├── runbook.md        # 运行手册
 │       │   └── rollback.md       # 回滚方案
-│       └── 06-iteration/         # 阶段六：监控与迭代
+│       └── iteration/            # 阶段六：监控与迭代
 │           ├── changelog.md      # 变更记录
 │           ├── roadmap.md        # 路线图
 │           ├── feedback.md       # 用户反馈
@@ -131,7 +131,7 @@ project-root/
 
 先用自然语言向 AI 描述业务目标、用户价值和成功标准。可以借助 AI 进行初步的市场调研或用户需求验证。例如，有开发者先用 AI 抓取社交平台数据、生成问卷，验证了“大学生情绪记录与缓解”是一个真实需求后，才确定产品方向。
 
-   - **模版**：[项目简报](template/.agents/specs/01-product/brief.md)
+   - **模版**：[项目简报](template/.agents/specs/product/brief.md)
    - **要求**：定义问题、目标、用户与成功标准。该层定义不清时，后续全部内容将发生偏离。这是整个项目的“北极星”，AI Agent 在后续所有工作中都会引用它来判断方向是否正确。
 
 #### 撰写 PRD
@@ -139,14 +139,14 @@ project-root/
 在 AI 协助下，将想法整理成正式的 PRD，明确**要解决什么问题、边界在哪里、如何验收**。同时，必须明确**非目标**，防止项目范围蔓延。
 
    - **范围定义**
-     - **模版**：[范围定义](template/.agents/specs/01-product/scope.md)
+     - **模版**：[范围定义](template/.agents/specs/product/scope.md)
      - **要求**：明确范围内事项、范围外事项、技术约束与本轮完成边界，用于控制范围扩张。AI 容易“过度发挥”，范围定义是防止此问题的第一道防线。
    - **产品需求文档**
-     - **模版**：[产品需求文档PRD](template/.agents/specs/01-product/prd.md)
+     - **模版**：[产品需求文档PRD](template/.agents/specs/product/prd.md)
      - **要求**：将产品需求转换为结构化功能描述，明确对象、行为、输入、输出与边界，为后续验收与实现提供对照基线。面向 AI 的 PRD 有一个关键要求：验收标准必须可操作、可验证，禁止“体验良好”“性能优秀”这类无法验证的表述，必须写成“点击X按钮后，出现Y”这种可直接验证的动作-结果对。
      - **给 AI 的 PRD 与给传统工程师的 PRD 的关键差异**：AI 消费的 PRD 应删除商业价值论证、市场规模、KPI 汇报等对代码实现无影响的内容，只保留编码 Agent 写代码需要知道的信息。
    - **验收标准**
-     - **模版**：[验收标准](template/.agents/specs/01-product/acceptance-criteria.md)
+     - **模版**：[验收标准](template/.agents/specs/product/acceptance-criteria.md)
      - **要求**：将目标转换为可判定的验收项，使“已实现”成为可判断命题，为后续测试策略和证据映射提供基线。这是连接“需求”与“测试”的桥梁。
 
 ### 02 技术选型与架构设计
@@ -164,31 +164,31 @@ project-root/
 - **工具链配置**：配置好 AI 编程环境，如 Cursor、Claude Code、GitHub Copilot 等，并引入 Git 进行版本控制，建立分支策略和提交规范。
 
    - **技术架构**
-     - **模版**：[技术架构](template/.agents/specs/02-design/architecture.md)
+     - **模版**：[技术架构](template/.agents/specs/design/architecture.md)
      - **要求**：写清技术栈和选型理由、系统分层、模块划分、目录结构与关键流程。这是整个系统的骨架，新代码要落在既定模块里，架构变更登记到 ADR。
    - **环境与配置**
-     - **模版**：[环境与配置](template/.agents/specs/02-design/environments.md)
+     - **模版**：[环境与配置](template/.agents/specs/design/environments.md)
      - **要求**：列出各运行环境、环境变量与配置方式，说明本地怎么启动。密钥通过密钥管理注入，`.env` 不提交；缺必填变量时启动要快速失败。
 
 #### 用户交互设计
 
 先把界面长什么样、怎么交互定下来，避免开发时每个页面各写一套风格。文档里要写清设计原则、颜色与字体、间距、组件规范和交互细节，颜色和尺寸统一用 token 表达，不要临时自创。
 
-   - **模版**：[UI 设计规范](template/.agents/specs/02-design/design-system.md)
+   - **模版**：[UI 设计规范](template/.agents/specs/design/design-system.md)
    - **要求**：定义设计原则、颜色 / 字体 / 间距 token、组件规范与无障碍要求。写 UI 前先读，颜色和尺寸一律引用这里的 token。
 
 #### 数据库设计
 
 数据库设计要确定数据怎么组织。文档里要包含实体、字段、类型与约束，以及实体之间的关系和级联行为，还要考虑迁移方式和敏感字段的处理。字段命名和类型要统一，改结构时同步更新迁移与回滚方案。
 
-   - **模版**：[数据模型](template/.agents/specs/02-design/data-model.md)
+   - **模版**：[数据模型](template/.agents/specs/design/data-model.md)
    - **要求**：定义实体、字段、关系与约束，说明索引、级联行为和迁移方式。涉及数据读写、迁移或接口设计前先读，保证命名与类型一致。
 
 #### API 设计
 
 API 设计要把前后端（或服务之间）怎么通信定死。文档里要包含通用约定、响应结构、错误码，以及每个接口的入参出参和示例。接口定下来后按契约冻结，改动走评审并同步更新文档。
 
-   - **模版**：[接口契约](template/.agents/specs/02-design/api-contract.md)
+   - **模版**：[接口契约](template/.agents/specs/design/api-contract.md)
    - **要求**：定义通用约定、响应结构、错误码与各接口详情。字段名、类型、错误码以本文档为准，契约冻结后修改必须走评审。
 
 ### 03 计划、任务与门禁
@@ -217,7 +217,7 @@ API 设计要把前后端（或服务之间）怎么通信定死。文档里要�
 
 质量门禁是给整个流程设的硬检查点，用来约束 AI 生成的代码质量。在需求、设计、开发、发布这些关键节点各设一道门，检查项要能直接判断，比如代码是否通过 Lint 和类型检查、关键模块是否经过独立评审、验收证据是否齐全；没通过就不进入下一步，避免 AI 一路生成、没人把关。
 
-   - **模版**：[质量门禁](template/.agents/specs/03-plan-gate/quality-gate.md)
+   - **模版**：[质量门禁](template/.agents/specs/plan-gate/quality-gate.md)
    - **要求**：定义各阶段的检查点与通过标准，作为进入下一阶段的前置条件。检查项要能判断，避免“体验良好”这类模糊表述。
 
 ### 💻 阶段三：AI 辅助开发与迭代（核心编码环节）

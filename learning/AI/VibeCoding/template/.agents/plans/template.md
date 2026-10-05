@@ -1,12 +1,12 @@
 # 实施计划 — [项目名称]
 
-> **给 AI**：本文档定义阶段性交付目标（里程碑）。阶段检查点（Gate）见 [quality-gate.md](../specs/03-plan-gate/quality-gate.md)。
+> **给 AI**：本文档定义阶段性交付目标（里程碑）。阶段检查点（Gate）见 [quality-gate.md](../specs/plan-gate/quality-gate.md)。
 
 | 阶段 | 优先级 | 状态 | 负责人 | 最后更新 |
 |------|--------|------|--------|----------|
 | 03 计划、任务与门禁 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[scope.md](../specs/01-product/scope.md)、[quality-gate.md](../specs/03-plan-gate/quality-gate.md) ｜ **下游**：[deployment.md](../specs/05-operations/deployment.md)
+**上游**：[scope.md](../specs/product/scope.md)、[quality-gate.md](../specs/plan-gate/quality-gate.md) ｜ **下游**：[deployment.md](../specs/operations/deployment.md)
 
 ## 里程碑清单
 

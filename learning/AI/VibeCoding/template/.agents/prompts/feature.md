@@ -6,10 +6,10 @@
 
 | 类型 | 路径 |
 |------|------|
-| 需求 | `.agents/specs/01-product/prd.md` 的 [F-00X] |
-| 验收标准 | `.agents/specs/01-product/acceptance-criteria.md` 的 [AC-00X] |
-| 接口契约 | `.agents/specs/02-design/api-contract.md` |
-| 数据模型 | `.agents/specs/02-design/data-model.md` |
+| 需求 | `.agents/specs/product/prd.md` 的 [F-00X] |
+| 验收标准 | `.agents/specs/product/acceptance-criteria.md` 的 [AC-00X] |
+| 接口契约 | `.agents/specs/design/api-contract.md` |
+| 数据模型 | `.agents/specs/design/data-model.md` |
 | 任务 | `.agents/tasks/` 中当前任务的 [T-00X] |
 | 规则 | `.agents/rules.md` |
 
@@ -39,6 +39,6 @@
 ## 完成后检查
 
 - [ ] 验收标准逐条满足
-- [ ] 测试通过，已更新 `.agents/specs/04-quality/`
+- [ ] 测试通过，已更新 `.agents/specs/quality/`
 - [ ] 已更新 `.agents/context.md` 与 `.agents/logs/`
 - [ ] 无越界改动

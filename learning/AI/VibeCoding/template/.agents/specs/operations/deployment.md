@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 05 部署与上线 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[environments.md](../02-design/environments.md)、[ci-cd.md](ci-cd.md) ｜ **下游**：[rollback.md](rollback.md)、[runbook.md](runbook.md)
+**上游**：[environments.md](../design/environments.md)、[ci-cd.md](ci-cd.md) ｜ **下游**：[rollback.md](rollback.md)、[runbook.md](runbook.md)
 
 ## 1. 部署目标
 

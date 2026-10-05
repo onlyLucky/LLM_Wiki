@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 04 测试与质量 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[acceptance-criteria.md](../01-product/acceptance-criteria.md) ｜ **下游**：[acceptance-evidence.md](acceptance-evidence.md)
+**上游**：[acceptance-criteria.md](../product/acceptance-criteria.md) ｜ **下游**：[acceptance-evidence.md](acceptance-evidence.md)
 
 ## 用例清单
 

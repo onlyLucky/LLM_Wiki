@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 04 测试与质量 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[acceptance-criteria.md](../01-product/acceptance-criteria.md) ｜ **下游**：[monitoring.md](../05-operations/monitoring.md)
+**上游**：[acceptance-criteria.md](../product/acceptance-criteria.md) ｜ **下游**：[monitoring.md](../operations/monitoring.md)
 
 ## 1. 性能指标（SLO）
 

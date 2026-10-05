@@ -8,7 +8,7 @@
 |------|------|
 | 现象描述 | [Issue 链接 / 复现步骤] |
 | 相关代码 | [文件路径] |
-| 相关测试 | `.agents/specs/04-quality/test-cases.md` |
+| 相关测试 | `.agents/specs/quality/test-cases.md` |
 | 规则 | `.agents/rules.md` |
 
 ## 提示词模板

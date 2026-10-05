@@ -39,8 +39,8 @@ project-root/
 
 - 规格总索引：[.agents/specs/INDEX.md](.agents/specs/INDEX.md)
 - AI 协作入口：[AGENTS.md](AGENTS.md)
-- 技术架构：[.agents/specs/02-design/architecture.md](.agents/specs/02-design/architecture.md)
-- 变更记录：[.agents/specs/06-iteration/changelog.md](.agents/specs/06-iteration/changelog.md)
+- 技术架构：[.agents/specs/design/architecture.md](.agents/specs/design/architecture.md)
+- 变更记录：[.agents/specs/iteration/changelog.md](.agents/specs/iteration/changelog.md)
 
 ## 贡献指南
 

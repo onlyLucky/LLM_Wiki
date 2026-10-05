@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 03 计划、任务与门禁 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](../01-product/prd.md)、[acceptance-criteria.md](../01-product/acceptance-criteria.md) ｜ **下游**：[plans/template.md](../../plans/template.md)、[tasks/template.md](../../tasks/template.md)
+**上游**：[prd.md](../product/prd.md)、[acceptance-criteria.md](../product/acceptance-criteria.md) ｜ **下游**：[plans/template.md](../../plans/template.md)、[tasks/template.md](../../tasks/template.md)
 
 ## 门禁总览
 

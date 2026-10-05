@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 04 测试与质量 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[architecture.md](../02-design/architecture.md) ｜ **下游**：[deployment.md](../05-operations/deployment.md)
+**上游**：[architecture.md](../design/architecture.md) ｜ **下游**：[deployment.md](../operations/deployment.md)
 
 ## 1. 凭证与密钥
 

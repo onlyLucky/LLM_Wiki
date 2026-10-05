@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 02 架构与设计 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](../01-product/prd.md) ｜ **下游**：[data-model.md](data-model.md)、[api-contract.md](api-contract.md)
+**上游**：[prd.md](../product/prd.md) ｜ **下游**：[data-model.md](data-model.md)、[api-contract.md](api-contract.md)
 
 ## 1. 技术栈
 

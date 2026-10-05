@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 02 架构与设计 | 中高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[architecture.md](architecture.md) ｜ **下游**：[deployment.md](../05-operations/deployment.md)
+**上游**：[architecture.md](architecture.md) ｜ **下游**：[deployment.md](../operations/deployment.md)
 
 ## 1. 环境清单
 

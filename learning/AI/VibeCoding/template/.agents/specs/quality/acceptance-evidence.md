@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 04 测试与质量 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[acceptance-criteria.md](../01-product/acceptance-criteria.md)、[test-cases.md](test-cases.md) ｜ **下游**：[deployment.md](../05-operations/deployment.md)
+**上游**：[acceptance-criteria.md](../product/acceptance-criteria.md)、[test-cases.md](test-cases.md) ｜ **下游**：[deployment.md](../operations/deployment.md)
 
 ## 证据映射表
 

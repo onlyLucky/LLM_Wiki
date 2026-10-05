@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 01 需求与规划 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](prd.md)、[user-stories.md](user-stories.md) ｜ **下游**：`../04-quality/test-cases.md`
+**上游**：[prd.md](prd.md)、[user-stories.md](user-stories.md) ｜ **下游**：`../quality/test-cases.md`
 
 ## 功能验收项
 

@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 06 监控与迭代 | 中 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[feedback.md](feedback.md)、[retrospective.md](retrospective.md) ｜ **下游**：[prd.md](../01-product/prd.md)
+**上游**：[feedback.md](feedback.md)、[retrospective.md](retrospective.md) ｜ **下游**：[prd.md](../product/prd.md)
 
 ## 1. 当前方向
 

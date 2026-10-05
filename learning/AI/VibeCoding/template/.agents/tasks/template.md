@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 03 计划、任务与门禁 | 极高 | 进行中 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](../specs/01-product/prd.md)、[architecture.md](../specs/02-design/architecture.md) ｜ **下游**：[template.md](../logs/template.md)
+**上游**：[prd.md](../specs/product/prd.md)、[architecture.md](../specs/design/architecture.md) ｜ **下游**：[template.md](../logs/template.md)
 
 ## 任务状态图例
 
@@ -42,5 +42,5 @@
 ## 拆分原则
 
 - 单个任务应能在 [半天内] 完成，可独立验证
-- 任务粒度对应 `../specs/01-product/user-stories.md` 的一个故事或一个接口
+- 任务粒度对应 `../specs/product/user-stories.md` 的一个故事或一个接口
 - 依赖关系必须显式标注，避免并行冲突

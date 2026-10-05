@@ -6,7 +6,7 @@
 |------|--------|------|--------|----------|
 | 02 架构与设计 | 高 | 草稿 | [@角色] | YYYY-MM-DD |
 
-**上游**：[prd.md](../01-product/prd.md) ｜ **下游**：[api-contract.md](api-contract.md)
+**上游**：[prd.md](../product/prd.md) ｜ **下游**：[api-contract.md](api-contract.md)
 
 ## 1. 实体关系图
 
