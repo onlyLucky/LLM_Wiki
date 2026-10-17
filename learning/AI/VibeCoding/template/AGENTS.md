@@ -17,7 +17,8 @@
 3. `.agents/rules.md` — 编码 / 提交 / 测试规则
 4. `.agents/specs/INDEX.md` — 文档总索引
 5. 与任务相关的 spec（按 `INDEX.md` 中的读取优先级）
-6. `.agents/memory/decisions.md`、`.agents/memory/lessons.md`
+6. `.agents/prompts/`、`.agents/skills/` — 按任务类型选用对应提示词与技能
+7. `.agents/memory/decisions.md`、`.agents/memory/lessons.md`
 
 ## 3. 目录导航
 
@@ -27,6 +28,9 @@
 | `.agents/plans/` | 实施计划（里程碑），README 为入口 |
 | `.agents/tasks/` | 任务清单，开发时的唯一任务来源 |
 | `.agents/logs/` | 开发日志 |
+| `.agents/prompts/` | 可复用提示词（feature / bugfix / review），README 为入口 |
+| `.agents/skills/` | 可复用技能与脚本说明 |
+| `.agents/memory/` | 长期记忆（决策、教训） |
 | `.agents/` | Agent 专用上下文（状态、规则、提示词、记忆） |
 | `src/` | 源码 |
 | `tests/` | 测试代码 |

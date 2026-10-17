@@ -37,8 +37,11 @@ project-root/
 
 ## 文档导航
 
-- 规格总索引：[.agents/specs/INDEX.md](.agents/specs/INDEX.md)
 - AI 协作入口：[AGENTS.md](AGENTS.md)
+- 规格总索引：[.agents/specs/INDEX.md](.agents/specs/INDEX.md)
+- 项目状态摘要：[.agents/context.md](.agents/context.md)
+- 编码与提交规则：[.agents/rules.md](.agents/rules.md)
+- 实施计划：[.agents/plans/README.md](.agents/plans/README.md) ｜ 任务清单：[.agents/tasks/README.md](.agents/tasks/README.md) ｜ 开发日志：[.agents/logs/README.md](.agents/logs/README.md)
 - 技术架构：[.agents/specs/design/architecture.md](.agents/specs/design/architecture.md)
 - 变更记录：[.agents/specs/iteration/changelog.md](.agents/specs/iteration/changelog.md)
 
