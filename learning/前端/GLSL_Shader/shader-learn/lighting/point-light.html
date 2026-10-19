@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>点光源 · 光照渲染 9/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 光照渲染</a>
+    <div class="title-wrap">
+      <h1>点光源</h1>
+      <span class="badge advanced">高级</span>
+      <span class="part-name">光照渲染 · 09 / 15</span>
+    </div>
+    <nav class="pager"><a href="phong-specular.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">9 / 15</span><a href="rim-light.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>这个教程在方向光的基础上加入了「位置」和「距离衰减」，核心部分是这几行：</p>
+<pre><code>vec3 l = normalize(lightPos - pos);
+float att = 1.0 / (1.0 + 3.0 * dot(lightPos-pos, lightPos-pos));
+float diff = max(dot(n, l), 0.0) * att;</code></pre>
+<p>下面拆解每个概念。</p>
+<hr>
+<h2>方向光 vs 点光源</h2>
+<p>方向光只有方向，没有位置，画面里每个像素收到光的方向都一样。</p>
+<p>点光源有位置。每个像素到光源的方向不同，而且越远的像素收到的光越弱——就像蜡烛，靠近的地方亮，远处就暗下去了。</p>
+<hr>
+<h2>光照方向随位置变化</h2>
+<pre><code>vec3 pos = vec3(p, 0.0);       // 当前像素的 3D 位置
+vec3 l = normalize(lightPos - pos);  // 从像素指向光源的方向</code></pre>
+<p><code>normalize</code> 把向量缩成长度为 1，只保留方向信息。每个像素算出来的 <code>l</code> 都不一样，这就是点光源和方向光最本质的区别。</p>
+<hr>
+<h2>距离衰减</h2>
+<p>光源距离越远，光照越弱。用距离的平方来控制衰减：</p>
+<pre><code>float att = 1.0 / (1.0 + 3.0 * dot(lightPos-pos, lightPos-pos));</code></pre>
+<p><code>dot(v, v)</code> 等于向量长度的平方，省去了开根号的计算。<code>1.0 / (1.0 + 3d²)</code> 的形状是：距离 0 时 att=1（100% 亮），距离越大 att 越趋向 0。系数 <code>3.0</code> 控制衰减速度，越大衰减越快。</p>
+<hr>
+<h2>组合漫反射和衰减</h2>
+<pre><code>float diff = max(dot(n, l), 0.0) * att;
+vec3 col = baseCol * (0.1 + diff * 2.0);</code></pre>
+<p><code>0.1</code> 是环境光底色（让背光面不完全黑掉），<code>diff * 2.0</code> 是放大后的漫反射贡献。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td>把 <code>lightPos</code> 的 x/y 改成 <code>-0.3, 0.2</code></td><td>光源移到左侧，球体受光面改变</td></tr><tr><td>把衰减系数 <code>3.0</code> 改为 <code>10.0</code></td><td>衰减更快，球体变暗</td></tr><tr><td>把衰减系数改为 <code>0.5</code></td><td>衰减更慢，光照范围更广</td></tr><tr><td>把 <code>0.1</code> 改为 <code>0.4</code></td><td>环境光增强，背光面也变亮</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>练习代码中已经计算了光照方向 <code>l</code>，但缺少距离衰减。补全 <code>att</code> 的计算，并把它乘进 <code>diff</code>，让球体呈现随距离变暗的点光源效果。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>float att = 1.0 / (1.0 + 3.0 * dot(lightPos-pos, lightPos-pos));
+float diff = max(dot(n, l), 0.0) * att;
+vec3 col = baseCol * (0.1 + diff * 2.0);</code></pre>
+<p>起始代码里 <code>diff = max(dot(n, l), 0.0)</code>，没有乘衰减，相当于光源无限强、距离无影响，整个球面受光均匀。</p>
+<p>加上 <code>att</code> 后，离光源近的像素 att 接近 1（亮度几乎不损失），远的像素 att 趋近 0（几乎不受光），球体就产生了真实的明暗过渡。</p>
+<p><code>dot(lightPos-pos, lightPos-pos)</code> 是距离平方，比 <code>length()</code> 少一次开根号运算，在 GPU 上效率更高。</p>
+<p>试着把光源位置 z 分量从 <code>0.6</code> 改成 <code>0.1</code>，让光源更贴近球面，观察衰减形状的变化。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/point-light.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 vUv;
+float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d&gt;0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 lightPos=vec3(0.3,0.4,0.6);vec3 pos=vec3(p,0.0);vec3 l=normalize(lightPos-pos);float att=1.0/(1.0+3.0*dot(lightPos-pos,lightPos-pos));float diff=max(dot(n,l),0.0)*att;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.1+diff*2.0);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">光照渲染 · 09 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/point-light.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 lightPos=vec3(0.3,0.4,0.6);vec3 pos=vec3(p,0.0);vec3 l=normalize(lightPos-pos);float att=1.0/(1.0+3.0*dot(lightPos-pos,lightPos-pos));float diff=max(dot(n,l),0.0)*att;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.1+diff*2.0);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 lightPos=vec3(0.3,0.4,0.6);vec3 pos=vec3(p,0.0);vec3 l=normalize(lightPos-pos);// TODO: 计算衰减 att 并乘到 diff\nfloat diff=max(dot(n,l),0.0);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.1+diff*2.0);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
+        exerciseSrc: '../glsl/lighting/point-light.frag',
+        referenceSrc: '../glsl/lighting/point-light.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

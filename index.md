@@ -95,7 +95,7 @@ wiki/
 <!-- 学习笔记 -->
 - [[learning/内容创作全流程SOP_从0到1到100]] — 内容创作全流程SOP：选题策划→大纲设计→文案撰写→脚本分镜→画面生成→话本稿→多平台输出 | 2026-06-10
 - [[learning/计算机图形学/GAMES101/README]] — GAMES101 现代计算机图形学课程笔记：8 章完整笔记（闫令琪 | UCSB） | 2026-07-05
-- [[learning/前端/GLSL_Shader/README]] — GLSL Shader 三天实战课程（全部完成）：三天从原生 WebGL2/GLSL 语法到 SDF·噪声·调色视觉算法再到 Three.js ShaderMaterial 实战，20 篇讲义 + 15 demo + 9 作业（含答案）+ 12 张 SVG 图解，npm run dev 即学 | 2026-09-20
+- [[learning/前端/GLSL_Shader/README]] — GLSL Shader 三天实战课程（全部完成）：三天从原生 WebGL2/GLSL 语法到 SDF·噪声·调色视觉算法再到 Three.js ShaderMaterial 实战，20 篇讲义 + 15 demo + 9 作业（含答案）+ 12 张 SVG 图解，另含 shader-learn 案例训练场（整理自 shader-learn.com 六大部分 104 个 fragment shader 案例：教程介绍/参考答案/正确预览/可编辑实时渲染的当前预览），npm run dev 即学 | 2026-10-17
 
 ## 📝 Content Creation
 <!-- 内容创作中心 -->

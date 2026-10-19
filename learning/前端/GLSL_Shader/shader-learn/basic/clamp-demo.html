@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Clamp 演示 · 基础入门 6/30 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 基础入门</a>
+    <div class="title-wrap">
+      <h1>Clamp 演示</h1>
+      <span class="badge beginner">入门</span>
+      <span class="part-name">基础入门 · 06 / 30</span>
+    </div>
+    <nav class="pager"><a href="circle-outline.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">6 / 30</span><a href="color-mixing.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>颜色的每个通道必须在 0.0 到 1.0 之间，超出范围会被截断。<code>clamp</code> 函数显式地把值限制在指定范围内。</p>
+<hr>
+<h2>clamp 是什么</h2>
+<p><code>clamp(x, min, max)</code> 把 <code>x</code> 限制在 <code>[min, max]</code> 范围内：</p>
+<ul><li><code>x &lt; min</code> → 返回 <code>min</code></li><li><code>x &gt; max</code> → 返回 <code>max</code></li><li>否则 → 返回 <code>x</code> 本身</li></ul>
+<pre><code>float t = clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0);</code></pre>
+<p>这行先把 <code>vUv.x</code> 缩放偏移，让渐变只发生在画面中间部分，再用 <code>clamp</code> 确保值不超界。</p>
+<hr>
+<h2>不用 clamp 会发生什么</h2>
+<p><code>vUv.x * 1.6 - 0.3</code> 的范围是 -0.3 到 1.3，超出了颜色的 0~1 范围：</p>
+<ul><li>左侧约 20% 会是负数 → GPU 截断到 0（黑色平台）</li><li>右侧约 20% 超过 1 → GPU 截断到 1（白色平台）</li></ul>
+<p>加上 <code>clamp</code> 之后，边界处的值被明确控制，渐变在特定位置开始和结束。</p>
+<hr>
+<h2>练习</h2>
+<p>练习代码里 <code>t = 0.0</code>（全黑）。用 <code>clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0)</code> 计算 t，观察渐变的起始和结束位置。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>float t = clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0);</code></pre>
+<p><code>vUv.x * 1.6 - 0.3</code>：缩放因子 1.6 让渐变更陡，偏移 -0.3 让它稍微往左移。</p>
+<p><code>clamp(..., 0.0, 1.0)</code> 把小于 0 的值拉回 0（左侧纯深色），把大于 1 的值压到 1（右侧纯亮色）。</p>
+<p>试试把 <code>1.6</code> 改成 <code>3.0</code>，渐变过渡区域会变得更窄，更像 step。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/clamp-demo.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 vUv;
+
+void main() {
+    float t = clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0);
+    vec3 c = mix(vec3(0.1), vec3(0.2, 0.85, 1.0), t);
+    gl_FragColor = vec4(c, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">基础入门 · 06 / 30</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/clamp-demo.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float t = clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0);\n    vec3 c = mix(vec3(0.1), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 用 clamp(vUv.x * 1.6 - 0.3, 0.0, 1.0) 计算 t\n    float t = 0.0;\n    vec3 c = mix(vec3(0.1), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
+        exerciseSrc: '../glsl/basic/clamp-demo.frag',
+        referenceSrc: '../glsl/basic/clamp-demo.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>法线可视化 · 光照渲染 6/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 光照渲染</a>
+    <div class="title-wrap">
+      <h1>法线可视化</h1>
+      <span class="badge intermediate">进阶</span>
+      <span class="part-name">光照渲染 · 06 / 15</span>
+    </div>
+    <nav class="pager"><a href="lambert-sphere.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">6 / 15</span><a href="phong-lighting.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>把法线方向直接显示成颜色，核心就是这一行：</p>
+<pre><code>gl_FragColor = vec4(n * 0.5 + 0.5, 1.0);</code></pre>
+<p>下面拆解它。</p>
+<hr>
+<h2>什么是法线</h2>
+<p>法线是一个三维向量，表示表面上某个点"朝哪个方向看"。它就像一根垂直插在表面上的箭头。在球体上，中心点的法线朝正前方，边缘的法线朝向侧面。</p>
+<p>每个分量（X、Y、Z）的范围是 -1.0 到 1.0：X 正方向朝右，Y 正方向朝上，Z 正方向朝向摄像机。</p>
+<hr>
+<h2>为什么要 * 0.5 + 0.5</h2>
+<p>法线的每个分量在 -1.0 到 1.0 之间，但颜色只能用 0.0 到 1.0（即 0% 到 100%）表示。</p>
+<p><code>* 0.5 + 0.5</code> 把范围从 <code>[-1, 1]</code> 重新映射到 <code>[0, 1]</code>：</p>
+<ul><li>朝左（-1）→ 0%（黑）</li><li>正中（0）→ 50%（中灰）</li><li>朝右（+1）→ 100%（亮）</li></ul>
+<p>这样三个轴分别对应红（X）、绿（Y）、蓝（Z）通道，球体就显示出彩色渐变。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td><code>n * 0.5 + 0.5</code> 改为 <code>abs(n)</code></td><td>取绝对值，只剩正值，颜色对称分布</td></tr><tr><td>改为 <code>vec4(vec3(n.z * 0.5 + 0.5), 1.0)</code></td><td>只看 Z 轴，球体中心最亮、边缘变暗</td></tr><tr><td>改为 <code>vec4(vec3(n.x * 0.5 + 0.5), 1.0)</code></td><td>只看 X 轴，左暗右亮的灰度图</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>当前练习区球体是全黑的，补全 TODO，让球体显示出法线可视化颜色。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>vec3 c = n * 0.5 + 0.5;
+gl_FragColor = vec4(c, 1.0);</code></pre>
+<p>初始状态：<code>c</code> 固定是 <code>vec3(0.0)</code>，所以球全黑。</p>
+<p>改动：把法线 <code>n</code> 乘以 0.5 再加 0.5，把范围从 <code>[-1, 1]</code> 压缩到 <code>[0, 1]</code>，这样才能作为颜色输出。每个轴对应一种颜色通道（X→红，Y→绿，Z→蓝）。</p>
+<p>试着把 <code>* 0.5 + 0.5</code> 改成 <code>* 0.5 + 0.3</code>，看看整体颜色会变深还是变浅。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/normal-visualizer.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 vUv;
+float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d&gt;0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);gl_FragColor=vec4(n*0.5+0.5,1.0);}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">光照渲染 · 06 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/normal-visualizer.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);gl_FragColor=vec4(n*0.5+0.5,1.0);}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);// TODO: 输出 n 的可视化颜色\nvec3 c=vec3(0.0);gl_FragColor=vec4(c,1.0);}\n",
+        exerciseSrc: '../glsl/lighting/normal-visualizer.frag',
+        referenceSrc: '../glsl/lighting/normal-visualizer.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

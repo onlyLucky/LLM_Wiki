@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>中心圆遮罩 · 数学公式 2/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 数学公式</a>
+    <div class="title-wrap">
+      <h1>中心圆遮罩</h1>
+      <span class="badge beginner">入门</span>
+      <span class="part-name">数学公式 · 02 / 15</span>
+    </div>
+    <nav class="pager"><a href="angle-visualizer.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">2 / 15</span><a href="clamp-saturate.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>用距离和 <code>step</code> 判断每个像素是否在圆内：</p>
+<pre><code>float dist = distance(vUv, center);
+float inside = step(dist, radius);</code></pre>
+<p>下面拆解它。</p>
+<hr>
+<h2>distance 计算距离</h2>
+<p><code>distance(a, b)</code> 返回两点的直线距离。</p>
+<p><code>distance(vUv, vec2(0.5, 0.5))</code> 就是每个像素到画面中心的距离：</p>
+<ul><li>中心像素 distance = 0</li><li>半径 0.3 处的像素 distance = 0.3</li><li>角落附近 distance ≈ 0.7</li></ul>
+<hr>
+<h2>step 生成硬边遮罩</h2>
+<p><code>step(edge, x)</code> 的判断规则是：x &lt; edge 返回 0，x ≥ edge 返回 1。</p>
+<p>这里用的是 <code>step(dist, radius)</code> ——注意参数顺序：</p>
+<ul><li>dist &lt; radius → step 返回 1（在圆内）</li><li>dist ≥ radius → step 返回 0（在圆外）</li></ul>
+<p>结果是一个硬边圆形遮罩：圆内为 1，圆外为 0。</p>
+<hr>
+<h2>mix 把遮罩变成颜色</h2>
+<pre><code>vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);</code></pre>
+<ul><li><code>inside = 1</code>（圆内）→ 显示暖黄色 <code>vec3(1.0, 0.8, 0.2)</code></li><li><code>inside = 0</code>（圆外）→ 显示黑色 <code>vec3(0.0)</code></li></ul>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td>把 <code>radius</code> 从 <code>0.3</code> 改成 <code>0.15</code></td><td>圆变小</td></tr><tr><td>把 <code>center</code> 改成 <code>vec2(0.3, 0.7)</code></td><td>圆心移到左上角</td></tr><tr><td>把 <code>step(dist, radius)</code> 改成 <code>1.0 - step(dist, radius)</code></td><td>圆内变黑，圆外变黄</td></tr><tr><td>用 <code>smoothstep(radius - 0.01, radius + 0.01, dist)</code> 替换</td><td>边缘变成柔和过渡</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>定义中心点和半径，用 <code>distance</code> 计算距离，用 <code>step</code> 生成遮罩，再用 <code>mix</code> 混合颜色后输出。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>vec2 center = vec2(0.5, 0.5);
+float radius = 0.3;
+float dist = distance(vUv, center);
+float inside = step(dist, radius);
+vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);
+gl_FragColor = vec4(color, 1.0);</code></pre>
+<p><code>distance(vUv, center)</code> 算出每个像素到中心的距离。<code>step(dist, radius)</code> 判断该距离是否在半径以内——小于 radius 返回 1（圆内），大于等于返回 0（圆外）。<code>mix</code> 用这个 0/1 遮罩在黑色和黄色之间切换。</p>
+<p>练习是空的 <code>main()</code>，需要从头补全六行代码。</p>
+<p>试着把 <code>step</code> 换成 <code>1.0 - smoothstep(0.29, 0.31, dist)</code> 看看边缘软化的效果。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/centered-circle-mask.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 vUv;
+
+void main() {
+    vec2 center = vec2(0.5, 0.5);
+    float radius = 0.3;
+    float dist = distance(vUv, center);
+    float inside = step(dist, radius);
+    vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);
+    gl_FragColor = vec4(color, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">数学公式 · 02 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/centered-circle-mask.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 center = vec2(0.5, 0.5);\n    float radius = 0.3;\n    float dist = distance(vUv, center);\n    float inside = step(dist, radius);\n    vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义中心点 center（0.5, 0.5）\n    // TODO: 计算当前像素与中心的距离 dist\n    // TODO: 使用 step() 判断是否在圆形内，生成遮罩值 inside\n    // TODO: 使用 mix() 混合颜色\n    // TODO: 输出最终颜色\n}\n",
+        exerciseSrc: '../glsl/math/centered-circle-mask.frag',
+        referenceSrc: '../glsl/math/centered-circle-mask.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

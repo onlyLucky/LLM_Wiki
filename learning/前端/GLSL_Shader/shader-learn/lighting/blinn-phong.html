@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Blinn-Phong · 光照渲染 2/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 光照渲染</a>
+    <div class="title-wrap">
+      <h1>Blinn-Phong</h1>
+      <span class="badge advanced">高级</span>
+      <span class="part-name">光照渲染 · 02 / 15</span>
+    </div>
+    <nav class="pager"><a href="ambient-diffuse.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">2 / 15</span><a href="fresnel.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>Phong 高光需要计算反射向量，Blinn-Phong 换了一种更快的方式——只用半向量：</p>
+<pre><code>vec3 hV = normalize(l + v);
+float spec = pow(max(dot(n, hV), 0.0), 48.0);</code></pre>
+<p>下面拆解半向量是什么，以及它和 Phong 的区别。</p>
+<hr>
+<h2>半向量是什么</h2>
+<p><code>l</code> 是指向光源的方向，<code>v</code> 是指向相机的方向。把两者相加再归一化，得到的就是半向量——它指向 <code>l</code> 和 <code>v</code> 正中间的方向。</p>
+<pre><code>vec3 hV = normalize(l + v);</code></pre>
+<p>Phong 高光判断"反射光是否打到眼睛"（<code>dot(r, v)</code>），Blinn-Phong 改为判断"法线是否对准半向量"（<code>dot(n, hV)</code>）。两者视觉效果相近，但半向量计算量更小，也是实时渲染中更常用的方案。</p>
+<hr>
+<h2>pow 控制高光大小</h2>
+<pre><code>float spec = pow(max(dot(n, hV), 0.0), 48.0);</code></pre>
+<p><code>dot(n, hV)</code> 的结果在 0–1 之间（0% 表示法线和半向量垂直，100% 表示完全对齐）。用 <code>pow</code> 做指数运算：指数越大，高光越小越集中，像镜面；指数越小，高光越宽越散，像磨砂材质。</p>
+<p><code>48.0</code> 是一个中等偏高的光泽度，高光区域较小但明显。</p>
+<hr>
+<h2>漫反射 + 高光合成</h2>
+<pre><code>float diff = max(dot(n, l), 0.0);
+vec3 col = baseCol * (0.12 + 0.88 * diff) + vec3(1.0) * spec;</code></pre>
+<p><code>baseCol * (0.12 + 0.88 * diff)</code> 是漫反射部分（底色 + 受光面亮度），<code>vec3(1.0) * spec</code> 是白色高光叠加在上面。两者相加就是完整的 Blinn-Phong 光照结果。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td><code>48.0</code> 改为 <code>8.0</code></td><td>高光变大变散，像磨砂球</td></tr><tr><td><code>48.0</code> 改为 <code>128.0</code></td><td>高光缩小成一个亮点，像玻璃球</td></tr><tr><td><code>vec3(1.0) * spec</code> 改为 <code>vec3(1.0, 0.8, 0.4) * spec</code></td><td>高光变成暖黄色</td></tr><tr><td>光源方向 <code>vec3(-0.4, 0.6, 0.7)</code> 改为 <code>vec3(0.8, 0.2, 0.7)</code></td><td>高光移到球体右侧</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>把 <code>hV = v</code> 替换为正确的半向量计算 <code>hV = normalize(l + v)</code>，让球体出现白色高光亮斑。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>vec3 hV = normalize(l + v);</code></pre>
+<p>初始状态：<code>hV = v</code>（用视线方向替代半向量），导致 <code>dot(n, hV)</code> 的计算结果不对，高光出现在球体正中心而不是受光面。</p>
+<p>改动：<code>normalize(l + v)</code> 把光源方向和视线方向相加后归一化，得到真正的半向量。此时 <code>dot(n, hV)</code> 在法线对准半向量的区域（即高光应出现的地方）最大，<code>pow</code> 之后形成集中的白色亮斑。</p>
+<p>试着把 <code>48.0</code> 改为 <code>200.0</code>，感受极高光泽度下高光集中成一个针尖大小的亮点。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/blinn-phong.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 vUv;
+
+float sphereSDF(vec2 p, float r) {
+    return length(p) - r;
+}
+
+vec3 estimateNormal(vec2 p) {
+    float e = 0.001;
+    float d = sphereSDF(p, 0.32);
+    vec2 n = vec2(
+        sphereSDF(p + vec2(e, 0.0), 0.32) - d,
+        sphereSDF(p + vec2(0.0, e), 0.32) - d
+    );
+    return normalize(vec3(n, 0.35));
+}
+
+void main() {
+    vec2 p = vUv - 0.5;
+    float d = sphereSDF(p, 0.32);
+
+    vec3 bg = vec3(0.05, 0.06, 0.08);
+    if (d &gt; 0.0) {
+        gl_FragColor = vec4(bg, 1.0);
+        return;
+    }
+
+    vec3 n = estimateNormal(p);
+    vec3 l = normalize(vec3(-0.4, 0.6, 0.7));
+    vec3 v = normalize(vec3(0.0, 0.0, 1.0));
+
+    // Blinn-Phong: 用半向量替代反射向量
+    vec3 hV = normalize(l + v);
+
+    float diff = max(dot(n, l), 0.0);
+    float spec = pow(max(dot(n, hV), 0.0), 48.0);
+
+    vec3 baseCol = vec3(0.25, 0.9, 0.85);
+    vec3 col = baseCol * (0.12 + 0.88 * diff) + vec3(1.0) * spec;
+
+    gl_FragColor = vec4(mix(bg, col, 1.0), 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">光照渲染 · 02 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/blinn-phong.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nfloat sphereSDF(vec2 p, float r) {\n    return length(p) - r;\n}\n\nvec3 estimateNormal(vec2 p) {\n    float e = 0.001;\n    float d = sphereSDF(p, 0.32);\n    vec2 n = vec2(\n        sphereSDF(p + vec2(e, 0.0), 0.32) - d,\n        sphereSDF(p + vec2(0.0, e), 0.32) - d\n    );\n    return normalize(vec3(n, 0.35));\n}\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = sphereSDF(p, 0.32);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    if (d > 0.0) {\n        gl_FragColor = vec4(bg, 1.0);\n        return;\n    }\n\n    vec3 n = estimateNormal(p);\n    vec3 l = normalize(vec3(-0.4, 0.6, 0.7));\n    vec3 v = normalize(vec3(0.0, 0.0, 1.0));\n\n    // Blinn-Phong: 用半向量替代反射向量\n    vec3 hV = normalize(l + v);\n\n    float diff = max(dot(n, l), 0.0);\n    float spec = pow(max(dot(n, hV), 0.0), 48.0);\n\n    vec3 baseCol = vec3(0.25, 0.9, 0.85);\n    vec3 col = baseCol * (0.12 + 0.88 * diff) + vec3(1.0) * spec;\n\n    gl_FragColor = vec4(mix(bg, col, 1.0), 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nfloat sphereSDF(vec2 p, float r) {\n    return length(p) - r;\n}\n\nvec3 estimateNormal(vec2 p) {\n    float e = 0.001;\n    float d = sphereSDF(p, 0.32);\n    vec2 n = vec2(\n        sphereSDF(p + vec2(e, 0.0), 0.32) - d,\n        sphereSDF(p + vec2(0.0, e), 0.32) - d\n    );\n    return normalize(vec3(n, 0.35));\n}\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = sphereSDF(p, 0.32);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    if (d > 0.0) {\n        gl_FragColor = vec4(bg, 1.0);\n        return;\n    }\n\n    vec3 n = estimateNormal(p);\n    vec3 l = normalize(vec3(-0.4, 0.6, 0.7));\n    vec3 v = normalize(vec3(0.0, 0.0, 1.0));\n\n    // TODO: 计算半向量 hV = normalize(l + v)\n    vec3 hV = v;\n\n    float diff = max(dot(n, l), 0.0);\n    float spec = pow(max(dot(n, hV), 0.0), 48.0);\n\n    vec3 baseCol = vec3(0.25, 0.9, 0.85);\n    vec3 col = baseCol * (0.12 + 0.88 * diff) + vec3(1.0) * spec;\n\n    gl_FragColor = vec4(mix(bg, col, 1.0), 1.0);\n}\n",
+        exerciseSrc: '../glsl/lighting/blinn-phong.frag',
+        referenceSrc: '../glsl/lighting/blinn-phong.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

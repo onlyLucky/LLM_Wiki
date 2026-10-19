@@ -1,0 +1,986 @@
+/* ============================================================================
+   shader-learn · 案例训练场 —— 全站样式（暗色主题）
+   ----------------------------------------------------------------------------
+   严格按 shadcn/ui（https://ui.shadcn.com/）的默认主题（zinc 基底）实现：
+   · 令牌 = Tailwind zinc 色阶：
+       background #09090b / foreground #fafafa / card #18181b
+       muted·accent #27272a / muted-foreground #a1a1aa
+       border white/10 · input white/15 · ring #71717a
+   · 圆角刻度 = shadcn --radius: 0.625rem（sm=radius-4, md=radius-2, lg=radius, xl=radius+4）
+   · Tabs（官方 new-york 源码规格）：
+       TabsList  inline-flex w-fit h-9 rounded-lg p-[3px] bg-muted text-muted-foreground
+       TabsTrigger rounded-md border-transparent px-2 py-1 text-sm font-medium
+                   未激活 text-muted-foreground，hover:text-foreground
+                   激活 dark: border-input + bg-input/30 + shadow-sm + text-foreground
+   · Button：outline（dark: bg-input/30 border-input）/ ghost（hover:bg-accent）
+   · 仅暗色主题，无切换。
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- 令牌 */
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+               'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas,
+               'Liberation Mono', monospace;
+
+  /* shadcn --radius: 0.625rem 与其刻度 */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);   /* rounded-sm = 6px  */
+  --radius-md: calc(var(--radius) - 2px);   /* rounded-md = 8px  */
+  --radius-lg: var(--radius);               /* rounded-lg = 10px */
+  --radius-xl: calc(var(--radius) + 4px);   /* rounded-xl = 14px */
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.18s;
+
+  color-scheme: dark;
+
+  /* ------- zinc 暗色令牌 ------- */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --muted: #27272a;             /* zinc-800，即 shadcn dark 的 muted/accent/secondary */
+  --accent: #27272a;
+  --muted-foreground: #a1a1aa;  /* zinc-400 */
+  --subtle: #71717a;            /* zinc-500 */
+  --border: rgba(255, 255, 255, 0.10);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #71717a;
+
+  /* 语义色（仅用于 Badge / 状态点 / 代码高亮，UI 控件保持单色） */
+  --success: #34d399;
+  --info: #38bdf8;
+  --warning: #fbbf24;
+  --danger: #fb7185;
+
+  --code-bg: #09090b;
+  --code-border: rgba(255, 255, 255, 0.10);
+
+  /* GLSL 高亮（one-dark 系） */
+  --tok-comment: #6b7280;
+  --tok-preproc: #c084fc;
+  --tok-key: #fb923c;
+  --tok-type: #38bdf8;
+  --tok-qual: #c084fc;
+  --tok-builtin: #34d399;
+  --tok-func: #60a5fa;
+  --tok-num: #fbbf24;
+
+  /* 画布 HUD（毛玻璃 chips，zinc） */
+  --hud-bg: rgba(9, 9, 11, 0.72);
+  --hud-border: rgba(255, 255, 255, 0.12);
+  --hud-ink: #e4e4e7;
+  --hud-ink-dim: #a1a1aa;
+  --hud-active: rgba(255, 255, 255, 0.10);
+
+  /* shadcn shadow-xs / shadow-sm / shadow-md（dark 下纯黑） */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.65);
+
+  --canvas-pad: #09090b;   /* 画框衬底 */
+}
+
+/* ---------------------------------------------------------------- 基础 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; }
+
+::selection { background: rgba(255, 255, 255, 0.16); color: var(--foreground); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--subtle); background-clip: content-box; }
+
+/* shadcn focus ring：ring-[3px] ring-ring/50，无 outline */
+:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+.lc { display: inline-block; vertical-align: -0.16em; flex: none; }
+
+/* shadcn Button：outline / ghost / icon 尺寸（h-8 / size-sm） */
+.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--input) 30%, transparent);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
+  transition: background-color var(--dur) ease, border-color var(--dur) ease,
+              color var(--dur) ease, box-shadow var(--dur) ease;
+}
+.btn:hover { background: var(--accent); border-color: var(--input); }
+.btn--ghost { border-color: transparent; background: transparent; color: var(--muted-foreground); box-shadow: none; }
+.btn--ghost:hover { background: var(--accent); color: var(--foreground); border-color: transparent; }
+.btn--icon { width: 32px; padding: 0; }
+
+/* ---------------------------------------------------------------- 顶栏 */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  flex: none;
+  animation: rise 0.6s var(--ease-out) both;
+}
+.topbar .back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--input) 30%, transparent);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
+  transition: background-color var(--dur) ease, border-color var(--dur) ease, color var(--dur) ease;
+}
+.topbar .back:hover { background: var(--accent); }
+
+.topbar .title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.topbar h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar h1::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 0.75em;
+  vertical-align: 0.14em;
+  background: var(--foreground);
+  border-radius: 50%;
+  animation: breathe-dot 3.2s ease-in-out infinite;
+}
+.topbar .part-name {
+  font-size: 12px;
+  color: var(--subtle);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* shadcn Badge（outline 变体 + 语义色） */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border: 1px solid var(--input);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex: none;
+}
+.badge.beginner { color: var(--success); border-color: color-mix(in srgb, var(--success) 35%, transparent); background: color-mix(in srgb, var(--success) 10%, transparent); }
+.badge.intermediate { color: var(--info); border-color: color-mix(in srgb, var(--info) 35%, transparent); background: color-mix(in srgb, var(--info) 10%, transparent); }
+.badge.advanced { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, transparent); background: color-mix(in srgb, var(--danger) 10%, transparent); }
+
+/* 上一个 / 下一个 */
+.pager { display: flex; align-items: center; gap: 6px; font-size: 13px; flex: none; }
+.pager a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--input) 30%, transparent);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: var(--shadow-xs);
+  transition: background-color var(--dur) ease, border-color var(--dur) ease, color var(--dur) ease;
+}
+.pager a:hover:not(.disabled) { background: var(--accent); }
+.pager a svg { transition: transform 0.25s var(--ease-out); }
+.pager a:hover:not(.disabled) svg:first-child { transform: translateX(-2px); }
+.pager a:last-child:hover:not(.disabled) svg { transform: translateX(2px); }
+.pager a.disabled { color: var(--subtle); background: transparent; border-color: var(--border); pointer-events: none; box-shadow: none; }
+.pager .pos {
+  color: var(--subtle);
+  min-width: 44px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- 主布局 */
+/* 桌面三列：面板 | 拖拽分隔条 | 舞台。面板 ≥320px、舞台列 ≥420px（JS 同步钳制） */
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) 8px minmax(420px, 1fr);
+  gap: 8px;
+  padding: 12px 16px 14px;
+  min-height: 0;
+}
+
+/* 可拖拽分隔条：hover / 拖动时高亮抓手 */
+.splitter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: col-resize;
+  touch-action: none;
+  border-radius: 999px;
+  min-height: 40px;
+}
+.splitter::before {
+  content: '';
+  width: 3px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background-color var(--dur) ease, height var(--dur) ease;
+}
+.splitter:hover,
+.splitter.dragging { background: color-mix(in srgb, var(--accent) 55%, transparent); }
+.splitter:hover::before,
+.splitter.dragging::before { background: var(--primary); height: 64px; }
+body.splitting { cursor: col-resize; user-select: none; -webkit-user-select: none; }
+body.splitting iframe { pointer-events: none; }
+
+/* ---------------------------------------------------------------- 左面板 */
+/* shadcn Card：bg-card rounded-xl border shadow-sm */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  animation: rise 0.6s var(--ease-out) 0.06s both;
+}
+
+/* shadcn Tabs（官方规格）：
+   TabsList = inline-flex w-fit h-9 rounded-lg p-[3px] bg-muted text-muted-foreground
+   TabsTrigger = h-[calc(100%-1px)] rounded-md border-transparent px-2 text-sm font-medium
+                 激活：border-input bg-input/30 shadow-sm text-foreground */
+.tabs {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 36px;
+  margin: 10px 10px 0;
+  padding: 3px;
+  background: var(--muted);
+  border-radius: var(--radius-lg);
+  color: var(--muted-foreground);
+  flex: none;
+}
+.tab {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 29px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur) ease, background-color var(--dur) ease,
+              border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+.tab:hover { color: var(--foreground); }
+.tab.active {
+  background: color-mix(in srgb, var(--input) 30%, transparent);
+  border-color: var(--input);
+  color: var(--foreground);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 24px;
+  min-height: 0;
+  flex: 1;
+}
+.tab-body.hidden { display: none; }
+
+/* ---------------------------------------------------------------- 教程排版 */
+.readme h2, .readme h3, .readme h4 {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 20px 0 8px;
+}
+.readme h2 { font-size: 16px; }
+.readme h3 { font-size: 14.5px; }
+.readme h4 { font-size: 13.5px; }
+.readme > :first-child { margin-top: 0; }
+.readme p { margin: 10px 0; color: var(--muted-foreground); }
+.readme strong { color: var(--foreground); font-weight: 600; }
+.readme em { color: var(--info); font-style: normal; }
+/* shadcn 行内代码：bg-muted rounded-sm，无边框 */
+.readme code {
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--foreground);
+}
+.readme pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+.readme pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.75;
+  white-space: pre;
+}
+.readme ul, .readme ol { margin: 10px 0 10px 20px; color: var(--muted-foreground); }
+.readme li { margin: 4px 0; }
+.readme li::marker { color: var(--subtle); }
+.readme hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 22px 0;
+}
+.readme table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  width: 100%;
+  font-size: 12.5px;
+}
+.readme th, .readme td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; color: var(--muted-foreground); }
+.readme th { color: var(--foreground); font-weight: 500; background: var(--muted); }
+.readme tbody tr:hover td { background: color-mix(in srgb, var(--accent) 55%, transparent); }
+.readme a { color: var(--info); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.readme blockquote {
+  border-left: 2px solid var(--input);
+  padding: 6px 14px;
+  margin: 12px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: color-mix(in srgb, var(--muted) 55%, transparent);
+  color: var(--muted-foreground);
+}
+
+/* 参考答案 */
+.answer-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.answer-src {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.answer-code {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin: 12px 0 4px;
+}
+.answer-code code {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--foreground);
+  white-space: pre;
+  font-family: var(--font-mono);
+  tab-size: 4;
+}
+
+/* ---------------------------------------------------------------- GLSL 高亮 */
+.tok-comment  { color: var(--tok-comment); font-style: italic; }
+.tok-preproc { color: var(--tok-preproc); }
+.tok-key     { color: var(--tok-key); }
+.tok-type    { color: var(--tok-type); }
+.tok-qual    { color: var(--tok-qual); }
+.tok-builtin { color: var(--tok-builtin); }
+.tok-func    { color: var(--tok-func); }
+.tok-num     { color: var(--tok-num); }
+
+/* 源文件提示条 */
+.file-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 7px 16px 9px;
+  font-size: 12px;
+  color: var(--subtle);
+  border-top: 1px solid var(--border);
+  flex: none;
+}
+.file-hint svg { color: var(--muted-foreground); }
+.file-hint code {
+  color: var(--foreground);
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  font-size: 11.5px;
+}
+
+/* ---------------------------------------------------------------- 舞台 */
+.stage-col {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  min-width: 0;
+  min-height: 0;
+  animation: rise 0.6s var(--ease-out) 0.12s both;
+}
+
+/* shadcn Card：bg-card rounded-xl border shadow-sm */
+.preview {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.preview.ready { opacity: 1; transform: none; }
+
+/* 舞台卡片占满整列的高度与宽度（拖动分隔条立刻看到它变大/变小）。
+   画布保持 1:1 的绘制缓冲，object-fit: contain 在卡片内居中，
+   衬底 --canvas-pad 与画布同色，不留突兀黑边 */
+.preview.stage {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.canvas-wrap {
+  position: absolute;
+  inset: 0;
+  background: var(--canvas-pad);
+}
+.preview canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  object-fit: contain;
+}
+
+/* ---- HUD：上下两条，flex 排布，永不互相压盖 / 溢出 ---- */
+.stage-hud {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease 0.25s;
+}
+.stage-hud--top { top: 0; justify-content: space-between; }
+.stage-hud--bottom { bottom: 0; justify-content: space-between; }
+.stage-hud > * { pointer-events: auto; }
+.preview.ready .stage-hud { opacity: 1; }
+
+/* HUD chip */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--hud-border);
+  border-radius: 999px;
+  background: var(--hud-bg);
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  color: var(--hud-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  user-select: none;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--shadow-xs);
+}
+/* 只有 HUD 的直接子项可以按百分比收窄；百分比放在 auto 宽的 flex 容器里
+   会形成循环依赖，把 chip 压到只剩「144」这类截断文字。 */
+.stage-hud > .tag { max-width: 46%; overflow: hidden; text-overflow: ellipsis; }
+.tag em { font-style: normal; color: var(--hud-ink); }
+.tag--idx { color: var(--hud-ink); }
+
+.stage-hud-right { display: flex; align-items: center; gap: 6px; flex: none; }
+
+/* 画布上的分段控件 = Tabs（同左栏规格，加毛玻璃） */
+.seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+  padding: 3px;
+  border: 1px solid var(--hud-border);
+  border-radius: var(--radius-lg);
+  background: var(--hud-bg);
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  color: var(--hud-ink-dim);
+  box-shadow: var(--shadow-xs);
+  max-width: 100%;
+  overflow: hidden;
+}
+.mode-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  color: var(--hud-ink-dim);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur) ease, color var(--dur) ease,
+              border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+.mode-btn:hover { color: var(--hud-ink); }
+.mode-btn.active {
+  background: var(--hud-active);
+  border-color: var(--hud-border);
+  color: var(--hud-ink);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 编译状态点（LIVE / ERROR） */
+.st-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--success) 70%, transparent);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  flex: none;
+}
+.tag--status.err .st-dot {
+  background: var(--danger);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--danger) 70%, transparent);
+}
+.tag--status.err { color: var(--danger); }
+.st-label { letter-spacing: 0.1em; font-size: 10px; font-family: var(--font-mono); }
+
+/* 重置按钮（仅当前预览模式出现） */
+.tag--reset {
+  height: 26px;
+  padding: 0 11px;
+  cursor: pointer;
+  color: var(--hud-ink);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  letter-spacing: 0;
+  transition: color var(--dur) ease, border-color var(--dur) ease, background-color var(--dur) ease;
+}
+.tag--reset:hover { background: color-mix(in srgb, var(--hud-active) 80%, transparent); color: var(--foreground); }
+.preview.mode-reference .tag--reset { display: none; }
+.preview.mode-reference .tag--status { display: none; }
+
+/* ---------------------------------------------------------------- 门户 */
+.portal {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3.4rem 2rem 5rem;
+  width: 100%;
+  position: relative;
+}
+.portal .kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 14px;
+}
+.portal h1 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+.portal .lede {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.9;
+  max-width: 68ch;
+  color: var(--muted-foreground);
+}
+.portal .lede a { color: var(--info); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.portal .lede-list {
+  margin-top: 12px;
+  padding: 0;
+  list-style: none;
+  max-width: 78ch;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--muted-foreground);
+}
+.portal .lede-list li { position: relative; padding-left: 18px; margin-top: 7px; }
+.portal .lede-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.82em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--subtle);
+}
+.portal .lede-list code {
+  color: var(--foreground);
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  font-size: 0.86em;
+}
+
+.portal > *, .part-page > * { position: relative; }
+
+/* shadcn Card 网格 */
+.parts-grid {
+  margin-top: 2.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+.part-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 20px 22px 17px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.25s var(--ease-out), background-color 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
+}
+.part-card:hover {
+  border-color: var(--input);
+  background: color-mix(in srgb, var(--accent) 45%, var(--card));
+  box-shadow: var(--shadow-md);
+}
+.part-card .no {
+  position: absolute;
+  right: 16px;
+  top: 6px;
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.05);
+  transition: color 0.25s ease;
+  pointer-events: none;
+}
+.part-card:hover .no { color: rgba(255, 255, 255, 0.09); }
+.part-card .icon { margin-bottom: 12px; color: var(--muted-foreground); }
+.part-card .icon svg { display: block; transition: transform 0.35s var(--ease-out), color 0.25s ease; }
+.part-card:hover .icon svg { transform: translateY(-3px); color: var(--foreground); }
+.part-card h2 { font-size: 15px; font-weight: 600; color: var(--foreground); letter-spacing: -0.01em; }
+.part-card .desc { font-size: 13px; color: var(--muted-foreground); margin-top: 8px; line-height: 1.75; min-height: 40px; }
+.part-card .meta {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.part-card .meta .free { color: var(--subtle); margin-left: 10px; }
+
+/* ---------------------------------------------------------------- 部分索引 */
+.part-page { max-width: 960px; margin: 0 auto; padding: 2.6rem 2rem 5rem; width: 100%; position: relative; }
+.part-page .crumb { font-size: 12px; color: var(--subtle); }
+.part-page .crumb a { color: var(--muted-foreground); text-decoration: none; transition: color var(--dur) ease; }
+.part-page .crumb a:hover { color: var(--foreground); }
+.part-page .crumb svg, .topbar .back svg { vertical-align: -2px; }
+.part-page h1 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  margin-top: 12px;
+}
+.part-page .h1-icon { display: inline-flex; margin-right: 12px; color: var(--muted-foreground); vertical-align: -3px; }
+.part-page .lede { font-size: 13px; color: var(--muted-foreground); margin-top: 10px; }
+.part-page .lede code {
+  color: var(--foreground);
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  font-size: 0.86em;
+}
+
+/* 列表行：hover = bg-accent（shadcn list 行为） */
+.lesson-row {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr auto;
+  gap: 2px 14px;
+  align-items: center;
+  padding: 11px 12px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+.lesson-row:hover { background: color-mix(in srgb, var(--accent) 70%, transparent); }
+.lesson-row .idx { font-size: 12px; color: var(--subtle); font-variant-numeric: tabular-nums; }
+.lesson-row:hover .idx { color: var(--foreground); }
+.lesson-row .name { font-size: 14px; font-weight: 500; color: var(--foreground); }
+.lesson-row .desc { grid-column: 2; font-size: 12px; color: var(--subtle); line-height: 1.6; }
+.lesson-row .diff {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  border: 1px solid var(--input);
+  border-radius: 999px;
+  padding: 0 9px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.lesson-row .diff.beginner { color: var(--success); border-color: color-mix(in srgb, var(--success) 35%, transparent); }
+.lesson-row .diff.intermediate { color: var(--info); border-color: color-mix(in srgb, var(--info) 35%, transparent); }
+.lesson-row .diff.advanced { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, transparent); }
+
+.footnote {
+  margin-top: 3.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--subtle);
+}
+.footnote a { color: var(--muted-foreground); text-decoration: none; border-bottom: 1px solid var(--border); transition: color var(--dur) ease; }
+.footnote a:hover { color: var(--foreground); }
+.footnote code {
+  color: var(--foreground);
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  font-size: 0.86em;
+}
+
+/* ---------------------------------------------------------------- 动画 */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes breathe-dot {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+.portal > *, .part-page > * { animation: rise 0.6s var(--ease-out) both; }
+.portal > *:nth-child(2), .part-page > *:nth-child(2) { animation-delay: 0.06s; }
+.portal > *:nth-child(3), .part-page > *:nth-child(3) { animation-delay: 0.12s; }
+.portal > *:nth-child(4), .part-page > *:nth-child(4) { animation-delay: 0.18s; }
+.portal > *:nth-child(5), .part-page > *:nth-child(5) { animation-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .portal > *, .part-page > *, .topbar, .panel, .stage-col { animation: none !important; }
+  .preview { opacity: 1; transform: none; transition: none; }
+  .stage-hud { opacity: 1; transition: none; }
+  .topbar h1::after { animation: none; }
+}
+
+/* ---------------------------------------------------------------- 窄屏 ≤1020
+   平板与手机同一套「三 Tab」布局：教程介绍 / 参考答案 / 运行效果；
+   桌面（>1020）保持左面板 + 右舞台双栏 + 可拖拽分隔条 */
+.tab--stage { display: none; }
+.splitter { display: block; }
+
+@media (max-width: 1020px) {
+  .tab--stage { display: inline-flex; }
+  .splitter { display: none; }
+
+  /* 单列满宽贴边（与桌面占满行为一致，不再 560 居中留大白边）。
+     行高默认 stretch 拉伸占满整个可用高度 */
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  /* 阅读视图（教程介绍 / 参考答案）：面板占满整列高度，
+     正文在卡片内部滚动；舞台隐藏 */
+  .layout .stage-col { display: none; }
+
+  /* 运行视图：面板内容体隐藏（Tabs 栏保留作返回导航），
+     舞台占满剩余的整个高度与宽度（与桌面一致）。
+     Tabs 栏同为满宽，与舞台边缘对齐 */
+  .layout.mode-stage { display: flex; flex-direction: column; }
+  .layout.mode-stage .panel {
+    width: 100%;
+    flex: none;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+  .layout.mode-stage .tab-body { display: none; }
+  .layout.mode-stage .stage-col {
+    display: block;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+  .layout.mode-stage .preview.stage {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    min-height: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  /* HUD：顶部 = 左「正确/当前预览」+ 右操作区（LIVE/重置，脚本移入）；
+     底部只剩 u_time */
+  .stage-hud { padding: 8px; gap: 6px; }
+  .stage-hud--top .tag--idx { display: none; }
+  .stage-hud--top .seg { display: inline-flex; }
+  .tag { height: 24px; padding: 0 9px; font-size: 10px; max-width: 44%; }
+  .seg { height: 32px; padding: 2px; }
+  .mode-btn { height: 26px; padding: 0 11px; font-size: 12px; }
+  .tag--fps { display: none; }
+  .tag--reset { height: 24px; padding: 0 10px; font-size: 11.5px; }
+
+  .topbar { flex-wrap: wrap; gap: 10px; }
+}
+
+/* ---------------------------------------------------------------- 手机 ≤640
+   在三 Tab 布局之上做紧凑化：两行顶栏、更小的字号与间距 */
+@media (max-width: 640px) {
+  body { font-size: 13.5px; }
+
+  /* 两行顶栏：① 返回 · 标题  ② 上一个 / 进度 / 下一个 */
+  .topbar { padding: 8px 12px; gap: 8px; row-gap: 6px; }
+  .topbar .back { order: 0; height: 30px; padding: 0 10px; font-size: 12px; }
+  .topbar .title-wrap { order: 1; flex: 1 1 auto; min-width: 0; gap: 8px; }
+  .topbar h1 { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar .part-name { display: none; }
+  .pager { order: 3; width: 100%; justify-content: space-between; gap: 8px; }
+  .pager a { height: 30px; padding: 0 9px; font-size: 12px; }
+  .pager .pos { min-width: 38px; }
+
+  .layout { padding: 10px 10px 12px; }
+
+  .panel { border-radius: var(--radius-lg); }
+  .tab-body { padding: 12px 14px 18px; }
+  .tabs { margin: 8px 8px 0; height: 34px; }
+  .tab { height: 27px; font-size: 12.5px; gap: 5px; padding: 0 10px; }
+  .readme pre code, .answer-code code { font-size: 11.5px; }
+  .file-hint { padding: 7px 12px 9px; font-size: 11px; line-height: 1.6; }
+}

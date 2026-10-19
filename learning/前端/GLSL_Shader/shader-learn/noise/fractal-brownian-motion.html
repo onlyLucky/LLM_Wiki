@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>分形布朗运动 (FBM) · 噪声函数 5/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 噪声函数</a>
+    <div class="title-wrap">
+      <h1>分形布朗运动 (FBM)</h1>
+      <span class="badge intermediate">进阶</span>
+      <span class="part-name">噪声函数 · 05 / 15</span>
+    </div>
+    <nav class="pager"><a href="fbm.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">5 / 15</span><a href="hash-grid-noise.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>单层噪声太均匀——缺少细节。FBM 把多层噪声叠加起来，每层频率翻倍、振幅减半，结果既有大范围的起伏，也有细粒度的纹理：</p>
+<pre><code>for (int i = 0; i &lt; octaves; i++) {
+    value += amplitude * noise(st * frequency);
+    frequency *= 2.0;
+    amplitude *= 0.5;
+}</code></pre>
+<hr>
+<h2>倍频程（Octaves）是什么</h2>
+<p>每「层」叫一个倍频程（octave）。第一层是低频的大块噪声（提供整体形状），第二层频率翻倍振幅减半（添加中等细节），以此类推。叠加的层数越多，细节越丰富——但超过 6 层之后效果通常没有明显提升。</p>
+<hr>
+<h2>频率翻倍、振幅减半</h2>
+<pre><code>第1层: 频率×1, 振幅×0.5  → 大块，贡献多
+第2层: 频率×2, 振幅×0.25 → 中块，贡献较少
+第3层: 频率×4, 振幅×0.125 → 细节，贡献更少</code></pre>
+<p>振幅按 0.5 的幂次衰减（1/2, 1/4, 1/8 ...），理论上无限叠加的总和收敛，不会溢出 1.0。</p>
+<hr>
+<h2>画面里三列对比</h2>
+<p>左列 1 个倍频程——平滑的大块，像地形的高度图轮廓。中列 3 个倍频程——加入了中等细节。右列 6 个倍频程——细节最丰富，像真实的地形或云层截面。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td><code>int octaves = 4</code> 改为 <code>1</code></td><td>只有粗粒度的大块噪声</td></tr><tr><td><code>int octaves = 4</code> 改为 <code>8</code></td><td>极细的高频细节，但肉眼已很难辨识差异</td></tr><tr><td><code>amplitude *= 0.5</code> 改为 <code>amplitude *= 0.7</code></td><td>高层振幅衰减变慢，细节贡献增大，对比度更高</td></tr><tr><td><code>uv * 3.0</code> 改为 <code>uv * 6.0</code></td><td>整体频率翻倍，纹理变细</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>尝试把 <code>int octaves = 4</code> 分别改为 <code>1</code>、<code>3</code> 和 <code>6</code>，观察每个值下画面细节的变化，理解倍频程数量对 FBM 外观的影响。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>int octaves = 4;  // 改为 1、3、6 观察差异</code></pre>
+<p>1 个倍频程：只有一层平滑噪声，类似基础值噪声，没有细节。</p>
+<p>3 个倍频程：加入了中频细节，形状开始有复杂感，像浓缩的云层或柔和的地形。</p>
+<p>6 个倍频程：细节丰富到接近自然界的复杂度，微小的纹理让整体更真实。</p>
+<p>关键规律：每增加一个倍频程，贡献的振幅是上一层的一半，新增的视觉复杂度在逐渐降低。超过 6–8 层后，增加更多层的效果几乎不可见。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/fractal-brownian-motion.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">// 分形布朗运动
+// 教程ID: fractal-brownian-motion
+
+precision mediump float;
+
+uniform vec2 u_resolution; // 画布尺寸
+uniform float u_time; // 时间（秒）
+
+// 伪随机数生成函数
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
+// 值噪声函数
+float noise(vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+
+    // 四个角的随机值
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+
+    // 平滑插值
+    vec2 u = smoothstep(0.0, 1.0, f);
+
+    // 混合4个角的值
+    return mix(
+        mix(a, b, u.x),
+        mix(c, d, u.x),
+        u.y
+    );
+}
+
+// 分形布朗运动
+float fbm(vec2 st, int octaves) {
+    float value = 0.0;
+    float amplitude = 0.5;
+    float frequency = 1.0;
+
+    // 累加多个不同频率和振幅的噪声
+    for(int i = 0; i &lt; 10; i ++ ) {
+        if (i &gt;= octaves)break;
+
+        value += amplitude * noise(st * frequency);
+
+        // 每次迭代，频率加倍，振幅减半
+        frequency *= 2.0;
+        amplitude *= 0.5;
+    }
+
+    return value;
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+
+    // 坐标缩放
+    vec2 pos = uv * 3.0;
+
+    // 添加时间动画
+    pos.x += u_time * 0.1;
+
+    // 显示不同数量倍频的FBM效果
+    vec3 color;
+
+    if (uv.x &lt; 0.33) {
+        // 1倍频
+        color = vec3(fbm(pos, 1));
+    } else if (uv.x &lt; 0.66) {
+        // 3倍频
+        color = vec3(fbm(pos, 3));
+    } else {
+        // 6倍频
+        color = vec3(fbm(pos, 6));
+    }
+
+    // 添加分隔线
+    if (abs(uv.x - 0.33) &lt; 0.002 || abs(uv.x - 0.66) &lt; 0.002) {
+        color = vec3(1.0, 0.0, 0.0);
+    }
+
+    // 添加颜色
+    color = mix(
+        vec3(0.2, 0.1, 0.4),
+        vec3(0.8, 0.7, 0.0),
+        color
+    );
+
+    gl_FragColor = vec4(color, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">噪声函数 · 05 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/fractal-brownian-motion.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "// 分形布朗运动\n// 教程ID: fractal-brownian-motion\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 伪随机数生成函数\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\n// 值噪声函数\nfloat noise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机值\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    // 混合4个角的值\n    return mix(\n        mix(a, b, u.x),\n        mix(c, d, u.x),\n        u.y\n    );\n}\n\n// 分形布朗运动\nfloat fbm(vec2 st, int octaves) {\n    float value = 0.0;\n    float amplitude = 0.5;\n    float frequency = 1.0;\n\n    // 累加多个不同频率和振幅的噪声\n    for(int i = 0; i < 10; i ++ ) {\n        if (i >= octaves)break;\n\n        value += amplitude * noise(st * frequency);\n\n        // 每次迭代，频率加倍，振幅减半\n        frequency *= 2.0;\n        amplitude *= 0.5;\n    }\n\n    return value;\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 坐标缩放\n    vec2 pos = uv * 3.0;\n\n    // 添加时间动画\n    pos.x += u_time * 0.1;\n\n    // 显示不同数量倍频的FBM效果\n    vec3 color;\n\n    if (uv.x < 0.33) {\n        // 1倍频\n        color = vec3(fbm(pos, 1));\n    } else if (uv.x < 0.66) {\n        // 3倍频\n        color = vec3(fbm(pos, 3));\n    } else {\n        // 6倍频\n        color = vec3(fbm(pos, 6));\n    }\n\n    // 添加分隔线\n    if (abs(uv.x - 0.33) < 0.002 || abs(uv.x - 0.66) < 0.002) {\n        color = vec3(1.0, 0.0, 0.0);\n    }\n\n    // 添加颜色\n    color = mix(\n        vec3(0.2, 0.1, 0.4),\n        vec3(0.8, 0.7, 0.0),\n        color\n    );\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "// 分形布朗运动（练习版）\n// 教程ID: fractal-brownian-motion\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\nfloat noise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\nfloat fbm(vec2 st, int octaves) {\n    float value = 0.0;\n    float amplitude = 0.5;\n    float frequency = 1.0;\n\n    for (int i = 0; i < 10; i++) {\n        if (i >= octaves) break;\n        value += amplitude * noise(st * frequency);\n        frequency *= 2.0;\n        amplitude *= 0.5;\n    }\n\n    return value;\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    vec2 pos = uv * 3.0;\n    pos.x += u_time * 0.1;\n\n    // TODO: 修改 octaves（1/3/6）观察细节层次变化\n    int octaves = 4;\n    float n = fbm(pos, octaves);\n\n    vec3 color = mix(vec3(0.2, 0.1, 0.4), vec3(0.8, 0.7, 0.0), n);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseSrc: '../glsl/noise/fractal-brownian-motion.frag',
+        referenceSrc: '../glsl/noise/fractal-brownian-motion.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

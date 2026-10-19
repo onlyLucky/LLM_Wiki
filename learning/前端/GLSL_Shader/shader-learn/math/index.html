@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>数学公式 · 15 个案例 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <div class="part-page">
+    <div class="crumb"><a href="../index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回案例训练场</a> / 数学公式</div>
+    <h1><span class="h1-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 7V4H6l6 8-6 8h12v-3"/></svg></span>数学公式</h1>
+    <p class="lede">掌握图形编程中的数学函数和坐标变换 · 共 15 个案例，建议按顺序推进：先读教程介绍，再修改该案例的 <code>.frag</code> 练习文件，切到「当前预览」与「正确预览」对照，改到一致即过关。</p>
+    <a class="lesson-row" href="angle-visualizer.html">
+      <span class="idx">01</span>
+      <span class="name">角度可视化</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="centered-circle-mask.html">
+      <span class="idx">02</span>
+      <span class="name">中心圆遮罩</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">使用 distance() 创建一个以画布中心为圆心的遮罩区域。</span>
+    </a>
+    <a class="lesson-row" href="clamp-saturate.html">
+      <span class="idx">03</span>
+      <span class="name">Clamp 与饱和</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="coordinate-transformation.html">
+      <span class="idx">04</span>
+      <span class="name">坐标变换</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">学习2D坐标变换的基本原理，包括旋转、缩放和重复图案的创建</span>
+    </a>
+    <a class="lesson-row" href="distance-field-rect.html">
+      <span class="idx">05</span>
+      <span class="name">SDF 矩形</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="modulo-wrap.html">
+      <span class="idx">06</span>
+      <span class="name">取模循环</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="remap.html">
+      <span class="idx">07</span>
+      <span class="name">Remap 函数</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">实现 remap() 辅助函数，用于区间映射。</span>
+    </a>
+    <a class="lesson-row" href="rotate2d.html">
+      <span class="idx">08</span>
+      <span class="name">二维旋转矩阵</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">使用二维旋转矩阵旋转坐标。</span>
+    </a>
+    <a class="lesson-row" href="rounded-rect.html">
+      <span class="idx">09</span>
+      <span class="name">圆角矩形</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="simple-fractal.html">
+      <span class="idx">10</span>
+      <span class="name">简单分形</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">学习创建简单的分形图案，理解递归和自相似的概念在着色器中的应用。</span>
+    </a>
+    <a class="lesson-row" href="sin-cos-curve.html">
+      <span class="idx">11</span>
+      <span class="name">Sin/Cos 曲线</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="sine-wave.html">
+      <span class="idx">12</span>
+      <span class="name">正弦波动画</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">学习使用sin函数创建波形效果，理解频率、振幅和相位的概念。</span>
+    </a>
+    <a class="lesson-row" href="smooth-min.html">
+      <span class="idx">13</span>
+      <span class="name">平滑最小值</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="smoothstep-basics.html">
+      <span class="idx">14</span>
+      <span class="name">Smoothstep 基础</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习着色器中常用的数学基础积木。</span>
+    </a>
+    <a class="lesson-row" href="smoothstep-edge-fade.html">
+      <span class="idx">15</span>
+      <span class="name">柔边渐隐</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">使用 smoothstep() 实现图形边缘的渐隐过渡，对比 step()。</span>
+    </a>
+    <div class="footnote">
+      返回：<a href="../index.html">案例训练场</a> ·
+      <a href="../../index.html">课程门户</a> · 内容整理自 <a href="https://www.shader-learn.com/zh/learn" target="_blank" rel="noopener">shader-learn.com</a> 的「数学公式」部分
+    </div>
+  </div>
+</body>
+</html>

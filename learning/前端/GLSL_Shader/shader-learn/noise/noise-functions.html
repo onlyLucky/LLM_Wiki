@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>噪声函数 · 噪声函数 9/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 噪声函数</a>
+    <div class="title-wrap">
+      <h1>噪声函数</h1>
+      <span class="badge intermediate">进阶</span>
+      <span class="part-name">噪声函数 · 09 / 15</span>
+    </div>
+    <nav class="pager"><a href="noise-color-map.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">9 / 15</span><a href="noise-texture.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>程序化噪声的核心是「随机但连续」——相邻的像素值接近，整体有平滑的起伏。值噪声（Value Noise）是实现这一点的最基础方法：</p>
+<pre><code>vec2 u = f * f * (3.0 - 2.0 * f);
+return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);</code></pre>
+<hr>
+<h2>值噪声是怎么工作的</h2>
+<p>把平面分成均匀的格子，每个格点（整数坐标）分配一个伪随机值。当前像素落在某个格子里，取格子四个角的随机值，用平滑曲线在它们之间插值——这就是值噪声。</p>
+<pre><code>(i, j+1) --- (i+1, j+1)
+    |    pixel    |
+(i, j)   --- (i+1, j)</code></pre>
+<p><code>floor(st)</code> 取格点（整数部分），<code>fract(st)</code> 取像素在格子内的位置（0–1）。</p>
+<hr>
+<h2>为什么用 f*f*(3-2f) 而不用直接插值</h2>
+<p>直接用 <code>f</code>（线性插值）会在格点处产生可见的折痕，因为导数不连续。</p>
+<p><code>f * f * (3.0 - 2.0 * f)</code> 是「平滑阶跃函数」（smoothstep 的多项式等价），它在 0 和 1 处导数都是 0，过渡非常平滑，不会出现折痕。这是值噪声的关键。</p>
+<hr>
+<h2>画面里有三种噪声对比</h2>
+<ul><li><strong>左侧</strong>：随机噪声（<code>random(pos * 10.0)</code>）——像素之间完全独立，看起来像电视雪花</li><li><strong>中间</strong>：值噪声（<code>valueNoise(pos)</code>）——平滑连续的斑块，相邻像素相关</li><li><strong>右侧</strong>：梯度噪声（<code>perlinNoise(pos)</code>）——比值噪声更自然，对比度更均匀</li></ul>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td><code>pos * 5.0</code> 改为 <code>pos * 10.0</code></td><td>噪声频率翻倍，斑块变小</td></tr><tr><td><code>pos * 5.0</code> 改为 <code>pos * 2.0</code></td><td>噪声频率减半，斑块变大</td></tr><tr><td><code>u_time * 0.5</code> 改为 <code>u_time * 2.0</code></td><td>噪声流动速度加快</td></tr><tr><td>把 <code>f*f*(3.0-2.0*f)</code> 改回 <code>f</code></td><td>值噪声边缘出现折痕，对比平滑差异</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>尝试在 <code>valueNoise</code> 函数中把 <code>vec2 u = smoothstep(0.0, 1.0, f);</code> 改为等价的多项式写法 <code>f * f * (3.0 - 2.0 * f)</code>，观察结果是否相同。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>vec2 u = f * f * (3.0 - 2.0 * f);</code></pre>
+<p><code>smoothstep(0.0, 1.0, f)</code> 和 <code>f * f * (3.0 - 2.0 * f)</code> 数学上完全等价——smoothstep 内部就是这个多项式。两者都在 f=0 和 f=1 处导数为 0，产生平滑过渡。</p>
+<p>直接写多项式的优势是：代码更直观地表明了「我在做平滑插值」，而不依赖 GPU 实现的 smoothstep 细节。实际项目中两者均可使用。</p>
+<p>试着把值噪声结果做两次叠加：<code>valueNoise(pos) * 0.5 + valueNoise(pos * 2.0) * 0.25</code>，体验手动 FBM 的效果。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/noise-functions.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">// 噪声函数
+// 教程ID: noise-functions
+
+precision mediump float;
+
+uniform vec2 u_resolution; // 画布尺寸
+uniform float u_time; // 时间（秒）
+
+// 伪随机数生成函数
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
+// 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；
+// 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）
+vec2 hash2(vec2 p) {
+    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
+}
+
+// 值噪声函数
+float valueNoise(vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+
+    // 四个角的随机值
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+
+    // 平滑插值
+    vec2 u = smoothstep(0.0, 1.0, f);
+
+    // 混合4个角的值
+    return mix(
+        mix(a, b, u.x),
+        mix(c, d, u.x),
+        u.y
+    );
+}
+
+// Perlin噪声（简化版）
+float perlinNoise(vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+
+    // 四个角的随机梯度
+    vec2 a = hash2(i) * 2.0 - 1.0;
+    vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;
+    vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;
+    vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;
+
+    // 计算点积
+    float dotA = dot(a, f);
+    float dotB = dot(b, f - vec2(1.0, 0.0));
+    float dotC = dot(c, f - vec2(0.0, 1.0));
+    float dotD = dot(d, f - vec2(1.0, 1.0));
+
+    // 平滑插值
+    vec2 u = f * f * (3.0 - 2.0 * f);
+
+    return mix(
+        mix(dotA, dotB, u.x),
+        mix(dotC, dotD, u.x),
+        u.y
+    ) * 0.5 + 0.5; // 将范围从[-1,1]转换到[0,1]
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+
+    // 将画布分成三部分显示不同类型的噪声
+    vec3 color;
+
+    // 坐标缩放和动画
+    vec2 pos = uv * 5.0;
+    pos.x += u_time * 0.5;
+
+    if (uv.x &lt; 0.33) {
+        // 随机噪声
+        color = vec3(random(pos * 10.0));
+    } else if (uv.x &lt; 0.66) {
+        // 值噪声
+        color = vec3(valueNoise(pos));
+    } else {
+        // Perlin噪声
+        color = vec3(perlinNoise(pos));
+    }
+
+    // 添加分隔线
+    if (abs(uv.x - 0.33) &lt; 0.002 || abs(uv.x - 0.66) &lt; 0.002) {
+        color = vec3(1.0, 0.0, 0.0);
+    }
+
+    gl_FragColor = vec4(color, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">噪声函数 · 09 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/noise-functions.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "// 噪声函数\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 伪随机数生成函数\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\n// 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；\n// 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）\nvec2 hash2(vec2 p) {\n    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);\n}\n\n// 值噪声函数\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机值\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    // 混合4个角的值\n    return mix(\n        mix(a, b, u.x),\n        mix(c, d, u.x),\n        u.y\n    );\n}\n\n// Perlin噪声（简化版）\nfloat perlinNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机梯度\n    vec2 a = hash2(i) * 2.0 - 1.0;\n    vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;\n    vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;\n    vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;\n\n    // 计算点积\n    float dotA = dot(a, f);\n    float dotB = dot(b, f - vec2(1.0, 0.0));\n    float dotC = dot(c, f - vec2(0.0, 1.0));\n    float dotD = dot(d, f - vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(\n        mix(dotA, dotB, u.x),\n        mix(dotC, dotD, u.x),\n        u.y\n    ) * 0.5 + 0.5; // 将范围从[-1,1]转换到[0,1]\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 将画布分成三部分显示不同类型的噪声\n    vec3 color;\n\n    // 坐标缩放和动画\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    if (uv.x < 0.33) {\n        // 随机噪声\n        color = vec3(random(pos * 10.0));\n    } else if (uv.x < 0.66) {\n        // 值噪声\n        color = vec3(valueNoise(pos));\n    } else {\n        // Perlin噪声\n        color = vec3(perlinNoise(pos));\n    }\n\n    // 添加分隔线\n    if (abs(uv.x - 0.33) < 0.002 || abs(uv.x - 0.66) < 0.002) {\n        color = vec3(1.0, 0.0, 0.0);\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "// 噪声函数（练习版）\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // TODO: 用平滑曲线替代线性插值（比如 u = f*f*(3-2f)）\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    // TODO: 修改 scale/pos，观察随机噪声与平滑噪声的区别\n    float n = valueNoise(pos);\n\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
+        exerciseSrc: '../glsl/noise/noise-functions.frag',
+        referenceSrc: '../glsl/noise/noise-functions.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

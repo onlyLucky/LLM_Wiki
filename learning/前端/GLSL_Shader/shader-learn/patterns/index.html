@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>图案纹理 · 15 个案例 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <div class="part-page">
+    <div class="crumb"><a href="../index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回案例训练场</a> / 图案纹理</div>
+    <h1><span class="h1-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/><path d="M3 12h18"/></svg></span>图案纹理</h1>
+    <p class="lede">创建各种图案和纹理效果 · 共 15 个案例，建议按顺序推进：先读教程介绍，再修改该案例的 <code>.frag</code> 练习文件，切到「当前预览」与「正确预览」对照，改到一致即过关。</p>
+    <a class="lesson-row" href="brick-wall.html">
+      <span class="idx">01</span>
+      <span class="name">砖墙</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="checker-10x10.html">
+      <span class="idx">02</span>
+      <span class="name">10x10 棋盘格</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="checkerboard-pattern.html">
+      <span class="idx">03</span>
+      <span class="name">棋盘格图案</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">结合 mod() 函数与 floor()，生成黑白相间的棋盘格纹理。</span>
+    </a>
+    <a class="lesson-row" href="color-blending-gradient.html">
+      <span class="idx">04</span>
+      <span class="name">颜色混合渐变</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">通过 mix() 函数在红蓝两色之间实现水平渐变，帮助理解线性插值。</span>
+    </a>
+    <a class="lesson-row" href="concentric-rings.html">
+      <span class="idx">05</span>
+      <span class="name">同心圆环</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="diagonal-stripes.html">
+      <span class="idx">06</span>
+      <span class="name">对角条纹</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="gradient-effects.html">
+      <span class="idx">07</span>
+      <span class="name">渐变效果</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">学习创建多种渐变效果，包括线性渐变、径向渐变、角度渐变和动态混合</span>
+    </a>
+    <a class="lesson-row" href="gradient-grid.html">
+      <span class="idx">08</span>
+      <span class="name">渐变网格</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="pattern-repetition.html">
+      <span class="idx">09</span>
+      <span class="name">图案重复</span>
+      <span class="diff intermediate">进阶</span>
+      <span class="desc">学习如何创建重复的几何图案，包括网格系统、随机变化和动画效果</span>
+    </a>
+    <a class="lesson-row" href="polka-dots.html">
+      <span class="idx">10</span>
+      <span class="name">波点</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">把画面分成网格，并在每个格子中绘制圆点。</span>
+    </a>
+    <a class="lesson-row" href="radial-gradient-center.html">
+      <span class="idx">11</span>
+      <span class="name">中心径向渐变</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">以画布中心为起点，通过 distance() 创建向外扩散的径向渐变。</span>
+    </a>
+    <a class="lesson-row" href="stripes-horizontal.html">
+      <span class="idx">12</span>
+      <span class="name">水平条纹</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">使用 fract() 与 step() 创建水平条纹。</span>
+    </a>
+    <a class="lesson-row" href="stripes-vertical.html">
+      <span class="idx">13</span>
+      <span class="name">垂直条纹</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="truchet-tiles.html">
+      <span class="idx">14</span>
+      <span class="name">Truchet 瓷砖</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">练习基于 UV 构建重复图案。</span>
+    </a>
+    <a class="lesson-row" href="vertical-color-fade.html">
+      <span class="idx">15</span>
+      <span class="name">垂直颜色渐变</span>
+      <span class="diff beginner">入门</span>
+      <span class="desc">基于 vUv.y 实现从下至上的颜色渐变，适合练习 UV 坐标使用。</span>
+    </a>
+    <div class="footnote">
+      返回：<a href="../index.html">案例训练场</a> ·
+      <a href="../../index.html">课程门户</a> · 内容整理自 <a href="https://www.shader-learn.com/zh/learn" target="_blank" rel="noopener">shader-learn.com</a> 的「图案纹理」部分
+    </div>
+  </div>
+</body>
+</html>

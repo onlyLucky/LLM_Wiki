@@ -31,7 +31,16 @@ npm run dev
 ```
 ├── 00-课程计划与学习地图.md      先读这个：三天时刻表、作业递进与结营标准
 ├── 01-环境准备.md               开课前 10 分钟读完，跑一遍环境检查
-├── index.html                   门户页：15 个 demo 与 9 份作业的入口
+├── index.html                   门户页：15 个 demo + 9 份作业 + 案例训练场入口
+├── shader-learn/                案例训练场（整理自 shader-learn.com）：六大部分 104 个 fragment shader 小案例，
+│   │                           每页 = 教程介绍 + 参考答案 + 单一大舞台画布（HUD 分段控件切换正确/当前预览）
+│   │                           暗色主题（shadcn/ui zinc 基底，无切换）
+│   ├── index.html               案例训练场总入口（六部分卡片）
+│   ├── basic|math|lighting|patterns|animation|noise/   各部分索引页 + 案例详情页
+│   ├── glsl/<part>/<案例>.frag  练习代码独立文件（驱动当前预览），.answer.frag 为参考答案；
+│   │                           在编辑器里改 .frag 文件，页面预览 ~1.5s 内自动更新
+│   └── assets/                  runtime.js（WebGL 预览 + 文件轮询 + 模式切换 + GLSL 高亮）、
+│                               course.css（shadcn/ui zinc 暗色令牌与组件）
 ├── 讲义/                        20 篇讲义，按天分目录（7 + 8 + 5）
 ├── demos/                       15 个完整可运行的参考实现
 ├── homework/                    9 份分层作业骨架（TODO 挖空式）

@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>卡通渲染 (Toon Shading) · 光照渲染 14/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 光照渲染</a>
+    <div class="title-wrap">
+      <h1>卡通渲染 (Toon Shading)</h1>
+      <span class="badge advanced">高级</span>
+      <span class="part-name">光照渲染 · 14 / 15</span>
+    </div>
+    <nav class="pager"><a href="toon-lighting.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">14 / 15</span><a href="two-lights.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>用 if-else 把连续的光照强度切成几个固定色阶，核心是这段代码：</p>
+<pre><code>if (intensity &gt; 0.9) color = objectColor * 1.0;
+else if (intensity &gt; 0.6) color = objectColor * 0.8;</code></pre>
+<p>下面拆解它。</p>
+<hr>
+<h2>卡通分级是什么</h2>
+<p>普通光照是连续渐变的——从最亮到最暗无缝过渡。卡通渲染把这个连续渐变"量化"成几个固定的亮度档位，就像只有几种灰度的印刷品。这样光影边界变得清晰硬朗，产生手绘或漫画的视觉风格。</p>
+<p>代码里按 <code>intensity = dot(normal, lightDir)</code> 把亮度分成 5 个档位：0.2 / 0.4 / 0.6 / 0.8 / 1.0。</p>
+<hr>
+<h2>轮廓线怎么实现</h2>
+<p>轮廓线同样是视角技巧：</p>
+<pre><code>float edge = 1.0 - dot(normal, viewDir);
+return smoothstep(0.0, thickness, edge);</code></pre>
+<p>球体边缘处法线和视线垂直，<code>dot(normal, viewDir)</code> 接近 0，<code>edge</code> 接近 1。<code>smoothstep</code> 把这个值转成 0 到 1 的遮罩，<code>thickness</code> 控制轮廓粗细。最后用 <code>mix(color, vec3(0.0), edgeFactor * 0.8)</code> 把轮廓区域混合成黑色。</p>
+<hr>
+<h2>动画</h2>
+<p>光源方向随时间旋转：</p>
+<pre><code>vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));</code></pre>
+<p>阴影边界在球面上移动，你可以直观感受到分级的阴影是如何"跳变"的。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td>把 5 个档位改成 3 个</td><td>阴影更粗糙，更像简单漫画</td></tr><tr><td><code>outlineThickness</code> 改为 <code>0.2</code></td><td>轮廓线变细</td></tr><tr><td><code>edgeFactor * 0.8</code> 改为 <code>edgeFactor * 1.0</code></td><td>轮廓线变全黑</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>练习区的 <code>toonShading</code> 函数已有 4 个档位（阈值略不同），轮廓线 <code>thickness</code> 也已设好，当前代码可以正常运行。尝试把 4 个档位的亮度系数（<code>1.0</code>, <code>0.7</code>, <code>0.45</code>, <code>0.25</code>）改为（<code>1.0</code>, <code>0.6</code>, <code>0.3</code>, <code>0.1</code>），观察阴影对比度的变化。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<p><code>toonShading</code> 函数把 <code>intensity = dot(normal, lightDir)</code> 按阈值分级：</p>
+<pre><code>if (intensity &gt; 0.75) return objectColor * 1.0;
+if (intensity &gt; 0.45) return objectColor * 0.7;
+if (intensity &gt; 0.2)  return objectColor * 0.45;
+return objectColor * 0.25;</code></pre>
+<p>四个档位：高于 0.75 的区域最亮，低于 0.2 的区域最暗。阈值之间没有平滑过渡——这就是卡通效果的关键，边界是"跳"过去的，不是渐变的。</p>
+<p>轮廓线 <code>thickness</code> 越大，黑边越粗；<code>sin(u_time) * 0.08</code> 让轮廓粗细轻微呼吸。</p>
+<p>试着把最低档位的系数从 <code>0.25</code> 改成 <code>0.0</code>，看阴影区域会不会变成完全的黑色。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/toon-shading.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">// 卡通渲染
+// 教程ID: toon-shading
+
+precision mediump float;
+
+uniform vec2 u_resolution; // 画布尺寸
+uniform float u_time; // 时间（秒）
+
+// 球体SDF（有符号距离场）
+float sphereSDF(vec3 p, float radius) {
+    return length(p) - radius;
+}
+
+// 计算法线
+vec3 calcNormal(vec3 p, float radius) {
+    float eps = 0.001;
+    vec3 n;
+    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);
+    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);
+    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);
+    return normalize(n);
+}
+
+// 基本光线投射
+float castRay(vec3 ro, vec3 rd, float radius) {
+    float t = 0.0;
+    for(int i = 0; i &lt; 64; i ++ ) {
+        vec3 p = ro + rd * t;
+        float h = sphereSDF(p, radius);
+        if (h &lt; 0.001)break;
+        t += h;
+        if (t &gt; 5.0)break;
+    }
+    return t;
+}
+
+// 卡通着色
+vec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {
+    float intensity = dot(normal, lightDir);
+
+    // 根据光照强度分几个级别
+    vec3 color;
+    if (intensity &gt; 0.9) {
+        color = objectColor * 1.0;
+    } else if (intensity &gt; 0.6) {
+        color = objectColor * 0.8;
+    } else if (intensity &gt; 0.3) {
+        color = objectColor * 0.6;
+    } else if (intensity &gt; 0.1) {
+        color = objectColor * 0.4;
+    } else {
+        color = objectColor * 0.2;
+    }
+
+    return color;
+}
+
+// 添加轮廓线
+float outline(vec3 normal, vec3 viewDir, float thickness) {
+    float edge = dot(normal, viewDir);
+    edge = 1.0 - edge;
+    return smoothstep(0.0, thickness, edge);
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    uv = uv * 2.0 - 1.0; // 将uv映射到[-1, 1]
+    uv.x *= u_resolution.x / u_resolution.y; // 宽高比校正
+
+    // 摄像机与光源设置
+    vec3 ro = vec3(0.0, 0.0, 2.0); // 射线原点（摄像机位置）
+    vec3 rd = normalize(vec3(uv, - 1.0)); // 射线方向
+
+    // 球体参数
+    float radius = 0.8;
+    float outlineThickness = 0.4 + sin(u_time) * 0.1; // 轮廓线厚度（带动画）
+
+    // 光源方向（动态）
+    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));
+
+    // 光线投射
+    float t = castRay(ro, rd, radius);
+
+    vec3 color = vec3(0.1); // 背景色
+
+    // 如果光线击中物体
+    if (t &lt; 5.0) {
+        vec3 p = ro + rd * t; // 交点位置
+        vec3 normal = calcNormal(p, radius); // 法线方向
+        vec3 viewDir = normalize(ro - p); // 视线方向
+
+        // 物体基础颜色
+        vec3 objectColor = vec3(0.4, 0.7, 0.9);
+
+        // 使用卡通着色
+        color = toonShading(normal, lightDir, objectColor);
+
+        // 添加轮廓线
+        float edgeFactor = outline(normal, viewDir, outlineThickness);
+        color = mix(color, vec3(0.0), edgeFactor * 0.8);
+
+        // 添加高光点（简化的卡通高光）
+        float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));
+        specular = pow(specular, 10.0);
+        specular = step(0.85, specular);
+        color += specular * 0.5;
+    }
+
+    gl_FragColor = vec4(color, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">光照渲染 · 14 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/toon-shading.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "// 卡通渲染\n// 教程ID: toon-shading\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 球体SDF（有符号距离场）\nfloat sphereSDF(vec3 p, float radius) {\n    return length(p) - radius;\n}\n\n// 计算法线\nvec3 calcNormal(vec3 p, float radius) {\n    float eps = 0.001;\n    vec3 n;\n    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n    return normalize(n);\n}\n\n// 基本光线投射\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n    float t = 0.0;\n    for(int i = 0; i < 64; i ++ ) {\n        vec3 p = ro + rd * t;\n        float h = sphereSDF(p, radius);\n        if (h < 0.001)break;\n        t += h;\n        if (t > 5.0)break;\n    }\n    return t;\n}\n\n// 卡通着色\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n    float intensity = dot(normal, lightDir);\n\n    // 根据光照强度分几个级别\n    vec3 color;\n    if (intensity > 0.9) {\n        color = objectColor * 1.0;\n    } else if (intensity > 0.6) {\n        color = objectColor * 0.8;\n    } else if (intensity > 0.3) {\n        color = objectColor * 0.6;\n    } else if (intensity > 0.1) {\n        color = objectColor * 0.4;\n    } else {\n        color = objectColor * 0.2;\n    }\n\n    return color;\n}\n\n// 添加轮廓线\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n    float edge = dot(normal, viewDir);\n    edge = 1.0 - edge;\n    return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    uv = uv * 2.0 - 1.0; // 将uv映射到[-1, 1]\n    uv.x *= u_resolution.x / u_resolution.y; // 宽高比校正\n\n    // 摄像机与光源设置\n    vec3 ro = vec3(0.0, 0.0, 2.0); // 射线原点（摄像机位置）\n    vec3 rd = normalize(vec3(uv, - 1.0)); // 射线方向\n\n    // 球体参数\n    float radius = 0.8;\n    float outlineThickness = 0.4 + sin(u_time) * 0.1; // 轮廓线厚度（带动画）\n\n    // 光源方向（动态）\n    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n\n    // 光线投射\n    float t = castRay(ro, rd, radius);\n\n    vec3 color = vec3(0.1); // 背景色\n\n    // 如果光线击中物体\n    if (t < 5.0) {\n        vec3 p = ro + rd * t; // 交点位置\n        vec3 normal = calcNormal(p, radius); // 法线方向\n        vec3 viewDir = normalize(ro - p); // 视线方向\n\n        // 物体基础颜色\n        vec3 objectColor = vec3(0.4, 0.7, 0.9);\n\n        // 使用卡通着色\n        color = toonShading(normal, lightDir, objectColor);\n\n        // 添加轮廓线\n        float edgeFactor = outline(normal, viewDir, outlineThickness);\n        color = mix(color, vec3(0.0), edgeFactor * 0.8);\n\n        // 添加高光点（简化的卡通高光）\n        float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));\n        specular = pow(specular, 10.0);\n        specular = step(0.85, specular);\n        color += specular * 0.5;\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "// 卡通渲染（练习版）\n// 教程ID: toon-shading\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat sphereSDF(vec3 p, float radius) {\n    return length(p) - radius;\n}\n\nvec3 calcNormal(vec3 p, float radius) {\n    float eps = 0.001;\n    vec3 n;\n    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n    return normalize(n);\n}\n\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n    float t = 0.0;\n    for (int i = 0; i < 64; i++) {\n        vec3 p = ro + rd * t;\n        float h = sphereSDF(p, radius);\n        if (h < 0.001) break;\n        t += h;\n        if (t > 5.0) break;\n    }\n    return t;\n}\n\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n    float intensity = dot(normal, lightDir);\n\n    // TODO: 调整分级阈值/层数，观察卡通分段效果\n    if (intensity > 0.75) return objectColor * 1.0;\n    if (intensity > 0.45) return objectColor * 0.7;\n    if (intensity > 0.2) return objectColor * 0.45;\n    return objectColor * 0.25;\n}\n\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n    float edge = 1.0 - dot(normal, viewDir);\n    return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    uv = uv * 2.0 - 1.0;\n    uv.x *= u_resolution.x / u_resolution.y;\n\n    vec3 ro = vec3(0.0, 0.0, 2.0);\n    vec3 rd = normalize(vec3(uv, -1.0));\n\n    float radius = 0.8;\n    // TODO: 调整轮廓线 thickness（建议 0.3 - 0.6）\n    float outlineThickness = 0.45 + sin(u_time) * 0.08;\n\n    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n\n    float t = castRay(ro, rd, radius);\n\n    vec3 color = vec3(0.1);\n    if (t < 5.0) {\n        vec3 p = ro + rd * t;\n        vec3 normal = calcNormal(p, radius);\n        vec3 viewDir = normalize(ro - p);\n\n        vec3 objectColor = vec3(0.4, 0.7, 0.9);\n        color = toonShading(normal, lightDir, objectColor);\n\n        float edgeFactor = outline(normal, viewDir, outlineThickness);\n        color = mix(color, vec3(0.0), edgeFactor * 0.8);\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseSrc: '../glsl/lighting/toon-shading.frag',
+        referenceSrc: '../glsl/lighting/toon-shading.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

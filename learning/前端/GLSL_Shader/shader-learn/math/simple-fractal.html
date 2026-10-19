@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>简单分形 · 数学公式 10/15 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 数学公式</a>
+    <div class="title-wrap">
+      <h1>简单分形</h1>
+      <span class="badge beginner">入门</span>
+      <span class="part-name">数学公式 · 10 / 15</span>
+    </div>
+    <nav class="pager"><a href="rounded-rect.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">10 / 15</span><a href="sin-cos-curve.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>每次迭代把坐标放大 2 倍再取小数，就能不断产生自相似的细节层次，关键循环是：</p>
+<pre><code>for (int i = 0; i &lt; 4; i++) {
+    pos *= 2.0;
+    pos = fract(pos) - 0.5;
+    float dist = length(pos);
+    float circle = 1.0 - smoothstep(0.1, 0.3, dist);
+    pattern += circle / pow(2.0, float(i + 1));
+}</code></pre>
+<p>下面拆解这个迭代是怎么制造分形的。</p>
+<hr>
+<h2>放大 + fract = 自相似</h2>
+<p>每次循环做两件事：</p>
+<ol><li><code>pos *= 2.0</code> — 把坐标空间放大 2 倍，原来的一个大格子变成 4 个小格子</li><li><code>pos = fract(pos) - 0.5</code> — 取小数部分并重新居中，每个格子都重置为 [-0.5, 0.5] 的独立小空间</li></ol>
+<p>放大一次，坐标空间里出现更小的相同图案。放大四次，就有四个尺度的相同图案叠加在一起，看起来无限细节向下延伸——这就是分形的本质。</p>
+<hr>
+<h2>权重递减</h2>
+<pre><code>pattern += circle / pow(2.0, float(i + 1));</code></pre>
+<p>第一次迭代权重 1/2（50%），第二次 1/4（25%），第三次 1/8（12.5%），第四次 1/16（6.25%）。大尺度的圆圈贡献最多，细节层次贡献递减，所以整体轮廓清晰，细节丰富但不淹没主体。</p>
+<hr>
+<h2>动态脉冲</h2>
+<pre><code>pattern += 0.1 * sin(u_time + length(uv) * 5.0);</code></pre>
+<p>用 <code>sin(时间 + 距中心距离)</code> 添加随时间变化的波纹，让静态图案有了生命感。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td>把循环次数从 4 改为 2</td><td>细节减少，图案更粗糙</td></tr><tr><td>把循环次数改为 6</td><td>更多层次，细节更丰富</td></tr><tr><td>把 <code>pow(2.0, ...)</code> 改为 <code>pow(1.5, ...)</code></td><td>细节层权重更高，细节更突出</td></tr><tr><td>把 <code>2.0</code> 放大倍率改为 <code>3.0</code></td><td>每次放大更多，图案密度更高</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>练习代码中循环结构和圆形已经写好，但初始振幅未设定。在循环开始前把初始振幅设为 <code>0.5</code>，让分形图案正确显示。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>float pattern = 0.0;
+for (int i = 0; i &lt; 4; i++) {
+    pos *= 2.0;
+    pos = fract(pos) - 0.5;
+    float dist = length(pos);
+    float circle = 1.0 - smoothstep(0.1, 0.3, dist);
+    pattern += circle / pow(2.0, float(i + 1));
+}</code></pre>
+<p>练习的起始状态是 <code>pattern = 0.0</code> 且缺少迭代累加，画面没有任何图案。</p>
+<p>每次迭代对坐标做放大+fract+居中，相当于把画布无限细分。<code>circle / pow(2.0, float(i+1))</code> 保证每层贡献随尺度缩小而递减：最大的圆主导整体，最小的圆只是精细纹理。四次迭代叠加后，<code>pattern</code> 在有圆圈的地方接近 1，空白处接近 0。</p>
+<p>试着把 <code>smoothstep(0.1, 0.3, dist)</code> 改为 <code>smoothstep(0.05, 0.25, dist)</code>，让每个圆更实心，观察分形图案的密度变化。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/simple-fractal.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">precision mediump float;
+
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    // 将坐标转换为 -1 到 1 的范围，中心为原点
+    vec2 uv = (gl_FragCoord.xy / u_resolution.xy) * 2.0 - 1.0;
+
+    // 保持宽高比
+    uv.x *= u_resolution.x / u_resolution.y;
+
+    // 简单的分形：重复的圆形图案
+    vec2 pos = uv;
+    float pattern = 0.0;
+
+    // 创建多层次的重复图案
+    for (int i = 0; i &lt; 4; i++) {
+        // 缩放坐标
+        pos *= 2.0;
+
+        // 取小数部分，创建重复
+        pos = fract(pos) - 0.5;
+
+        // 计算到中心的距离
+        float dist = length(pos);
+
+        // 创建圆形图案
+        float circle = 1.0 - smoothstep(0.1, 0.3, dist);
+
+        // 累加图案，每层权重递减
+        pattern += circle / pow(2.0, float(i + 1));
+    }
+
+    // 添加时间动画
+    pattern += 0.1 * sin(u_time + length(uv) * 5.0);
+
+    // 创建颜色
+    vec3 color = vec3(pattern);
+
+    // 彩色版本（注释掉上面的 color 赋值来使用）
+    // vec3 color = vec3(
+    //     pattern,
+    //     pattern * 0.7,
+    //     pattern * 0.5
+    // );
+
+    // 更复杂的颜色映射
+    // vec3 color = vec3(
+    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time),
+    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 2.0),
+    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 4.0)
+    // );
+
+    gl_FragColor = vec4(color, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">数学公式 · 10 / 15</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/simple-fractal.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 将坐标转换为 -1 到 1 的范围，中心为原点\n    vec2 uv = (gl_FragCoord.xy / u_resolution.xy) * 2.0 - 1.0;\n\n    // 保持宽高比\n    uv.x *= u_resolution.x / u_resolution.y;\n\n    // 简单的分形：重复的圆形图案\n    vec2 pos = uv;\n    float pattern = 0.0;\n\n    // 创建多层次的重复图案\n    for (int i = 0; i < 4; i++) {\n        // 缩放坐标\n        pos *= 2.0;\n\n        // 取小数部分，创建重复\n        pos = fract(pos) - 0.5;\n\n        // 计算到中心的距离\n        float dist = length(pos);\n\n        // 创建圆形图案\n        float circle = 1.0 - smoothstep(0.1, 0.3, dist);\n\n        // 累加图案，每层权重递减\n        pattern += circle / pow(2.0, float(i + 1));\n    }\n\n    // 添加时间动画\n    pattern += 0.1 * sin(u_time + length(uv) * 5.0);\n\n    // 创建颜色\n    vec3 color = vec3(pattern);\n\n    // 彩色版本（注释掉上面的 color 赋值来使用）\n    // vec3 color = vec3(\n    //     pattern,\n    //     pattern * 0.7,\n    //     pattern * 0.5\n    // );\n\n    // 更复杂的颜色映射\n    // vec3 color = vec3(\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time),\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 2.0),\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 4.0)\n    // );\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：简单分形\n    // 目标：创建多层次的重复圆形图案\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 将坐标移到中心并添加时间动画\n    vec2 pos = (uv - 0.5) * 2.0;\n    pos += sin(u_time * 0.5) * 0.1;\n\n    // 练习1：初始化分形参数\n    float fractal = 0.0;\n    // TODO: 设置初始振幅（建议 0.5）\n    float amplitude = 0.5;\n\n    // 练习2：创建分形循环\n    // 通过多次迭代创建分形效果\n    for (int i = 0; i < 4; i++) {\n        // 缩放坐标\n        pos *= 2.0;\n\n        // 取小数部分，创建重复\n        pos = fract(pos) - 0.5;\n\n        // 计算到中心的距离\n        // TODO: distance = length(pos)\n        float distance = length(pos);\n\n        // 创建圆形并添加到分形中\n        float circle = smoothstep(0.4, 0.3, distance);\n        // TODO: fractal += circle * amplitude\n        fractal += circle * amplitude;\n\n        // 减小振幅，为下一层做准备\n        // TODO: amplitude *= 0.5\n        amplitude *= 0.5;\n    }\n\n    // 练习3：添加动态颜色\n    // 根据分形值和时间创建颜色\n    vec3 color1 = vec3(1.0, 0.3, 0.5); // 粉红色\n    vec3 color2 = vec3(0.3, 0.7, 1.0); // 蓝色\n    vec3 color3 = vec3(1.0, 0.8, 0.2); // 黄色\n\n    // 练习4：创建颜色混合\n    // 使用分形值在不同颜色间混合\n    vec3 finalColor;\n    if (fractal < 0.5) {\n        finalColor = mix(\n            vec3(0.1, 0.1, 0.2), // 背景色\n            color1,\n            // TODO: 用 fractal 作为混合因子（可适当放大）\n            fractal / 0.5\n        );\n    } else {\n        finalColor = mix(\n            color1,\n            mix(color2, color3, sin(u_time) * 0.5 + 0.5),\n            (fractal - 0.5) * 2.0\n        );\n    }\n\n    // 练习5：添加额外的动画效果\n    // 让整体颜色随时间脉动\n    float pulse = sin(u_time * 2.0) * 0.1 + 0.9;\n    // TODO: 让 finalColor 乘以 pulse\n    finalColor *= pulse;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        exerciseSrc: '../glsl/math/simple-fractal.frag',
+        referenceSrc: '../glsl/math/simple-fractal.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>

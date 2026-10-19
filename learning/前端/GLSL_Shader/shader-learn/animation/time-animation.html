@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>时间动画 · 动画交互 12/14 · GLSL 案例训练场</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/course.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> 返回 动画交互</a>
+    <div class="title-wrap">
+      <h1>时间动画</h1>
+      <span class="badge beginner">入门</span>
+      <span class="part-name">动画交互 · 12 / 14</span>
+    </div>
+    <nav class="pager"><a href="spinning-ring.html"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> 上一个</a><span class="pos">12 / 14</span><a href="time-pulse.html">下一个 <svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="案例内容">
+        <button class="tab active" type="button" role="tab" data-tab="intro" id="tab-btn-intro" aria-controls="tab-intro" aria-selected="true"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 教程介绍</button>
+        <button class="tab" type="button" role="tab" data-tab="answer" id="tab-btn-answer" aria-controls="tab-answer" aria-selected="false"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 12.5-2 2.5 2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg> 参考答案</button>
+        <button class="tab tab--stage" type="button" role="tab" data-tab="stage" id="tab-btn-stage" aria-controls="panel-stage" aria-selected="false"><svg class="lc" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9V3z"/></svg> 运行效果</button>
+      </div>
+      <div class="tab-body readme" id="tab-intro" role="tabpanel" aria-labelledby="tab-btn-intro"><p>让整个画面的红色亮度随时间呼吸起来，核心就这两行：</p>
+<pre><code>float oscillation = sin(u_time);
+float normalizedOscillation = (oscillation + 1.0) * 0.5;</code></pre>
+<p>下面拆解每个部分。</p>
+<hr>
+<h2>u_time 是什么</h2>
+<p><code>u_time</code> 是一个从外部传进来的值，代表程序运行了多少秒。它一直在增长：0.0、0.5、1.2、3.7……</p>
+<p>把它想象成一个一直走动的秒表。</p>
+<hr>
+<h2>sin 函数的作用</h2>
+<p><code>sin(u_time)</code> 会把那个一直增长的时间值，变成一个在 <strong>-1.0 到 1.0 之间反复震荡</strong>的值。</p>
+<p>就像钟摆：它不会一直往一边摆，而是来回摆动。</p>
+<hr>
+<h2>为什么要做 (oscillation + 1.0) * 0.5</h2>
+<p><code>sin</code> 输出范围是 -1.0 到 1.0，但颜色值只接受 0.0 到 1.0（负数颜色没有意义）。</p>
+<p>所以需要换算：</p>
+<ul><li>先加 1.0：范围变成 0.0 到 2.0</li><li>再乘以 0.5：范围压缩到 0.0 到 1.0</li></ul>
+<p>换算后，红色从 0%（全暗）到 100%（最亮）再回到 0%，循环往复。</p>
+<hr>
+<h2>试着改一改</h2>
+<table><thead><tr><th>改动</th><th>效果</th></tr></thead><tbody><tr><td><code>sin(u_time * 2.0)</code></td><td>动画速度变为两倍快</td></tr><tr><td><code>sin(u_time * 0.3)</code></td><td>动画变成缓慢的呼吸</td></tr><tr><td><code>vec4(0.0, normalizedOscillation, 0.0, 1.0)</code></td><td>改为绿色呼吸</td></tr><tr><td><code>vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0)</code></td><td>黄色呼吸</td></tr></tbody></table>
+<hr>
+<h2>练习</h2>
+<p>练习区的画面是静态红色，用 <code>sin(u_time)</code> 让它的亮度随时间动起来，形成红色的呼吸效果。</p></div>
+      <div class="tab-body readme hidden" id="tab-answer" role="tabpanel" aria-labelledby="tab-btn-answer"><h2>答案解析</h2>
+<pre><code>float oscillation = sin(u_time);
+float normalizedOscillation = (oscillation + 1.0) * 0.5;
+gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);</code></pre>
+<ul><li><code>sin(u_time)</code> 产生 -1.0 到 1.0 的震荡</li><li><code>(oscillation + 1.0) * 0.5</code> 把范围换算到 0.0 到 1.0</li><li><code>vec4(normalizedOscillation, 0.0, 0.0, 1.0)</code> 把这个值用作红色通道</li></ul>
+<p>起始代码是固定的红色，没有时间变量。加入 <code>sin(u_time)</code> 后，红色分量随时间变化，就产生了呼吸感。</p>
+<p>试着把 <code>* 0.5</code> 改成 <code>* 0.3</code>，让暗部保留更多红色，呼吸幅度变小。</p>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/time-animation.answer.frag</span></div>
+        <pre class="answer-code"><code id="answer-code">precision mediump float;
+
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值
+    float oscillation = sin(u_time);
+
+    // 将振荡值转换为 0.0 到 1.0 的范围
+    // sin 函数返回 -1 到 1，我们需要 0 到 1
+    float normalizedOscillation = (oscillation + 1.0) * 0.5;
+
+    // 使用这个值作为红色分量，创建呼吸效果
+    gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);
+
+    // 尝试其他动画效果：
+    // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸
+    // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸
+
+    // 更快的动画（乘以2让时间流逝更快）：
+    // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;
+    // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);
+}
+</code></pre>
+      </div>
+    </section>
+
+    <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="拖动调整面板与舞台宽度"></div>
+
+    <section class="stage-col">
+      <figure class="preview stage mode-reference" id="panel-stage">
+        <div class="canvas-wrap"><canvas id="canvas-stage"></canvas></div>
+
+        <div class="stage-hud stage-hud--top">
+          <span class="tag tag--idx">动画交互 · 12 / 14</span>
+          <div class="seg" id="mode-switch" role="tablist" aria-label="预览模式">
+            <button class="mode-btn active" type="button" role="tab" aria-selected="true" data-mode="reference">正确预览</button>
+            <button class="mode-btn" type="button" role="tab" aria-selected="false" data-mode="current">当前预览</button>
+          </div>
+        </div>
+
+        <div class="stage-hud stage-hud--bottom">
+          <span class="tag tag--clock" data-clock>u_time 0.0s</span>
+          <div class="stage-hud-right">
+            <span class="tag tag--status" id="status-current"><span class="st-dot"></span><span class="st-label">LIVE</span></span>
+            <span class="tag tag--fps" id="fps-stage"></span>
+            <button class="tag tag--reset" type="button" id="btn-reset"><svg class="lc" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 重置</button>
+          </div>
+        </div>
+      </figure>
+    </section>
+  </main>
+
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/time-animation.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+
+  <script src="../assets/runtime.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var bodies = { intro: document.getElementById('tab-intro'), answer: document.getElementById('tab-answer') };
+      var layoutEl = document.querySelector('.layout');
+      function selectTab(btn) {
+        tabs.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        Object.keys(bodies).forEach(function (k) { bodies[k].classList.toggle('hidden', k !== btn.dataset.tab); });
+        /* 手机端第三个 Tab「运行效果」：隐藏左面板，舞台独占整屏 */
+        layoutEl.classList.toggle('mode-stage', btn.dataset.tab === 'stage');
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectTab(btn); });
+      });
+      /* shadcn Tabs 的键盘行为：左右方向键在可见的触发项之间移动 */
+      tabs.forEach(function (btn, i) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var dir = e.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          for (var k = 1; k <= tabs.length; k++) {
+            var next = tabs[(i + dir * k) % tabs.length];
+            if (!next.offsetParent) continue; /* 桌面上跳过隐藏的「运行效果」 */
+            next.focus();
+            selectTab(next);
+            break;
+          }
+        });
+      });
+      /* 窄屏（≤1020）：把操作区（LIVE / 重置）从底部 HUD 移到顶部右侧，
+         形成「左 Tabs 切换 + 右操作区」的单行布局；回桌面时放回底部 */
+      var mqNarrow = window.matchMedia('(max-width: 1020px)');
+      var opsEl = document.querySelector('.stage-hud-right');
+      var hudTop = document.querySelector('.stage-hud--top');
+      var hudBottom = document.querySelector('.stage-hud--bottom');
+      function moveOps() {
+        if (opsEl && hudTop && hudBottom) (mqNarrow.matches ? hudTop : hudBottom).appendChild(opsEl);
+      }
+      moveOps();
+
+      var introBtn = document.getElementById('tab-btn-intro');
+      function onMq(e) {
+        moveOps();
+        syncSplit();
+        /* 从窄屏进入桌面时退出「运行效果」视图，恢复阅读内容
+           （否则左面板内容被隐藏且桌面上没有第三个 Tab 可切回） */
+        if (!e.matches && layoutEl.classList.contains('mode-stage')) selectTab(introBtn);
+      }
+      if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq);
+      else if (mqNarrow.addListener) mqNarrow.addListener(onMq);
+
+      /* 桌面：拖动分隔条调整左右占比。面板 ≥320px、舞台列 ≥420px，
+         位置记忆到 localStorage；窄屏单列布局下分隔条隐藏并清除内联列宽 */
+      var mqDesk = window.matchMedia('(min-width: 1021px)');
+      var splitter = document.getElementById('splitter');
+      var PANEL_MIN = 320, STAGE_MIN = 420, SPLIT_W = 8, splitW = 0;
+      try { splitW = parseInt(localStorage.getItem('sl-split'), 10) || 0; } catch (e) {}
+      function clampW(w) {
+        var room = document.documentElement.clientWidth - 32 - 16 - SPLIT_W - STAGE_MIN;
+        return Math.round(Math.max(PANEL_MIN, Math.min(w, Math.max(PANEL_MIN, room))));
+      }
+      function applySplit(w, save) {
+        layoutEl.style.gridTemplateColumns = w + 'px ' + SPLIT_W + 'px minmax(0,1fr)';
+        if (save) { try { localStorage.setItem('sl-split', w); } catch (e) {} }
+      }
+      function syncSplit() {
+        if (mqDesk.matches && splitW) applySplit(clampW(splitW), false);
+        else layoutEl.style.gridTemplateColumns = '';
+      }
+      if (splitter) {
+        splitter.addEventListener('pointerdown', function (e) {
+          if (!mqDesk.matches) return;
+          e.preventDefault();
+          var panel = document.querySelector('.panel');
+          var startX = e.clientX, startW = panel.offsetWidth;
+          splitter.classList.add('dragging');
+          document.body.classList.add('splitting');
+          try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+          function onMove(ev) { applySplit(clampW(startW + ev.clientX - startX), false); }
+          function onUp(ev) {
+            splitW = clampW(startW + ev.clientX - startX);
+            applySplit(splitW, true);
+            splitter.classList.remove('dragging');
+            document.body.classList.remove('splitting');
+            splitter.removeEventListener('pointermove', onMove);
+            splitter.removeEventListener('pointerup', onUp);
+            splitter.removeEventListener('pointercancel', onUp);
+          }
+          splitter.addEventListener('pointermove', onMove);
+          splitter.addEventListener('pointerup', onUp);
+          splitter.addEventListener('pointercancel', onUp);
+        });
+        window.addEventListener('resize', function () {
+          if (mqDesk.matches && splitW) splitW = clampW(splitW);
+          syncSplit();
+        });
+      }
+      syncSplit();
+      SLRuntime.boot({
+        canvas: document.getElementById('canvas-stage'),
+        stage: document.getElementById('panel-stage'),
+        modeBtns: document.querySelectorAll('.mode-btn'),
+        resetBtn: document.getElementById('btn-reset'),
+        referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值\n    float oscillation = sin(u_time);\n\n    // 将振荡值转换为 0.0 到 1.0 的范围\n    // sin 函数返回 -1 到 1，我们需要 0 到 1\n    float normalizedOscillation = (oscillation + 1.0) * 0.5;\n\n    // 使用这个值作为红色分量，创建呼吸效果\n    gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);\n\n    // 尝试其他动画效果：\n    // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸\n    // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸\n\n    // 更快的动画（乘以2让时间流逝更快）：\n    // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;\n    // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);\n}\n",
+        exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：创建时间动画效果\n    // 目标：创建一个会动的彩色圆形\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 练习1：创建动态的圆心位置\n    // 让圆心在屏幕中央做圆周运动\n    vec2 center = vec2(\n        // TODO: 填写运动半径（建议 0.2）\n        0.5 + sin(u_time) * 0.2,\n        0.5 + cos(u_time) * 0.2\n    );\n\n    // 练习2：计算到动态圆心的距离\n    vec2 pos = uv - center;\n    // TODO: distance = length(pos)\n    float distance = length(pos);\n\n    // 练习3：创建动态半径\n    // 让圆的大小随时间变化\n    // TODO: 填写半径变化幅度（建议 0.05）\n    float radius = 0.1 + sin(u_time * 2.0) * 0.05;\n\n    // 练习4：创建动态颜色\n    // 让颜色随时间变化\n    vec3 dynamicColor = vec3(\n        sin(u_time) * 0.5 + 0.5,\n        cos(u_time * 1.5) * 0.5 + 0.5,\n        sin(u_time * 0.8) * 0.5 + 0.5\n    );\n\n    // 练习5：使用 smoothstep 创建平滑边缘\n    // smoothstep(edge0, edge1, x) 在 edge0 和 edge1 之间创建平滑过渡\n    float circle = smoothstep(\n        radius + 0.02,  // 外边缘\n        radius - 0.02,  // 内边缘\n        // TODO: 填写距离变量（distance）\n        distance\n    );\n\n    // 练习6：混合背景和圆形颜色\n    vec3 backgroundColor = vec3(0.1, 0.1, 0.2);\n    vec3 finalColor = mix(\n        backgroundColor,\n        // TODO: 使用 dynamicColor 作为圆形颜色\n        dynamicColor,\n        circle\n    );\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        exerciseSrc: '../glsl/animation/time-animation.frag',
+        referenceSrc: '../glsl/animation/time-animation.answer.frag',
+        answerCodeEl: document.getElementById('answer-code'),
+        fpsEl: document.getElementById('fps-stage'),
+        statusEl: document.getElementById('status-current')
+      });
+    })();
+  </script>
+</body>
+</html>
