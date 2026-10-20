@@ -10,7 +10,8 @@ void main() {
 
     // TODO: 用 u_resolution 计算纵横比（aspect = u_resolution.x / u_resolution.y）
     // 提示：不修正时，在非正方形画布上圆可能看起来像椭圆
-    float aspect = 1.0;
+    // float aspect = 1.0;
+    float aspect = u_resolution.x / u_resolution.y;
 
     vec2 p = uv - 0.5;
     p.x *= aspect;
