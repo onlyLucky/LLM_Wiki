@@ -8,7 +8,7 @@ void main() {
     vec3 b = vec3(1.0, 0.6, 0.15);
 
     // TODO: 使用 vUv.x 作为插值因子（从左到右渐变）
-    float t = 0.0;
+    float t = vUv.x;
 
     vec3 color = mix(a, b, t);
     gl_FragColor = vec4(color, 1.0);

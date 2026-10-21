@@ -11,7 +11,7 @@ void main() {
     float w = 0.02;
 
     // TODO: 计算圆环遮罩 ring（提示：abs(d - r)）
-    float ring = 0.0;
+    float ring = 1.0 - smoothstep(w, w+0.006, abs(d - r));
 
     vec3 bg = vec3(0.06, 0.07, 0.1);
     vec3 fg = vec3(0.9, 0.95, 1.0);

@@ -6,6 +6,6 @@ varying vec2 vUv;
 
 void main() {
     // TODO: 1.0 - vUv.x
-    float t = 0.0;
+    float t = 1.0 - vUv.x;
     gl_FragColor = vec4(vec3(t), 1.0);
 }

@@ -10,13 +10,13 @@ void main() {
     vec2 halfSize = vec2(0.28, 0.18);
 
     // TODO: 计算外矩形遮罩 inside（矩形内为 1，外为 0）
-    float inside = 0.0;
+    float inside = (1.0 - step(halfSize.x, d.x)) * (1.0 - step(halfSize.y, d.y));
 
     float thickness = 0.03;
     vec2 innerHalf = halfSize - thickness;
 
     // TODO: 计算内矩形遮罩 insideInner
-    float insideInner = 0.0;
+    float insideInner = (1.0 - step(innerHalf.x, d.x)) * (1.0 - step(innerHalf.y, d.y));
 
     // TODO: 边框遮罩 border = inside - insideInner
     float border = clamp(inside - insideInner, 0.0, 1.0);

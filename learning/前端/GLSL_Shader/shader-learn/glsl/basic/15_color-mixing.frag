@@ -18,7 +18,7 @@ void main() {
     // 提示：mix(a, b, t) 在 a 和 b 之间按 t 的比例混合
     // 当 t=0 时返回 a，当 t=1 时返回 b
     // TODO: 使用 uv.x 作为混合因子，从左到右渐变
-    vec3 finalColor = mix(redColor, blueColor, 0.0);
+    vec3 finalColor = mix(redColor, blueColor, uv.x);
 
     gl_FragColor = vec4(finalColor, 1.0);
 }

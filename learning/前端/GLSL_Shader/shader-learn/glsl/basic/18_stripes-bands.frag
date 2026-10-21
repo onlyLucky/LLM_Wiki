@@ -9,7 +9,7 @@ void main() {
     vec3 colorB = vec3(0.9, 0.95, 1.0);
 
     // TODO: 设置条纹数量（建议 8.0 - 20.0）
-    float stripeCount = 8.0;
+    float stripeCount = 12.0;
 
     // TODO: 使用 fract(vUv.x * stripeCount) 得到每条纹内部的 0-1 坐标
     float x = fract(vUv.x * stripeCount);
