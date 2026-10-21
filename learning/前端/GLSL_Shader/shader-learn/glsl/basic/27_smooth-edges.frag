@@ -11,7 +11,7 @@ void main() {
     // TODO: 用 smoothstep 创建软边圆形遮罩
     // 提示：smoothstep(inner, outer, d)，让 d 在 0.2~0.3 之间平滑过渡
     // 用 1.0 - smoothstep(...) 让圆心为白色
-    float mask = 0.0;
+    float mask = 1.0 - smoothstep(0.2, 0.3, d);
 
     gl_FragColor = vec4(vec3(mask), 1.0);
 }

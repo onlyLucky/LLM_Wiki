@@ -9,10 +9,10 @@ void main() {
     vec3 rightColor = vec3(0.4, 0.4, 1.0);
 
     // TODO: 使用 step(0.5, vUv.x) 生成遮罩 mask（左侧 0，右侧 1）
-    float mask = 0.0;
+    float mask = step(0.5, vUv.x);
 
     // TODO: 使用 mix(leftColor, rightColor, mask) 得到最终颜色
-    vec3 color = leftColor;
+    vec3 color = mix(leftColor, rightColor, mask);
 
     gl_FragColor = vec4(color, 1.0);
 }

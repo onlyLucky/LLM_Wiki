@@ -14,7 +14,7 @@ float rectMask(vec2 uv, vec2 center, vec2 halfSize) {
 void main() {
     vec2 uv = vUv;
 
-    float rect = rectMask(uv, vec2(0.5), vec2(0.18, 0.1));
+    float rect = rectMask(uv, vec2(0.5), vec2(0.38, 0.1));
 
     vec2 p = uv - 0.5;
     float r = 0.22;
