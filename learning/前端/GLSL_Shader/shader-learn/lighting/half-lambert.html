@@ -50,7 +50,7 @@
 <p>初始状态：<code>diff</code> 固定为 <code>0.0</code>，球体一片黑。</p>
 <p>改动：去掉 <code>max</code>，直接用 <code>dot(n, l) * 0.5 + 0.5</code>，把整个 <code>[-1, 1]</code> 范围都映射到 <code>[0, 1]</code>，背光面也能保留亮度。</p>
 <p>试着把系数从 <code>0.5 + 0.5</code> 改成 <code>0.6 + 0.4</code>，看看暗部会不会更亮。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/half-lambert.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/04_half-lambert.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -87,7 +87,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/half-lambert.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/04_half-lambert.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -199,8 +199,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));float diff=dot(n,l)*0.5+0.5;vec3 baseCol=vec3(0.25,0.9,0.85);gl_FragColor=vec4(mix(bg,baseCol*diff,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));// TODO: Half-Lambert diff = dot(n,l)*0.5+0.5\nfloat diff=0.0;vec3 baseCol=vec3(0.25,0.9,0.85);gl_FragColor=vec4(mix(bg,baseCol*diff,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/half-lambert.frag',
-        referenceSrc: '../glsl/lighting/half-lambert.answer.frag',
+        exerciseSrc: '../glsl/lighting/04_half-lambert.frag',
+        referenceSrc: '../glsl/lighting/04_half-lambert.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

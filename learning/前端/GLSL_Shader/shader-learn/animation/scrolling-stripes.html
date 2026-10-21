@@ -55,7 +55,7 @@
 <ul><li><code>vUv.x * count</code> 把横坐标分成 12 段</li><li><code>fract(...)</code> 让每段循环在 0.0–1.0 之间</li><li><code>+ u_time * 0.6</code> 让整体随时间偏移，条纹开始滚动</li></ul>
 <p>起始代码是 <code>fract(vUv.x * count)</code>，没有时间项，条纹静止。加入 <code>u_time * 0.6</code> 后，每帧的折叠起点都在向右推，条纹就动了。</p>
 <p>试着把 <code>step(0.5, x)</code> 改成 <code>smoothstep(0.45, 0.55, x)</code>，条纹边缘会变得略微柔和。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/scrolling-stripes.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/07_scrolling-stripes.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/scrolling-stripes.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/07_scrolling-stripes.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(0.5,x);vec3 c=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){float count=12.0;// TODO: 把 u_time 加到 fract 前\nfloat x=fract(vUv.x*count);float m=step(0.5,x);vec3 c=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/animation/scrolling-stripes.frag',
-        referenceSrc: '../glsl/animation/scrolling-stripes.answer.frag',
+        exerciseSrc: '../glsl/animation/07_scrolling-stripes.frag',
+        referenceSrc: '../glsl/animation/07_scrolling-stripes.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

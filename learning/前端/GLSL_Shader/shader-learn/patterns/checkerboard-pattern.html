@@ -56,7 +56,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>floor(vUv.x * 8.0)</code> 把横坐标离散成 0–7 的列号，<code>floor(vUv.y * 8.0)</code> 把纵坐标离散成 0–7 的行号。把两个编号相加后对 2 取余，相邻格子的余数必然不同，形成 0/1 交替的棋盘遮罩。<code>mix(vec3(1.0), vec3(0.0), pattern)</code> 把 0 映射到白色、1 映射到黑色。</p>
 <p>初始代码没有任何变量，画面什么都不输出。关键是先用 <code>floor</code> 建立网格坐标，再用 <code>mod</code> 生成奇偶判断，最后 <code>mix</code> 决定颜色。</p>
 <p>试着把 <code>mix(vec3(1.0), vec3(0.0), pattern)</code> 改成 <code>mix(vec3(0.2, 0.4, 0.8), vec3(0.9, 0.3, 0.1), pattern)</code>，用蓝色和橙色替代黑白。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/checkerboard-pattern.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/07_checkerboard-pattern.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -100,7 +100,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/checkerboard-pattern.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/07_checkerboard-pattern.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -212,8 +212,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float x = floor(vUv.x * 8.0);\n    float y = floor(vUv.y * 8.0);\n    float pattern = mod(x + y, 2.0);\n    vec3 color = mix(vec3(1.0), vec3(0.0), pattern);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 将 vUv 扩展为 8x8 网格\n    // TODO: 使用 floor() 计算每个单元格编号\n    // TODO: 使用 mod() 生成黑白交替模式\n    // TODO: 使用 mix() 混合颜色输出\n}\n",
-        exerciseSrc: '../glsl/patterns/checkerboard-pattern.frag',
-        referenceSrc: '../glsl/patterns/checkerboard-pattern.answer.frag',
+        exerciseSrc: '../glsl/patterns/07_checkerboard-pattern.frag',
+        referenceSrc: '../glsl/patterns/07_checkerboard-pattern.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

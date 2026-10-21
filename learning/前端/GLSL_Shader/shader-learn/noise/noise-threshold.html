@@ -55,7 +55,7 @@ float m = step(0.5, n);</code></pre>
 <ul><li><code>valueNoise(vUv * 10.0)</code>：生成较细的平滑噪声</li><li><code>step(0.5, n)</code>：噪声值 &gt;= 50% 变白（1.0），&lt; 50% 变黑（0.0）</li><li><code>vec3(m)</code>：黑白输出</li></ul>
 <p>初始 <code>m = 0.0</code> 是全黑。加上 <code>step</code> 之后，画面被噪声分隔成黑白两块区域，边界形状就是噪声自然起伏的等高线。</p>
 <p>试着把阈值从 <code>0.5</code> 改成 <code>0.7</code>，看看白色区域如何收缩。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/noise-threshold.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/07_noise-threshold.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/noise-threshold.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/07_noise-threshold.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=valueNoise(vUv*10.0);float m=step(0.5,n);gl_FragColor=vec4(vec3(m),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=valueNoise(vUv*10.0);// TODO: m=step(0.5,n)\nfloat m=0.0;gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseSrc: '../glsl/noise/noise-threshold.frag',
-        referenceSrc: '../glsl/noise/noise-threshold.answer.frag',
+        exerciseSrc: '../glsl/noise/07_noise-threshold.frag',
+        referenceSrc: '../glsl/noise/07_noise-threshold.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

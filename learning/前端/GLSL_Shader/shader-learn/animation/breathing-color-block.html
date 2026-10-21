@@ -54,7 +54,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <ul><li><code>0.5 + 0.5 * sin(u_time)</code> 把正弦波换算到 0.0–1.0 范围</li><li><code>vec3(brightness, 0.6, 0.9)</code> 只让红色通道变动，绿蓝保持固定</li><li><code>vec4(color, 1.0)</code> 输出到屏幕</li></ul>
 <p>起始代码的 <code>main()</code> 是空的，什么都不输出。填入这三行后，每帧计算出不同的 <code>brightness</code>，颜色就开始呼吸。</p>
 <p>试着把 <code>0.6</code> 也换成 <code>sin(u_time + 1.0) * 0.5 + 0.5</code>，让绿色同步但相位不同地呼吸，颜色变化会更丰富。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/breathing-color-block.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/02_breathing-color-block.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -97,7 +97,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/breathing-color-block.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/02_breathing-color-block.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -209,8 +209,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nuniform float u_time;\nvarying vec2 vUv;\n\nvoid main() {\n    float brightness = 0.5 + 0.5 * sin(u_time);\n    vec3 color = vec3(brightness, 0.6, 0.9);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nuniform float u_time;\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 使用 sin(u_time) 生成亮度因子\n    // TODO: 构建动态 RGB 颜色值\n    // TODO: 输出 gl_FragColor\n}\n",
-        exerciseSrc: '../glsl/animation/breathing-color-block.frag',
-        referenceSrc: '../glsl/animation/breathing-color-block.answer.frag',
+        exerciseSrc: '../glsl/animation/02_breathing-color-block.frag',
+        referenceSrc: '../glsl/animation/02_breathing-color-block.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

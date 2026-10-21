@@ -44,7 +44,7 @@ p.x *= aspect;  // 把 x 方向按比例拉伸</code></pre>
 <pre><code>float aspect = u_resolution.x / u_resolution.y;</code></pre>
 <p><code>u_resolution</code> 是 uniform，代表画布的实际像素尺寸。宽除以高得到比例系数，再乘到 <code>p.x</code> 上，让水平距离和垂直距离在物理上等比。</p>
 <p>练习的画布是 300×300 的正方形，所以 <code>aspect = 1.0</code> 不会看出区别。改一下代码里的 <code>u_resolution</code> 值，或者在非正方形的情境下测试，效果才明显。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/aspect-ratio-uv.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/05_aspect-ratio-uv.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -100,7 +100,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/aspect-ratio-uv.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/05_aspect-ratio-uv.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -212,8 +212,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform vec2 u_resolution;\n\nvoid main() {\n    vec2 uv = vUv;\n\n    float aspect = u_resolution.x / u_resolution.y;\n    vec2 p = uv - 0.5;\n    p.x *= aspect;\n\n    float d = length(p);\n    float r = 0.25;\n    float aa = 0.006;\n    float mask = 1.0 - smoothstep(r, r + aa, d);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    vec3 fg = vec3(0.2, 0.85, 1.0);\n    vec3 color = mix(bg, fg, mask);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform vec2 u_resolution;\n\nvoid main() {\n    vec2 uv = vUv;\n\n    // TODO: 用 u_resolution 计算纵横比（aspect = u_resolution.x / u_resolution.y）\n    // 提示：不修正时，在非正方形画布上圆可能看起来像椭圆\n    float aspect = 1.0;\n\n    vec2 p = uv - 0.5;\n    p.x *= aspect;\n\n    // 目标：绘制一个带平滑边缘的圆\n    float d = length(p);\n    float r = 0.25;\n    float aa = 0.006;\n    float mask = 1.0 - smoothstep(r, r + aa, d);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    vec3 fg = vec3(0.2, 0.85, 1.0);\n    vec3 color = mix(bg, fg, mask);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/aspect-ratio-uv.frag',
-        referenceSrc: '../glsl/basic/aspect-ratio-uv.answer.frag',
+        exerciseSrc: '../glsl/basic/05_aspect-ratio-uv.frag',
+        referenceSrc: '../glsl/basic/05_aspect-ratio-uv.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

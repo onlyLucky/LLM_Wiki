@@ -51,7 +51,7 @@
 <p>起始代码是 <code>vec4(1.0, 1.0, 0.0, 1.0)</code>，蓝色通道固定为 <code>0.0</code>（0%），所以整张画面都是黄色。</p>
 <p>把第三个参数从 <code>0.0</code> 改为 <code>uv.y</code>，蓝色通道就不再固定，而是跟随每个像素的纵向位置：底部 <code>uv.y=0.0</code> 蓝色为 0%，顶部 <code>uv.y=1.0</code> 蓝色为 100%。红绿两通道始终是 100%，所以底部是黄色（红+绿），顶部蓝色加满变成白色（红+绿+蓝）。</p>
 <p>试着把红色通道也换成 <code>uv.x</code>，看看两个方向的渐变叠加会产生什么效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/basic-gradients.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/07_basic-gradients.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">// 基础渐变效果
 // 教程ID: basic-gradients
 
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/basic-gradients.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/07_basic-gradients.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "// 基础渐变效果\n// 教程ID: basic-gradients\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nvoid main() {\n    // 归一化坐标 (0.0 - 1.0)\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    gl_FragColor = vec4(1.,1.,uv.y, 1.0);\n}\n",
         exerciseCode: "// 基础渐变效果\n// 教程ID: basic-gradients\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nvoid main() {\n    // 归一化坐标 (0.0 - 1.0)\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    // TODO: 将蓝色通道改为 uv.y 以得到从下到上的渐变\n    gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/basic-gradients.frag',
-        referenceSrc: '../glsl/basic/basic-gradients.answer.frag',
+        exerciseSrc: '../glsl/basic/07_basic-gradients.frag',
+        referenceSrc: '../glsl/basic/07_basic-gradients.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

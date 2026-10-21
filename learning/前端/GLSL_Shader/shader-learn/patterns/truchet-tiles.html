@@ -59,7 +59,7 @@ float m = step(length(f - 0.5), 0.35);</code></pre>
 <p><code>hash21(i)</code> 根据格子编号生成 0–1 的随机数。当 <code>r &lt; 0.5</code> 时，<code>f.x = 1.0 - f.x</code> 把格子内坐标左右翻转。这等价于选择了另一种弧线走向。</p>
 <p>练习初始代码有 <code>f</code> 和 <code>hash21</code>，但缺少翻转语句，导致所有格子的弧线方向相同，图案完全对称无随机性。加上 <code>if (r &lt; 0.5) f.x = 1.0 - f.x</code> 后，约有一半的格子被翻转，产生 Truchet 迷宫效果。</p>
 <p>试着把 <code>f.x = 1.0 - f.x</code> 改为 <code>f.y = 1.0 - f.y</code>，看看弧线方向有何不同。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/truchet-tiles.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/14_truchet-tiles.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -96,7 +96,7 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/truchet-tiles.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/14_truchet-tiles.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -208,8 +208,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}void main(){vec2 uv=vUv*6.0;vec2 i=floor(uv);vec2 f=fract(uv);float r=hash21(i);if(r<0.5) f.x=1.0-f.x;float m=step(length(f-0.5),0.35);vec3 col=mix(vec3(0.05,0.06,0.08),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}void main(){vec2 uv=vUv*6.0;vec2 i=floor(uv);vec2 f=fract(uv);float r=hash21(i);// TODO: if(r<0.5) f.x=1.0-f.x\nfloat m=step(length(f-0.5),0.35);vec3 col=mix(vec3(0.05,0.06,0.08),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/truchet-tiles.frag',
-        referenceSrc: '../glsl/patterns/truchet-tiles.answer.frag',
+        exerciseSrc: '../glsl/patterns/14_truchet-tiles.frag',
+        referenceSrc: '../glsl/patterns/14_truchet-tiles.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -54,7 +54,7 @@ float dot = 1.0 - smoothstep(0.18, 0.19, d);</code></pre>
 <p><code>fract(vUv * 8.0)</code> 把坐标折叠成 8×8 的格子局部坐标。<code>- 0.5</code> 把每格的原点移到中心，这样 <code>length(gv)</code> 就是到格子中心的距离。<code>smoothstep(0.18, 0.19, d)</code> 在半径 0.18–0.19 处画出平滑圆边，<code>1.0 - ...</code> 把遮罩反转成"圆内为 1"。</p>
 <p>初始代码 <code>gv = vec2(0.0)</code> 让所有像素的局部坐标为 0，<code>length(gv)</code> 恒为 0，<code>dot</code> 恒为 1，画面全是前景色，看不出圆点图案。</p>
 <p>试着把 <code>0.18, 0.19</code> 改为 <code>0.1, 0.4</code>，看看圆边羽化范围的变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/polka-dots.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/12_polka-dots.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -99,7 +99,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/polka-dots.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/12_polka-dots.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -211,8 +211,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 8.0;\n    vec2 gv = fract(vUv * count) - 0.5;\n    float d = length(gv);\n    float dot = 1.0 - smoothstep(0.18, 0.19, d);\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 8.0;\n\n    // TODO: 把 vUv 分成网格，并让每个单元以中心为原点（提示：fract(vUv*count)-0.5）\n    vec2 gv = vec2(0.0);\n\n    float d = length(gv);\n\n    // TODO: 用 smoothstep 画圆点（单元中心为 1，外部为 0）\n    float dot = 0.0;\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
-        exerciseSrc: '../glsl/patterns/polka-dots.frag',
-        referenceSrc: '../glsl/patterns/polka-dots.answer.frag',
+        exerciseSrc: '../glsl/patterns/12_polka-dots.frag',
+        referenceSrc: '../glsl/patterns/12_polka-dots.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

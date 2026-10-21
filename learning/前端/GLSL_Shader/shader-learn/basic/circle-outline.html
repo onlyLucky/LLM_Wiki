@@ -45,7 +45,7 @@ float ring = 1.0 - smoothstep(w, w + 0.006, abs(d - r));</code></pre>
 <pre><code>float ring = 1.0 - smoothstep(w, w + 0.006, abs(d - r));</code></pre>
 <p><code>abs(d - r)</code> 把圆周当作「零点」：圆周上距离为 0，向内向外都增大。<code>smoothstep</code> 用这个距离做边缘衰减，<code>w</code> 控制描边宽度（半宽），<code>0.006</code> 控制边缘模糊度。</p>
 <p>改变 <code>w = 0.04</code> 让描边更粗，改变 <code>r = 0.2</code> 让圆更小。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/circle-outline.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/23_circle-outline.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/circle-outline.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/23_circle-outline.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    float r = 0.28;\n    float w = 0.02;\n    float ring = 1.0 - smoothstep(w, w + 0.006, abs(d - r));\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(0.9, 0.95, 1.0);\n    gl_FragColor = vec4(mix(bg, fg, ring), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    float r = 0.28;\n    float w = 0.02;\n\n    // TODO: 计算圆环遮罩 ring（提示：abs(d - r)）\n    float ring = 0.0;\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(0.9, 0.95, 1.0);\n    gl_FragColor = vec4(mix(bg, fg, ring), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/circle-outline.frag',
-        referenceSrc: '../glsl/basic/circle-outline.answer.frag',
+        exerciseSrc: '../glsl/basic/23_circle-outline.frag',
+        referenceSrc: '../glsl/basic/23_circle-outline.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

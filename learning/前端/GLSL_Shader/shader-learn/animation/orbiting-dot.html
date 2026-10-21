@@ -56,7 +56,7 @@ float dot = 1.0 - smoothstep(0.02, 0.025, d);</code></pre>
 <ul><li><code>vec2(cos(u_time), sin(u_time))</code> 随时间描绘一个单位圆</li><li><code>* r</code> 缩放半径到 0.25</li><li><code>+ center</code> 把圆心定位到画面中央</li></ul>
 <p>起始代码里 <code>pos = center</code>，圆点始终在正中心。加入圆周运动的计算后，<code>pos</code> 随时间在轨道上移动，圆点就转起来了。</p>
 <p>试着把 <code>r = 0.25</code> 改成 <code>0.35</code>，轨道扩大后圆点会接近画面边缘运动。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/orbiting-dot.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/09_orbiting-dot.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -94,7 +94,7 @@ void main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/orbiting-dot.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/09_orbiting-dot.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ void main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),sin(u_time))*r;float d=distance(vUv,pos);float dot=1.0-smoothstep(0.02,0.025,d);vec3 c=mix(vec3(0.05,0.06,0.08),vec3(0.2,0.85,1.0),dot);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 center=vec2(0.5);float r=0.25;// TODO: 计算 pos\nvec2 pos=center;float d=distance(vUv,pos);float dot=1.0-smoothstep(0.02,0.025,d);vec3 c=mix(vec3(0.05,0.06,0.08),vec3(0.2,0.85,1.0),dot);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/animation/orbiting-dot.frag',
-        referenceSrc: '../glsl/animation/orbiting-dot.answer.frag',
+        exerciseSrc: '../glsl/animation/09_orbiting-dot.frag',
+        referenceSrc: '../glsl/animation/09_orbiting-dot.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

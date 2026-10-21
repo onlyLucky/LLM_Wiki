@@ -50,7 +50,7 @@
 <p><code>vUv.x * 5.0</code> 把 0–1 的范围拉伸到 0–5。<code>fract</code> 取每个位置的小数部分，在 0–5 上每隔 1 单位就重置一次，产生 5 段各自从 0 到 1 的循环渐变。</p>
 <p>练习起始是 <code>float t = vUv.x</code>，只有一段从左到右的普通渐变。把它换成 <code>fract(vUv.x * 5.0)</code> 就出现 5 条重复带。</p>
 <p>试着把 <code>5.0</code> 换成 <code>5.5</code>，看看渐变带在边缘处截断的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/modulo-wrap.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/03_modulo-wrap.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -87,7 +87,7 @@ void main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/modulo-wrap.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/03_modulo-wrap.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -199,8 +199,8 @@ void main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: 用 fract 做循环\nfloat t=vUv.x;gl_FragColor=vec4(vec3(t),1.0);}\n",
-        exerciseSrc: '../glsl/math/modulo-wrap.frag',
-        referenceSrc: '../glsl/math/modulo-wrap.answer.frag',
+        exerciseSrc: '../glsl/math/03_modulo-wrap.frag',
+        referenceSrc: '../glsl/math/03_modulo-wrap.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

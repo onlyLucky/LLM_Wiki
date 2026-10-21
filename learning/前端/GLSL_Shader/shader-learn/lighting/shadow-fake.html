@@ -57,7 +57,7 @@ vec3 outCol = mix(bg, vec3(0.0), shadow);</code></pre>
 <p>起始代码中背景直接用 <code>bg</code>，没有任何阴影。</p>
 <p><code>length(vec2(p.x, p.y+0.28)) - 0.28</code> 在球心正下方 0.28 处画了一个半径 0.28 的圆形 SDF。<code>smoothstep(0.0, 0.08, d)</code> 将 0 到 0.08 的距离范围平滑映射到 0→1，<code>1.0 - ...</code> 翻转为圆内是 1。乘以 0.35 控制透明度，最后 <code>mix(bg, vec3(0.0), shadow)</code> 把深色叠到背景上。</p>
 <p>试着把偏移量 <code>0.28</code> 改成 <code>p.x * 0.2 + 0.28</code>，让阴影随 x 坐标偏移，模拟光从斜上方照射的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/shadow-fake.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/13_shadow-fake.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -94,7 +94,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/shadow-fake.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/13_shadow-fake.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);float shadow=1.0-smoothstep(0.0,0.08,length(vec2(p.x,p.y+0.28))-0.28);shadow*=0.35;vec3 outCol=mix(bg,vec3(0.0),shadow);if(d>0.0){gl_FragColor=vec4(outCol,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));float diff=max(dot(n,l),0.0);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.12+0.88*diff);gl_FragColor=vec4(mix(outCol,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);// TODO: 计算 shadow 并混合到背景\nfloat shadow=0.0;vec3 outCol=mix(bg,vec3(0.0),shadow);if(d>0.0){gl_FragColor=vec4(outCol,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));float diff=max(dot(n,l),0.0);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.12+0.88*diff);gl_FragColor=vec4(mix(outCol,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/shadow-fake.frag',
-        referenceSrc: '../glsl/lighting/shadow-fake.answer.frag',
+        exerciseSrc: '../glsl/lighting/13_shadow-fake.frag',
+        referenceSrc: '../glsl/lighting/13_shadow-fake.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

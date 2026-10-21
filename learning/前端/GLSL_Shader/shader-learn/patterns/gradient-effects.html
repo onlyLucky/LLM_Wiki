@@ -60,7 +60,7 @@ float normalizedAngle = (angle + 3.14159) / (2.0 * 3.14159);</code></pre>
 <p><code>uv.x</code> 作为红色通道，从左到右由暗变亮。<code>uv.y</code> 作为绿色通道，从下到上由暗变亮。<code>(uv.x + uv.y) * 0.5</code> 作为蓝色通道，是两者的均值，在中心区域产生蓝色调。</p>
 <p>练习代码 <code>TODO</code> 注释处已经有完整的变量框架，只需把蓝色分量从占位符改为 <code>(uv.x + uv.y) * 0.5</code> 即可。</p>
 <p>试着把蓝色分量改为 <code>sin(uv.x * 6.28)  * 0.5 + 0.5</code>，让蓝色在横向上产生周期性变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/gradient-effects.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/15_gradient-effects.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 uniform vec2 u_resolution;
@@ -134,7 +134,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/gradient-effects.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/15_gradient-effects.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -246,8 +246,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nuniform vec2 u_resolution;\nuniform float u_time;\n\nvoid main() {\n    // 渐变效果 - 完整实现\n    // 这是最终效果代码，展示多种渐变效果的组合\n\n    // 归一化坐标 (0.0 - 1.0)\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 线性渐变 - 对角线方向\n    vec3 linearGrad = vec3(uv.x + uv.y) * 0.5;\n\n    // 径向渐变 - 从中心向外\n    vec2 center = vec2(0.5, 0.5);\n    float radialDist = distance(uv, center);\n    vec3 radialGrad = vec3(1.0 - radialDist * 2.0);\n\n    // 角度渐变\n    vec2 centered = uv - center;\n    float angle = atan(centered.y, centered.x);\n    float normalizedAngle = (angle + 3.14159) / (2.0 * 3.14159);\n    vec3 angularGrad = vec3(normalizedAngle, 1.0 - normalizedAngle, 0.5);\n\n    // 波浪渐变\n    float wave = sin(uv.x * 10.0 + u_time * 2.0) * 0.5 + 0.5;\n    vec3 waveGrad = vec3(wave, uv.y, 1.0 - wave);\n\n    // 动态混合多种渐变\n    float mixFactor1 = sin(u_time * 0.5) * 0.5 + 0.5;\n    float mixFactor2 = cos(u_time * 0.3) * 0.5 + 0.5;\n\n    vec3 blend1 = mix(linearGrad, radialGrad, mixFactor1);\n    vec3 blend2 = mix(angularGrad, waveGrad, mixFactor2);\n    vec3 finalColor = mix(blend1, blend2, sin(u_time * 0.7) * 0.5 + 0.5);\n\n    // 增强对比度\n    finalColor = smoothstep(0.0, 1.0, finalColor);\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：创建渐变效果\n    // 目标：创建一个从左下角到右上角的彩虹渐变\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 练习1：创建基础渐变\n    // 提示：可以直接使用 uv 坐标作为颜色分量\n    // TODO: 蓝色分量可以用 (uv.x + uv.y) * 0.5 或常量\n    vec3 color1 = vec3(uv.x, uv.y, (uv.x + uv.y) * 0.5);\n\n    // 练习2：创建径向渐变\n    // 计算到中心的距离\n    vec2 center = uv - vec2(0.5);\n    float distance = length(center);\n\n    // 使用距离创建径向渐变\n    // TODO: 绿色分量可用 1.0 - distance\n    vec3 color2 = vec3(distance, 1.0 - distance, 1.0 - distance);\n\n    // 练习3：创建动态渐变\n    // 使用时间创建动画效果\n    float timeOffset = sin(u_time) * 0.5 + 0.5;\n    vec3 color3 = vec3(\n        uv.x + timeOffset * 0.3,\n        // TODO: 给 y 分量一个时间偏移（如 timeOffset * 0.2）\n        uv.y + timeOffset * 0.2,\n        0.8\n    );\n\n    // 练习4：混合不同的渐变\n    // 使用 mix 函数组合渐变效果\n    vec3 finalColor = mix(\n        // TODO: 混合因子可用 0.5 或 distance\n        mix(color1, color2, 0.5),\n        color3,\n        sin(u_time * 0.5) * 0.5 + 0.5\n    );\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseSrc: '../glsl/patterns/gradient-effects.frag',
-        referenceSrc: '../glsl/patterns/gradient-effects.answer.frag',
+        exerciseSrc: '../glsl/patterns/15_gradient-effects.frag',
+        referenceSrc: '../glsl/patterns/15_gradient-effects.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

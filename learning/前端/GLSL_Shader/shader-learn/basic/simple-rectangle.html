@@ -44,7 +44,7 @@ float y = step(0.3, vUv.y) * step(vUv.y, 0.7);
 float rect = x * y;</code></pre>
 <p>每个 <code>step</code> 是一个 0/1 的边界判断，两个方向各两个 step 相乘，形成四条边。四边都满足时 <code>rect = 1</code>（白色），否则 <code>rect = 0</code>（黑色）。</p>
 <p>改变边界值可以移动矩形的位置和大小。试试 <code>step(0.4, vUv.x) * step(vUv.x, 0.6)</code> 让矩形变窄。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/simple-rectangle.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/19_simple-rectangle.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -89,7 +89,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/simple-rectangle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/19_simple-rectangle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -201,8 +201,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // 用 step 组合四条边：每条边 step 结果为 1 表示\"在边界内侧\"\n    // 四个结果相乘：只有四条边都满足时才为 1（矩形内）\n    float x = step(0.2, vUv.x) * step(vUv.x, 0.8);\n    float y = step(0.3, vUv.y) * step(vUv.y, 0.7);\n    float rect = x * y;\n    gl_FragColor = vec4(vec3(rect), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // 矩形范围：x: 0.2~0.8, y: 0.3~0.7\n    // TODO: 用 step 判断 vUv.x 是否在 0.2~0.8 范围内，得到 x\n    float x = 0.0;\n    // TODO: 用 step 判断 vUv.y 是否在 0.3~0.7 范围内，得到 y\n    float y = 0.0;\n\n    float rect = x * y;\n    gl_FragColor = vec4(vec3(rect), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/simple-rectangle.frag',
-        referenceSrc: '../glsl/basic/simple-rectangle.answer.frag',
+        exerciseSrc: '../glsl/basic/19_simple-rectangle.frag',
+        referenceSrc: '../glsl/basic/19_simple-rectangle.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

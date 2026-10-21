@@ -61,7 +61,7 @@ p = rot(u_time) * p;</code></pre>
 <ul><li><code>rot(u_time)</code> 生成一个角度为 <code>u_time</code> 的旋转矩阵</li><li><code>rot(u_time) * p</code> 把坐标 <code>p</code> 旋转该角度</li><li>随着 <code>u_time</code> 增大，旋转角度持续增大，图案持续旋转</li></ul>
 <p>起始代码缺少 <code>p = rot(u_time) * p</code> 这一行，坐标 <code>p</code> 从未被旋转。加上这行后，每帧的坐标都被旋转了更多角度，图案就转起来了。</p>
 <p>试着把 <code>rot(u_time)</code> 改成 <code>rot(sin(u_time))</code>，旋转角度会在正负方向来回摆动，图案会左右摇摆而不是持续转圈。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/rotating-uv.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/12_rotating-uv.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -99,7 +99,7 @@ mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}void main(){vec
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/rotating-uv.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/12_rotating-uv.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -211,8 +211,8 @@ mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}void main(){vec
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nmat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}void main(){vec2 p=vUv-0.5;p=rot(u_time)*p;vec2 uv=p+0.5;vec3 c=vec3(uv,0.0);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nmat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}void main(){vec2 p=vUv-0.5;// TODO: p=rot(u_time)*p\nvec2 uv=p+0.5;vec3 c=vec3(uv,0.0);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/animation/rotating-uv.frag',
-        referenceSrc: '../glsl/animation/rotating-uv.answer.frag',
+        exerciseSrc: '../glsl/animation/12_rotating-uv.frag',
+        referenceSrc: '../glsl/animation/12_rotating-uv.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

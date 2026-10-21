@@ -60,7 +60,7 @@ float pulse = sin(u_time * 2.0) * 0.5 + 0.5;
 vec3 finalColor = mouseColor * circle * pulse;</code></pre>
 <ul><li><code>u_mouse / u_resolution</code> 把鼠标坐标归一化到 0.0–1.0</li><li><code>distance(uv, mouse)</code> 测量每个像素到鼠标的距离</li><li><code>1.0 - smoothstep(0.0, 0.2, distToMouse)</code> 在半径 0.2 内生成光晕</li><li><code>vec3(mouse, 0.5)</code> 让颜色跟随鼠标的 x、y 位置变化</li><li><code>sin(u_time * 2.0) * 0.5 + 0.5</code> 产生 0.0–1.0 的脉动值</li><li>三者相乘让光晕同时具备位置跟随、颜色变化和脉动效果</li></ul>
 <p>试着把 <code>circle * pulse</code> 改成 <code>circle + pulse * 0.1</code>，光晕会在脉动时微微扩大而不是整体变暗。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/mouse-interaction.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/05_mouse-interaction.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 uniform float u_time;
@@ -137,7 +137,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/mouse-interaction.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/05_mouse-interaction.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -249,8 +249,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\nuniform vec2 u_mouse;\n\nvoid main() {\n    // 将坐标标准化到 0.0 到 1.0 范围\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 将鼠标坐标也标准化到相同范围\n    vec2 mouse = u_mouse.xy / u_resolution.xy;\n\n    // 计算当前像素到鼠标位置的距离\n    float dist = distance(uv, mouse);\n\n    // 创建一个跟随鼠标的圆形光晕\n    float radius = 0.2;\n    float glow = 1.0 - smoothstep(0.0, radius, dist);\n\n    // 基于距离创建颜色渐变\n    vec3 color = vec3(0.0);\n\n    // 方法1：简单的光晕效果\n    color = vec3(glow, glow * 0.5, glow * 0.8);\n\n    // 方法2：彩色距离效果（注释掉上面的 color 赋值来使用）\n    // float normalizedDist = dist / 0.5; // 归一化距离\n    // color = vec3(\n    //     1.0 - normalizedDist,           // 红色随距离减少\n    //     0.5 + 0.5 * sin(dist * 10.0),   // 绿色波纹\n    //     normalizedDist                  // 蓝色随距离增加\n    // );\n\n    // 方法3：脉冲效果（注释掉上面的 color 赋值来使用）\n    // float pulse = 0.5 + 0.5 * sin(u_time * 3.0);\n    // float dynamicRadius = radius * pulse;\n    // float dynamicGlow = 1.0 - smoothstep(0.0, dynamicRadius, dist);\n    // color = vec3(dynamicGlow, dynamicGlow * 0.7, dynamicGlow * 0.3);\n\n    // 添加背景色\n    vec3 bgColor = vec3(0.05, 0.05, 0.1); // 深色背景\n    color = mix(bgColor, color, glow);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nuniform vec2 u_resolution;\nuniform vec2 u_mouse;\nuniform float u_time;\n\nvoid main() {\n    // 练习：鼠标交互\n    // 目标：创建响应鼠标位置的交互效果\n\n    // 归一化坐标\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 练习1：获取归一化的鼠标坐标\n    // 提示：将鼠标坐标除以分辨率\n    // TODO: mouse = u_mouse / u_resolution\n    vec2 mouse = u_mouse / u_resolution;\n\n    // 练习2：计算当前像素到鼠标位置的距离\n    // 提示：使用distance函数\n    // TODO: distToMouse = distance(uv, mouse)\n    float distToMouse = distance(uv, mouse);\n\n    // 练习3：创建以鼠标为中心的圆形效果\n    // 提示：使用smoothstep创建平滑边缘\n    // TODO: 调整半径值（建议 0.15 - 0.3）\n    float circle = 1.0 - smoothstep(0.0, 0.2, distToMouse);\n\n    // 练习4：根据鼠标位置改变颜色\n    // 提示：使用鼠标的x和y坐标作为颜色分量\n    // TODO: mouseColor = vec3(mouse, 0.5)\n    vec3 mouseColor = vec3(mouse, 0.5);\n\n    // 练习5：添加时间动画\n    // 提示：使用sin函数创建脉动效果\n    // TODO: pulse = sin(u_time * speed) * 0.5 + 0.5\n    float pulse = sin(u_time * 2.0) * 0.5 + 0.5;\n\n    // 最终颜色混合\n    vec3 finalColor = mouseColor * circle * pulse;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseSrc: '../glsl/animation/mouse-interaction.frag',
-        referenceSrc: '../glsl/animation/mouse-interaction.answer.frag',
+        exerciseSrc: '../glsl/animation/05_mouse-interaction.frag',
+        referenceSrc: '../glsl/animation/05_mouse-interaction.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

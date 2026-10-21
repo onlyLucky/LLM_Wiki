@@ -44,7 +44,7 @@ float x = fract(vUv.x * stripeCount);
 float mask = step(0.5, x);</code></pre>
 <p><code>stripeCount</code> 越大，条纹越细越密。<code>step(0.5, x)</code> 的阈值 0.5 让两种颜色宽度相等；改成 <code>step(0.3, x)</code> 则 colorA 占 30%，colorB 占 70%。</p>
 <p>把 <code>vUv.x</code> 换成 <code>vUv.y</code> 得到水平条纹，换成 <code>(vUv.x + vUv.y) * 0.5</code> 得到对角条纹。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/stripes-bands.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/18_stripes-bands.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -92,7 +92,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/stripes-bands.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/18_stripes-bands.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -204,8 +204,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float stripeCount = 12.0;\n    float x = fract(vUv.x * stripeCount);\n    float mask = step(0.5, x);\n\n    vec3 colorA = vec3(0.08, 0.1, 0.12);\n    vec3 colorB = vec3(0.9, 0.95, 1.0);\n    vec3 color = mix(colorA, colorB, mask);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 colorA = vec3(0.08, 0.1, 0.12);\n    vec3 colorB = vec3(0.9, 0.95, 1.0);\n\n    // TODO: 设置条纹数量（建议 8.0 - 20.0）\n    float stripeCount = 8.0;\n\n    // TODO: 使用 fract(vUv.x * stripeCount) 得到每条纹内部的 0-1 坐标\n    float x = fract(vUv.x * stripeCount);\n\n    // TODO: 使用 step(0.5, x) 得到 0/1 遮罩（条纹两种颜色切换）\n    float mask = step(0.5, x);\n\n    vec3 color = mix(colorA, colorB, mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/stripes-bands.frag',
-        referenceSrc: '../glsl/basic/stripes-bands.answer.frag',
+        exerciseSrc: '../glsl/basic/18_stripes-bands.frag',
+        referenceSrc: '../glsl/basic/18_stripes-bands.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

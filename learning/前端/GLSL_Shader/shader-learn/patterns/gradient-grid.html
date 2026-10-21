@@ -51,7 +51,7 @@
 <p><code>floor(vUv * 6.0)</code> 把连续坐标离散成 0–5 的整数。<code>/ 6.0</code> 把它缩回 0–1 范围，让颜色幅度保持和原来一致。</p>
 <p>初始代码 <code>cell = vUv</code> 直接把 UV 坐标当颜色，是平滑渐变，没有格子边界。加上 <code>floor(...) / 6.0</code> 之后，同一格子内所有像素共享同一个坐标值，阶梯感就出现了。</p>
 <p>试着把 <code>/6.0</code> 改为 <code>/3.0</code>，看看颜色分布会发生什么变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/gradient-grid.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/11_gradient-grid.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -88,7 +88,7 @@ void main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=ve
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/gradient-grid.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/11_gradient-grid.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -200,8 +200,8 @@ void main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=ve
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: cell=floor(vUv*6.0)/6.0\nvec2 cell=vUv;vec3 col=vec3(cell,0.0);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/gradient-grid.frag',
-        referenceSrc: '../glsl/patterns/gradient-grid.answer.frag',
+        exerciseSrc: '../glsl/patterns/11_gradient-grid.frag',
+        referenceSrc: '../glsl/patterns/11_gradient-grid.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

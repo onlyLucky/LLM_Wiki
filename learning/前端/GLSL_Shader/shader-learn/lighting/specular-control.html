@@ -51,7 +51,7 @@
 <p>初始状态：<code>spec = 0.0</code>，球体只有漫反射。</p>
 <p>改动：用 <code>dot(n, hV)</code> 计算法线和半向量的对齐程度，再用 <code>pow(..., shininess)</code> 把它集中成一个高光点。<code>shininess = 16.0</code> 对应中等光滑的材质效果。</p>
 <p>试着把 <code>shininess</code> 改成 <code>2.0</code>，看看高光会扩散到多大范围。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/specular-control.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/08_specular-control.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -88,7 +88,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/specular-control.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/08_specular-control.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -200,8 +200,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));vec3 v=normalize(vec3(0.0,0.0,1.0));vec3 hV=normalize(l+v);float diff=max(dot(n,l),0.0);float shininess=16.0;float spec=pow(max(dot(n,hV),0.0),shininess);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.12+0.88*diff)+vec3(1.0)*spec*0.6;gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l=normalize(vec3(-0.4,0.6,0.7));vec3 v=normalize(vec3(0.0,0.0,1.0));vec3 hV=normalize(l+v);float diff=max(dot(n,l),0.0);// TODO: 调整 shininess 并计算 spec\nfloat shininess=16.0;float spec=0.0;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.12+0.88*diff)+vec3(1.0)*spec*0.6;gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/specular-control.frag',
-        referenceSrc: '../glsl/lighting/specular-control.answer.frag',
+        exerciseSrc: '../glsl/lighting/08_specular-control.frag',
+        referenceSrc: '../glsl/lighting/08_specular-control.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

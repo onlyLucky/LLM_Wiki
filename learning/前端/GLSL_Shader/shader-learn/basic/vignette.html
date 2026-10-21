@@ -46,7 +46,7 @@ float v = 1.0 - smoothstep(0.25, 0.6, d);</code></pre>
 <p><code>smoothstep(0.25, 0.6, d)</code> 在 d=0.25 时开始从 0 上升，到 d=0.6 时变成 1（边缘）。用 <code>1.0 -</code> 反转：中心为 1，边缘为 0。</p>
 <p>调整参数的效果：</p>
 <ul><li><code>0.25</code> 越小，暗角从离中心更近的地方开始</li><li><code>0.6</code> 越小，过渡带越窄，边缘越硬</li><li><code>0.6</code> 越大（比如 1.0），暗角更柔和</li></ul>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/vignette.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/30_vignette.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -89,7 +89,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/vignette.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/30_vignette.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -201,8 +201,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    float v = 1.0 - smoothstep(0.25, 0.6, d);\n    vec3 color = mix(vec3(0.03, 0.04, 0.06), vec3(0.25, 0.9, 0.85), v);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 用 smoothstep 做暗角遮罩 v（中心亮，四周暗）\n    float v = 1.0;\n\n    vec3 color = mix(vec3(0.03, 0.04, 0.06), vec3(0.25, 0.9, 0.85), v);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/vignette.frag',
-        referenceSrc: '../glsl/basic/vignette.answer.frag',
+        exerciseSrc: '../glsl/basic/30_vignette.frag',
+        referenceSrc: '../glsl/basic/30_vignette.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

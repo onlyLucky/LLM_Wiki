@@ -54,7 +54,7 @@ return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);</code></pre>
 <p><code>smoothstep(0.0, 1.0, f)</code> 和 <code>f * f * (3.0 - 2.0 * f)</code> 数学上完全等价——smoothstep 内部就是这个多项式。两者都在 f=0 和 f=1 处导数为 0，产生平滑过渡。</p>
 <p>直接写多项式的优势是：代码更直观地表明了「我在做平滑插值」，而不依赖 GPU 实现的 smoothstep 细节。实际项目中两者均可使用。</p>
 <p>试着把值噪声结果做两次叠加：<code>valueNoise(pos) * 0.5 + valueNoise(pos * 2.0) * 0.25</code>，体验手动 FBM 的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/noise-functions.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/02_noise-functions.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">// 噪声函数
 // 教程ID: noise-functions
 
@@ -181,7 +181,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/noise-functions.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/02_noise-functions.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -293,8 +293,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "// 噪声函数\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 伪随机数生成函数\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\n// 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；\n// 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）\nvec2 hash2(vec2 p) {\n    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);\n}\n\n// 值噪声函数\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机值\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    // 混合4个角的值\n    return mix(\n        mix(a, b, u.x),\n        mix(c, d, u.x),\n        u.y\n    );\n}\n\n// Perlin噪声（简化版）\nfloat perlinNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机梯度\n    vec2 a = hash2(i) * 2.0 - 1.0;\n    vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;\n    vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;\n    vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;\n\n    // 计算点积\n    float dotA = dot(a, f);\n    float dotB = dot(b, f - vec2(1.0, 0.0));\n    float dotC = dot(c, f - vec2(0.0, 1.0));\n    float dotD = dot(d, f - vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(\n        mix(dotA, dotB, u.x),\n        mix(dotC, dotD, u.x),\n        u.y\n    ) * 0.5 + 0.5; // 将范围从[-1,1]转换到[0,1]\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 将画布分成三部分显示不同类型的噪声\n    vec3 color;\n\n    // 坐标缩放和动画\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    if (uv.x < 0.33) {\n        // 随机噪声\n        color = vec3(random(pos * 10.0));\n    } else if (uv.x < 0.66) {\n        // 值噪声\n        color = vec3(valueNoise(pos));\n    } else {\n        // Perlin噪声\n        color = vec3(perlinNoise(pos));\n    }\n\n    // 添加分隔线\n    if (abs(uv.x - 0.33) < 0.002 || abs(uv.x - 0.66) < 0.002) {\n        color = vec3(1.0, 0.0, 0.0);\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "// 噪声函数（练习版）\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // TODO: 用平滑曲线替代线性插值（比如 u = f*f*(3-2f)）\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    // TODO: 修改 scale/pos，观察随机噪声与平滑噪声的区别\n    float n = valueNoise(pos);\n\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
-        exerciseSrc: '../glsl/noise/noise-functions.frag',
-        referenceSrc: '../glsl/noise/noise-functions.answer.frag',
+        exerciseSrc: '../glsl/noise/02_noise-functions.frag',
+        referenceSrc: '../glsl/noise/02_noise-functions.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

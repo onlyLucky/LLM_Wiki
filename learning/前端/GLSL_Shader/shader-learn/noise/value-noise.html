@@ -61,7 +61,7 @@ float d = hash21(i + vec2(1,1));   // 右上</code></pre>
 <ul><li><code>vUv * 8.0</code>：放大坐标，控制噪声的粗细程度</li><li><code>valueNoise(...)</code>：对四个格角插值，返回平滑的 0–1 灰度值</li><li><code>vec3(n)</code>：灰度输出</li></ul>
 <p>初始 <code>n = 0.0</code> 是全黑。替换之后每个像素根据自己在格子内的位置得到插值后的灰度，画面就变成平滑流动的噪声。</p>
 <p>试着把 <code>8.0</code> 换成 <code>4.0</code>，看看噪声是否变得更大、更柔和。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/value-noise.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/03_value-noise.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -120,7 +120,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/value-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/03_value-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -232,8 +232,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\n\nfloat valueNoise(vec2 p) {\n    vec2 i = floor(p);\n    vec2 f = fract(p);\n\n    float a = hash21(i);\n    float b = hash21(i + vec2(1.0, 0.0));\n    float c = hash21(i + vec2(0.0, 1.0));\n    float d = hash21(i + vec2(1.0, 1.0));\n\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\nvoid main() {\n    float n = valueNoise(vUv * 8.0);\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\n\nfloat valueNoise(vec2 p) {\n    vec2 i = floor(p);\n    vec2 f = fract(p);\n\n    float a = hash21(i);\n    float b = hash21(i + vec2(1.0, 0.0));\n    float c = hash21(i + vec2(0.0, 1.0));\n    float d = hash21(i + vec2(1.0, 1.0));\n\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\nvoid main() {\n    // TODO: 调用 valueNoise(vUv * 8.0) 输出灰度噪声\n    float n = 0.0;\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
-        exerciseSrc: '../glsl/noise/value-noise.frag',
-        referenceSrc: '../glsl/noise/value-noise.answer.frag',
+        exerciseSrc: '../glsl/noise/03_value-noise.frag',
+        referenceSrc: '../glsl/noise/03_value-noise.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

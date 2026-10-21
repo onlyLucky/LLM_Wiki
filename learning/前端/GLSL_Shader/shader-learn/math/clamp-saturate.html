@@ -50,7 +50,7 @@
 <p><code>vUv.x * 1.8 - 0.4</code> 是线性变换，把 x 坐标拉伸并左移，让渐变过渡区间收缩在画面中部。加上 <code>clamp(…, 0.0, 1.0)</code> 后，超出范围的部分被截断，两端成为纯黑和纯白。</p>
 <p>练习的起始状态是 <code>float t = 0.0</code>，画面全黑。替换成 <code>clamp(vUv.x * 1.8 - 0.4, 0.0, 1.0)</code> 就还原了渐变。</p>
 <p>试着把上限 <code>1.0</code> 改成 <code>0.7</code>，看看高光端被截断后的变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/clamp-saturate.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/01_clamp-saturate.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -87,7 +87,7 @@ void main(){float t=clamp(vUv.x*1.8-0.4,0.0,1.0);gl_FragColor=vec4(vec3(t),1.0);
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/clamp-saturate.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/01_clamp-saturate.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -199,8 +199,8 @@ void main(){float t=clamp(vUv.x*1.8-0.4,0.0,1.0);gl_FragColor=vec4(vec3(t),1.0);
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float t=clamp(vUv.x*1.8-0.4,0.0,1.0);gl_FragColor=vec4(vec3(t),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: 用 clamp 得到 t\nfloat t=0.0;gl_FragColor=vec4(vec3(t),1.0);}\n",
-        exerciseSrc: '../glsl/math/clamp-saturate.frag',
-        referenceSrc: '../glsl/math/clamp-saturate.answer.frag',
+        exerciseSrc: '../glsl/math/01_clamp-saturate.frag',
+        referenceSrc: '../glsl/math/01_clamp-saturate.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

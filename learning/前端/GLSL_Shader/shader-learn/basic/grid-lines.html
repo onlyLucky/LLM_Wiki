@@ -47,7 +47,7 @@ line = min(line, 1.0);</code></pre>
 line = min(line, 1.0);</code></pre>
 <p>x 方向和 y 方向各产生一条线，用 <code>+</code> 叠加后最大值为 2（两边界交叉处），<code>min(line, 1.0)</code> 把它压回 1。</p>
 <p>调整 <code>lw = 0.02</code> 可以让线条更细，改变 <code>density</code> 可以控制格子数量。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/grid-lines.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/17_grid-lines.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/grid-lines.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/17_grid-lines.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float density = 10.0;\n    vec2 g = fract(vUv * density);\n    float lw = 0.05;\n    float line = step(1.0 - lw, g.x) + step(1.0 - lw, g.y);\n    line = min(line, 1.0);\n    vec3 c = mix(vec3(0.1, 0.15, 0.25), vec3(1.0), line);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float density = 10.0;\n    vec2 g = fract(vUv * density);\n    float lw = 0.05;\n    // TODO: 用 step(1.0-lw, g.x) + step(1.0-lw, g.y) 计算 line，再用 min 限制到 1.0\n    float line = 0.0;\n    vec3 c = mix(vec3(0.1, 0.15, 0.25), vec3(1.0), line);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/grid-lines.frag',
-        referenceSrc: '../glsl/basic/grid-lines.answer.frag',
+        exerciseSrc: '../glsl/basic/17_grid-lines.frag',
+        referenceSrc: '../glsl/basic/17_grid-lines.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

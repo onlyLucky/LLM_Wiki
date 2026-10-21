@@ -17,7 +17,7 @@
     </p>
     <ul class="lede-list">
       <li>左侧是 <code>教程介绍</code> 与 <code>参考答案</code> 两个 Tab；右侧是一块可切换的舞台画布——<code>正确预览</code>（参考代码的渲染结果）与 <code>当前预览</code>（你的练习代码）</li>
-      <li>案例代码已抽离为独立的 <code>glsl/&lt;部分&gt;/&lt;案例&gt;.frag</code>（练习）与 <code>.answer.frag</code>（参考）文件：在编辑器里改 <code>.frag</code> 文件保存，页面画布会自动更新，无需刷新</li>
+      <li>案例代码已抽离为独立的 <code>glsl/&lt;部分&gt;/&lt;序号&gt;_&lt;案例&gt;.frag</code>（练习）与 <code>_&lt;序号&gt;_&lt;案例&gt;.answer.frag</code>（参考）文件：在编辑器里改 <code>.frag</code> 文件保存，页面画布会自动更新，无需刷新</li>
       <li>案例代码为 WebGL 通用的 GLSL ES 1.00 写法（<code>gl_FragColor</code>），由本页运行时以全屏四边形 + <code>varying vec2 vUv</code> 驱动，并按需注入 <code>u_time / u_resolution / u_mouse</code></li>
     </ul>
     <div class="parts-grid">

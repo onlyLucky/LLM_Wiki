@@ -56,7 +56,7 @@ n = abs(n * 2.0 - 1.0);</code></pre>
 <ul><li><code>n * 2.0 - 1.0</code>：把 [0,1] 拉伸到 [-1,1]，中点映射到 0</li><li><code>abs(...)</code>：把曲线的中段折叠成 V 形谷底，两端变成最亮</li></ul>
 <p>初始代码只有 <code>n = fbm(...)</code> 是平滑分形噪声，没有折叠。加上这行变换，所有平缓过渡的中间区域变成尖锐暗谷，图案出现强烈的湍流感。</p>
 <p>试着把 <code>2.0</code> 改成 <code>3.0</code>，V 形谷会更深更窄，暗纹更锐利。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/turbulence.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/12_turbulence.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -94,7 +94,7 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/turbulence.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/12_turbulence.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=fbm(vUv*6.0);n=abs(n*2.0-1.0);gl_FragColor=vec4(vec3(n),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=fbm(vUv*6.0);// TODO: n=abs(n*2.0-1.0)\ngl_FragColor=vec4(vec3(n),1.0);}\n",
-        exerciseSrc: '../glsl/noise/turbulence.frag',
-        referenceSrc: '../glsl/noise/turbulence.answer.frag',
+        exerciseSrc: '../glsl/noise/12_turbulence.frag',
+        referenceSrc: '../glsl/noise/12_turbulence.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

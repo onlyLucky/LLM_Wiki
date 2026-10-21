@@ -45,7 +45,7 @@ float d = length(p); // 到中心的距离</code></pre>
 <pre><code>float circle = 1.0 - step(0.3, d);</code></pre>
 <p><code>step(0.3, d)</code> 在 <code>d &lt; 0.3</code> 时返回 0，在 <code>d &gt;= 0.3</code> 时返回 1。用 <code>1.0 -</code> 反转：圆内为 1（白），圆外为 0（黑）。</p>
 <p>半径 <code>0.3</code> 是相对于归一化坐标 0~1 的比例。改成 <code>0.15</code> 圆变小，改成 <code>0.45</code> 圆变大，接近填满画面。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/simple-circle.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/21_simple-circle.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -90,7 +90,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/simple-circle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/21_simple-circle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -202,8 +202,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    // step(r, d) 在 d >= r 时为 1（圆外），d < r 时为 0（圆内）\n    // 1.0 - step(...) 翻转：圆内为 1，圆外为 0\n    float circle = 1.0 - step(0.3, d);\n    gl_FragColor = vec4(vec3(circle), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 用 step(0.3, d) 判断是否在圆外，再取反，得到圆内为 1.0 的遮罩\n    float circle = 0.0;\n\n    gl_FragColor = vec4(vec3(circle), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/simple-circle.frag',
-        referenceSrc: '../glsl/basic/simple-circle.answer.frag',
+        exerciseSrc: '../glsl/basic/21_simple-circle.frag',
+        referenceSrc: '../glsl/basic/21_simple-circle.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

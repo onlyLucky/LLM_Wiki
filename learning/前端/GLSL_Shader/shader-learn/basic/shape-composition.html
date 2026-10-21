@@ -53,7 +53,7 @@ float circle = 1.0 - smoothstep(0.22, 0.228, length(uv - 0.5));
 float combined = max(rect, circle);</code></pre>
 <p>矩形和圆的形状不同，<code>max</code> 让像素只要属于任意一个形状就显示前景色。</p>
 <p>试试用 <code>min(rect, circle)</code> 替代 <code>max</code>——<code>min</code> 是两个形状的交集，只有两者都覆盖的区域才会显示。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/shape-composition.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/25_shape-composition.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -115,7 +115,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/shape-composition.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/25_shape-composition.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -227,8 +227,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nfloat rectMask(vec2 uv, vec2 center, vec2 halfSize) {\n    vec2 d = abs(uv - center);\n    float insideX = 1.0 - step(halfSize.x, d.x);\n    float insideY = 1.0 - step(halfSize.y, d.y);\n    return insideX * insideY;\n}\n\nvoid main() {\n    vec2 uv = vUv;\n\n    float rect = rectMask(uv, vec2(0.5), vec2(0.18, 0.1));\n\n    vec2 p = uv - 0.5;\n    float r = 0.22;\n    float aa = 0.008;\n    float circle = 1.0 - smoothstep(r, r + aa, length(p));\n\n    float combined = max(rect, circle);\n\n    vec3 bg = vec3(0.07, 0.08, 0.12);\n    vec3 fg = vec3(0.35, 1.0, 0.65);\n    vec3 color = mix(bg, fg, combined);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 uv = vUv;\n\n    // TODO: 1) 用 step 构造矩形遮罩 rect（提示：比较 abs(uv - center) 与 halfSize）\n    float rect = 0.0;\n\n    // TODO: 2) 用 smoothstep 构造圆形遮罩 circle（提示：circle = 1.0 - smoothstep(r, r+aa, length(uv-0.5))）\n    float circle = 0.0;\n\n    // TODO: 3) 用 max(rect, circle) 合并成 combined\n    float combined = max(rect, circle);\n\n    vec3 bg = vec3(0.07, 0.08, 0.12);\n    vec3 fg = vec3(0.35, 1.0, 0.65);\n    vec3 color = mix(bg, fg, combined);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/shape-composition.frag',
-        referenceSrc: '../glsl/basic/shape-composition.answer.frag',
+        exerciseSrc: '../glsl/basic/25_shape-composition.frag',
+        referenceSrc: '../glsl/basic/25_shape-composition.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

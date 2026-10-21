@@ -39,7 +39,7 @@
 <pre><code>float t = 1.0 - vUv.x;</code></pre>
 <p><code>1.0 - x</code> 是最简单的「取反」操作：输入 0 得 1，输入 1 得 0，中间值也对称翻转。</p>
 <p>这个技巧不只用于渐变。任何 0~1 的遮罩，用 <code>1.0 -</code> 就能反转：白变黑、黑变白、圆内变圆外。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/invert-gradient.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/11_invert-gradient.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -80,7 +80,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/invert-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/11_invert-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -192,8 +192,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float t = 1.0 - vUv.x;\n    gl_FragColor = vec4(vec3(t), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 1.0 - vUv.x\n    float t = 0.0;\n    gl_FragColor = vec4(vec3(t), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/invert-gradient.frag',
-        referenceSrc: '../glsl/basic/invert-gradient.answer.frag',
+        exerciseSrc: '../glsl/basic/11_invert-gradient.frag',
+        referenceSrc: '../glsl/basic/11_invert-gradient.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

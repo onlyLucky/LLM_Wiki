@@ -55,7 +55,7 @@ vec3 waveColor = mix(color1, color2, colorMix);</code></pre>
 <p>原始状态：<code>sin(u_time) * 0.5 + 0.5</code> 让颜色在整条波上统一地随时间在橙色和蓝色之间切换。</p>
 <p>改动后：<code>uv.x</code> 直接用水平坐标作为混合比例，画布左边偏橙（colorMix 接近 0），右边偏蓝（colorMix 接近 1）。波的颜色从此不再随时间变化，而是沿水平方向产生空间渐变。</p>
 <p>这个改动展示了一个核心思路：任何 0–1 范围的值都可以作为 mix 的第三个参数，驱动颜色变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/sine-wave.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/14_sine-wave.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 uniform float u_time;
@@ -135,7 +135,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/sine-wave.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/14_sine-wave.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -247,8 +247,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 将坐标标准化到 0.0 到 1.0 范围\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 波形参数\n    float frequency = 5.0;  // 频率（波的密度）\n    float amplitude = 0.1;  // 振幅（波的高度）\n    float speed = 2.0;      // 速度（动画快慢）\n\n    // 计算正弦波\n    // sin(频率 * x坐标 + 时间 * 速度)\n    float wave = sin(frequency * uv.x + u_time * speed);\n\n    // 将波形从 [-1, 1] 范围映射到屏幕坐标\n    float waveY = 0.5 + amplitude * wave;\n\n    // 计算当前像素到波形的距离\n    float dist = abs(uv.y - waveY);\n\n    // 创建波形线条（使用 smoothstep 创建平滑边缘）\n    float lineWidth = 0.02;\n    float line = 1.0 - smoothstep(0.0, lineWidth, dist);\n\n    // 设置颜色\n    vec3 waveColor = vec3(0.0, 1.0, 1.0); // 青色波形\n    vec3 bgColor = vec3(0.0, 0.0, 0.2);   // 深蓝色背景\n\n    vec3 finalColor = mix(bgColor, waveColor, line);\n\n    gl_FragColor = vec4(finalColor, 1.0);\n\n    // 其他波形效果示例：\n    // 多重波形\n    // float wave1 = sin(frequency * uv.x + u_time * speed);\n    // float wave2 = sin(frequency * 2.0 * uv.x + u_time * speed * 1.5);\n    // float combinedWave = (wave1 + wave2 * 0.5) / 1.5;\n\n    // 彩色波形（基于位置变色）\n    // vec3 rainbowColor = vec3(\n    //     0.5 + 0.5 * sin(uv.x * 10.0 + u_time),\n    //     0.5 + 0.5 * sin(uv.x * 10.0 + u_time + 2.0),\n    //     0.5 + 0.5 * sin(uv.x * 10.0 + u_time + 4.0)\n    // );\n}\n",
         exerciseCode: "precision mediump float;\n\nuniform vec2 u_resolution;\nuniform float u_time;\n\nvoid main() {\n    // 练习：正弦波动画\n    // 目标：学习如何使用三角函数创建波浪效果\n\n    // 归一化坐标\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 练习1：创建基础正弦波\n    // 提示：使用sin函数，输入为x坐标乘以频率\n    // TODO: wave = sin(uv.x * frequency)\n    float wave = sin(uv.x * 10.0);\n\n    // 练习2：添加时间动画\n    // 提示：在sin函数中加入u_time使波浪移动\n    // TODO: animatedWave = sin(uv.x * 10.0 + u_time)\n    float animatedWave = sin(uv.x * 10.0 + u_time);\n\n    // 练习3：调整波浪的振幅和偏移\n    // 提示：sin函数返回[-1,1]，需要转换为[0,1]\n    // TODO: normalizedWave = animatedWave * 0.5 + 0.5\n    float normalizedWave = animatedWave * 0.5 + 0.5;\n\n    // 练习4：创建波浪带\n    // 提示：使用abs()和smoothstep()创建平滑的波浪带\n    float waveStripe = 1.0 - smoothstep(0.0, 0.1, abs(uv.y - normalizedWave));\n\n    // 练习5：添加颜色渐变\n    // 提示：根据y坐标和时间创建颜色变化\n    vec3 color1 = vec3(1.0, 0.5, 0.2); // 橙色\n    vec3 color2 = vec3(0.2, 0.5, 1.0); // 蓝色\n    // TODO: 用时间或坐标构造 0-1 的 colorMix\n    float colorMix = sin(u_time) * 0.5 + 0.5;\n    // TODO: waveColor = mix(color1, color2, colorMix)\n    vec3 waveColor = mix(color1, color2, colorMix);\n\n    vec3 finalColor = waveColor * waveStripe;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseSrc: '../glsl/math/sine-wave.frag',
-        referenceSrc: '../glsl/math/sine-wave.answer.frag',
+        exerciseSrc: '../glsl/math/14_sine-wave.frag',
+        referenceSrc: '../glsl/math/14_sine-wave.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

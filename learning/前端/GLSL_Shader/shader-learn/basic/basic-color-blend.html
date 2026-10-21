@@ -43,7 +43,7 @@
 <pre><code>vec3 blendedColor = mix(color1, color2, vUv.x);</code></pre>
 <p><code>vUv.x</code> 从左到右是 0 → 1。<code>mix</code> 在这两个颜色之间按比例插值，左边全是 color1（红），右边全是 color2（绿），中间是过渡色。</p>
 <p>这个模式可以扩展到任何两种颜色、任何方向。把 <code>vUv.x</code> 换成 <code>vUv.y</code> 就是从下到上的渐变。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/basic-color-blend.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/06_basic-color-blend.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 varying vec2 vUv;
@@ -84,7 +84,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/basic-color-blend.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/06_basic-color-blend.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -196,8 +196,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 color1 = vec3(1.0, 0.0, 0.0);\n    vec3 color2 = vec3(0.0, 1.0, 0.0);\n    vec3 blendedColor = mix(color1, color2, vUv.x);\n    gl_FragColor = vec4(blendedColor, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 color1 = vec3(1.0, 0.0, 0.0);\n    vec3 color2 = vec3(0.0, 1.0, 0.0);\n    // TODO: 使用 mix 函数，根据 vUv.x 实现从 color1 到 color2 的渐变\n    vec3 blendedColor = color1;\n\n    // TODO: 输出颜色\n    gl_FragColor = vec4(blendedColor, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/basic-color-blend.frag',
-        referenceSrc: '../glsl/basic/basic-color-blend.answer.frag',
+        exerciseSrc: '../glsl/basic/06_basic-color-blend.frag',
+        referenceSrc: '../glsl/basic/06_basic-color-blend.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -48,7 +48,7 @@ vec3 color = mix(colorA, colorB, t);</code></pre>
 <p><code>clamp(t, 0.0, 1.0)</code> 把 t 限制在 0~1，无论输入多大多小，输出不会超界。</p>
 <p><code>mix(colorA, colorB, t)</code> 用 t 在深蓝和橙色之间插值，左下角是 colorA（深蓝），右上角是 colorB（橙色）。</p>
 <p>改变 t 的计算方式，比如 <code>t = vUv.x * vUv.y</code>，看渐变形状会怎么变。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/diagonal-gradient.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/10_diagonal-gradient.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/diagonal-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/10_diagonal-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float t = (vUv.x + vUv.y) * 0.5;\n    t = clamp(t, 0.0, 1.0);\n\n    vec3 colorA = vec3(0.15, 0.2, 0.95);\n    vec3 colorB = vec3(1.0, 0.6, 0.15);\n    vec3 color = mix(colorA, colorB, t);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 colorA = vec3(0.15, 0.2, 0.95);\n    vec3 colorB = vec3(1.0, 0.6, 0.15);\n\n    // TODO: 构造对角线渐变因子 t（提示： (vUv.x + vUv.y) * 0.5）\n    float t = 0.0;\n\n    // TODO: 使用 clamp 将 t 限制在 0.0 - 1.0\n\n    // TODO: 使用 mix(colorA, colorB, t) 得到 color\n    vec3 color = mix(colorA, colorB, t);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/diagonal-gradient.frag',
-        referenceSrc: '../glsl/basic/diagonal-gradient.answer.frag',
+        exerciseSrc: '../glsl/basic/10_diagonal-gradient.frag',
+        referenceSrc: '../glsl/basic/10_diagonal-gradient.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -53,7 +53,7 @@ float m = mod(g.x + g.y, 2.0);</code></pre>
 <p><code>floor(vUv * 10.0)</code> 把 UV 坐标离散化成 10×10 的整数格子编号。<code>mod(g.x + g.y, 2.0)</code> 把两个方向的编号相加后对 2 取余，相邻格子的余数一定相差 1，所以颜色必然交替。</p>
 <p>初始代码 <code>g = vec2(0.0), m = 0.0</code> 让所有格子都是同一编号，<code>mix</code> 只能输出一种颜色。加上 <code>floor</code> 和 <code>mod</code> 之后，每个格子有了独立编号，交替规律就自然出现了。</p>
 <p>试着把 <code>mod(g.x + g.y, 2.0)</code> 改为 <code>mod(g.x * g.y, 2.0)</code>，看看会出现什么图案。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/checker-10x10.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/06_checker-10x10.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -90,7 +90,7 @@ void main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/checker-10x10.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/06_checker-10x10.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -202,8 +202,8 @@ void main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.1),vec3(0.9),m);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: g=floor(vUv*10.0); m=mod(g.x+g.y,2.0)\nvec2 g=vec2(0.0);float m=0.0;vec3 col=mix(vec3(0.1),vec3(0.9),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/checker-10x10.frag',
-        referenceSrc: '../glsl/patterns/checker-10x10.answer.frag',
+        exerciseSrc: '../glsl/patterns/06_checker-10x10.frag',
+        referenceSrc: '../glsl/patterns/06_checker-10x10.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

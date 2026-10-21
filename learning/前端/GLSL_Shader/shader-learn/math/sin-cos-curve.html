@@ -55,7 +55,7 @@ float m = 1.0 - smoothstep(0.0, 0.01, d);</code></pre>
 <p>初始状态：<code>y = 0.5</code> 是一条固定的水平线，不随 x 变化，也不会动。</p>
 <p>修改后：<code>vUv.x * 6.2831853</code> 让波形在横向走完一个完整的正弦周期；<code>+ u_time</code> 让相位随时间偏移，形成向左流动的动画；<code>* 0.25 + 0.5</code> 把 sin() 的 ±1 范围压缩并居中到画布的中间区域。</p>
 <p>试着把 <code>* 0.25</code> 改为 <code>* 0.48</code>，体验波峰几乎碰到画布顶部的极限感。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/sin-cos-curve.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/13_sin-cos-curve.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main(){float y=sin(vUv.x*6.2831853+u_time)*0.25+0.5;float d=abs(vUv.y-y);fl
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/sin-cos-curve.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/13_sin-cos-curve.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main(){float y=sin(vUv.x*6.2831853+u_time)*0.25+0.5;float d=abs(vUv.y-y);fl
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){float y=sin(vUv.x*6.2831853+u_time)*0.25+0.5;float d=abs(vUv.y-y);float m=1.0-smoothstep(0.0,0.01,d);vec3 c=mix(vec3(0.05),vec3(0.2,0.85,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){// TODO: 计算曲线 y\nfloat y=0.5;float d=abs(vUv.y-y);float m=1.0-smoothstep(0.0,0.01,d);vec3 c=mix(vec3(0.05),vec3(0.2,0.85,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/math/sin-cos-curve.frag',
-        referenceSrc: '../glsl/math/sin-cos-curve.answer.frag',
+        exerciseSrc: '../glsl/math/13_sin-cos-curve.frag',
+        referenceSrc: '../glsl/math/13_sin-cos-curve.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

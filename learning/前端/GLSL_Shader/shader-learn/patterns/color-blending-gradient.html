@@ -53,7 +53,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>colorA</code> 是纯红色（红 100%，绿 0%，蓝 0%），<code>colorB</code> 是纯蓝色（红 0%，绿 0%，蓝 100%）。<code>mix</code> 以 <code>vUv.x</code> 为权重，在最左侧取 100% 的 <code>colorA</code>，最右侧取 100% 的 <code>colorB</code>，中间线性混合。</p>
 <p>初始代码什么都没有。关键步骤是定义两个端点颜色，再用 <code>mix</code> + 坐标分量把它们连起来。</p>
 <p>试着在 <code>mix</code> 的第三个参数处用 <code>smoothstep(0.3, 0.7, vUv.x)</code> 替换 <code>vUv.x</code>，渐变会集中在画面中间的 30%–70% 区域，两端维持纯色。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/color-blending-gradient.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/01_color-blending-gradient.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -96,7 +96,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/color-blending-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/01_color-blending-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -208,8 +208,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 colorA = vec3(1.0, 0.0, 0.0);\n    vec3 colorB = vec3(0.0, 0.0, 1.0);\n    vec3 color = mix(colorA, colorB, vUv.x);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义 colorA 为红色\n    // TODO: 定义 colorB 为蓝色\n    // TODO: 使用 vUv.x 作为混合因子\n    // TODO: 使用 mix 函数进行颜色插值\n    // TODO: 输出最终颜色\n}\n",
-        exerciseSrc: '../glsl/patterns/color-blending-gradient.frag',
-        referenceSrc: '../glsl/patterns/color-blending-gradient.answer.frag',
+        exerciseSrc: '../glsl/patterns/01_color-blending-gradient.frag',
+        referenceSrc: '../glsl/patterns/01_color-blending-gradient.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

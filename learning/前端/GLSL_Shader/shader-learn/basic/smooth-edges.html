@@ -49,7 +49,7 @@ float soft = 1.0 - smoothstep(0.2, 0.3, d);</code></pre>
 <pre><code>float mask = 1.0 - smoothstep(0.2, 0.3, d);</code></pre>
 <p><code>smoothstep(0.2, 0.3, d)</code> 在 d = 0.2 处开始从 0 增长，到 d = 0.3 时变成 1。用 <code>1.0 -</code> 反转：圆心为白，圆外为黑。</p>
 <p>过渡范围是 0.3 - 0.2 = 0.1。把 <code>0.3</code> 改成 <code>0.25</code>，过渡变窄，边缘更硬；改成 <code>0.5</code>，过渡变宽，边缘更模糊。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/smooth-edges.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/27_smooth-edges.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -94,7 +94,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/smooth-edges.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/27_smooth-edges.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    // smoothstep(0.2, 0.3, d)：d 在 0.2~0.3 之间平滑从 0 过渡到 1\n    // 1.0 - ... 让圆心为白色，圆外为黑色\n    float mask = 1.0 - smoothstep(0.2, 0.3, d);\n    gl_FragColor = vec4(vec3(mask), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 用 smoothstep 创建软边圆形遮罩\n    // 提示：smoothstep(inner, outer, d)，让 d 在 0.2~0.3 之间平滑过渡\n    // 用 1.0 - smoothstep(...) 让圆心为白色\n    float mask = 0.0;\n\n    gl_FragColor = vec4(vec3(mask), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/smooth-edges.frag',
-        referenceSrc: '../glsl/basic/smooth-edges.answer.frag',
+        exerciseSrc: '../glsl/basic/27_smooth-edges.frag',
+        referenceSrc: '../glsl/basic/27_smooth-edges.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

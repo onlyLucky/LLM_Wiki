@@ -56,7 +56,7 @@ float d = length(p);</code></pre>
 <p><code>d</code> 是像素到中心的距离，<code>d * 12.0</code> 把距离范围放大 12 倍，<code>fract()</code> 把它折叠成重复的 0–1 波形，每折叠一次就产生一个圆环。</p>
 <p>初始代码 <code>rings = 0.0</code> 让所有像素的 rings 恒为 0，<code>step(0.5, 0.0)</code> 恒为 0，画面全是深色。改成 <code>fract(d * 12.0)</code> 后，rings 随距离变化形成锯齿波，step 在每个周期内切出一对深/浅的圆环。</p>
 <p>试着把 <code>fract(d * 12.0)</code> 改为 <code>fract(d * d * 50.0)</code>，圆环间距会随距离变化，产生向外收缩的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/concentric-rings.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/09_concentric-rings.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main(){vec2 p=vUv-0.5;float d=length(p);float rings=fract(d*12.0);float m=s
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/concentric-rings.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/09_concentric-rings.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main(){vec2 p=vUv-0.5;float d=length(p);float rings=fract(d*12.0);float m=s
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 p=vUv-0.5;float d=length(p);float rings=fract(d*12.0);float m=step(0.5,rings);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(0.2,0.85,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 p=vUv-0.5;float d=length(p);// TODO: rings=fract(d*12.0)\nfloat rings=0.0;float m=step(0.5,rings);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(0.2,0.85,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/concentric-rings.frag',
-        referenceSrc: '../glsl/patterns/concentric-rings.answer.frag',
+        exerciseSrc: '../glsl/patterns/09_concentric-rings.frag',
+        referenceSrc: '../glsl/patterns/09_concentric-rings.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

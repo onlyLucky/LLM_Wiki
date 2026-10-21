@@ -50,7 +50,7 @@ float m = step(0.5, x);</code></pre>
 <p><code>c</code> 是 12.0，<code>vUv.x * 12.0</code> 把 x 坐标扩展成 0–12 的范围，<code>fract()</code> 把它折叠成 12 段重复的锯齿波。</p>
 <p>初始代码 <code>float x = 0.0</code> 让所有像素的 x 永远等于 0，<code>step(0.5, 0.0)</code> 恒为 0，画面全是深色。改成 <code>fract(vUv.x * c)</code> 之后，x 随水平位置变化，<code>step</code> 就能在每段里分出左右两半，形成垂直条纹。</p>
 <p>试着把 <code>c</code> 改成 <code>24.0</code>，条纹密度会变为原来的两倍。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/stripes-vertical.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/04_stripes-vertical.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -87,7 +87,7 @@ void main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/stripes-vertical.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/04_stripes-vertical.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -199,8 +199,8 @@ void main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=12.0;float x=0.0; // TODO: fract(vUv.x*c)\nfloat m=step(0.5,x);vec3 col=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/stripes-vertical.frag',
-        referenceSrc: '../glsl/patterns/stripes-vertical.answer.frag',
+        exerciseSrc: '../glsl/patterns/04_stripes-vertical.frag',
+        referenceSrc: '../glsl/patterns/04_stripes-vertical.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

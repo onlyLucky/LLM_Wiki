@@ -54,7 +54,7 @@
 <p>初始状态：<code>diff</code> 固定为 <code>0.0</code>，球体只有 <code>base * 0.15</code> 的暗底色，看起来是一团深色圆。</p>
 <p>改动：把 <code>dot(n, lightDir)</code> 的结果用 <code>max(..., 0.0)</code> 截断为非负数。法线和光方向越对齐，<code>diff</code> 越接近 1.0，对应的像素就越亮。</p>
 <p>试着把 <code>max(dot(n, lightDir), 0.0)</code> 改成 <code>dot(n, lightDir) * 0.5 + 0.5</code>，看看暗部会发生什么变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/lambert-sphere.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/02_lambert-sphere.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -123,7 +123,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/lambert-sphere.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/02_lambert-sphere.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -235,8 +235,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r) {\n    return length(p) - r;\n}\n\nvec3 estimateNormal(vec2 p) {\n    float e = 0.001;\n    float d = sphereSDF(p, 0.32);\n    vec2 n = vec2(\n        sphereSDF(p + vec2(e, 0.0), 0.32) - d,\n        sphereSDF(p + vec2(0.0, e), 0.32) - d\n    );\n    vec3 normal = normalize(vec3(n, 0.35));\n    return normal;\n}\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = sphereSDF(p, 0.32);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    if (d > 0.0) {\n        gl_FragColor = vec4(bg, 1.0);\n        return;\n    }\n\n    vec3 n = estimateNormal(p);\n    vec3 lightDir = normalize(vec3(-0.4, 0.6, 0.7));\n\n    float diff = max(dot(n, lightDir), 0.0);\n    vec3 base = vec3(0.25, 0.9, 0.85);\n    vec3 color = base * (0.15 + 0.85 * diff);\n\n    gl_FragColor = vec4(mix(bg, color, 1.0), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r) {\n    return length(p) - r;\n}\n\nvec3 estimateNormal(vec2 p) {\n    float e = 0.001;\n    float d = sphereSDF(p, 0.32);\n    vec2 n = vec2(\n        sphereSDF(p + vec2(e, 0.0), 0.32) - d,\n        sphereSDF(p + vec2(0.0, e), 0.32) - d\n    );\n    vec3 normal = normalize(vec3(n, 0.35));\n    return normal;\n}\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = sphereSDF(p, 0.32);\n\n    vec3 bg = vec3(0.05, 0.06, 0.08);\n    if (d > 0.0) {\n        gl_FragColor = vec4(bg, 1.0);\n        return;\n    }\n\n    vec3 n = estimateNormal(p);\n    vec3 lightDir = normalize(vec3(-0.4, 0.6, 0.7));\n\n    // TODO: 计算漫反射 diff = max(dot(n, lightDir), 0.0)\n    float diff = 0.0;\n\n    vec3 base = vec3(0.25, 0.9, 0.85);\n    vec3 color = base * (0.15 + 0.85 * diff);\n\n    gl_FragColor = vec4(mix(bg, color, 1.0), 1.0);\n}\n",
-        exerciseSrc: '../glsl/lighting/lambert-sphere.frag',
-        referenceSrc: '../glsl/lighting/lambert-sphere.answer.frag',
+        exerciseSrc: '../glsl/lighting/02_lambert-sphere.frag',
+        referenceSrc: '../glsl/lighting/02_lambert-sphere.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

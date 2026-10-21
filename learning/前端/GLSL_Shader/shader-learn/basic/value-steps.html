@@ -40,7 +40,7 @@ float t = floor(vUv.x * steps) / (steps - 1.0);</code></pre>
 <pre><code>float t = floor(vUv.x * steps) / (steps - 1.0);</code></pre>
 <p><code>floor</code> 把连续值「锁定」到整数——相邻像素只要落在同一个整数区间，就输出完全一样的颜色。除以 <code>(steps - 1.0)</code> 而不是 <code>steps</code>，是为了让最后一阶恰好等于 1.0（最右端是颜色 b）。</p>
 <p>改变 <code>steps = 3.0</code> 得到粗粒度的 3 档色阶，<code>steps = 16.0</code> 接近连续渐变。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/value-steps.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/29_value-steps.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -86,7 +86,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/value-steps.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/29_value-steps.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -198,8 +198,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float steps = 6.0;\n    float t = floor(vUv.x * steps) / (steps - 1.0);\n\n    vec3 a = vec3(0.1, 0.15, 0.25);\n    vec3 b = vec3(0.9, 0.35, 0.25);\n    vec3 color = mix(a, b, t);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float steps = 6.0;\n\n    // TODO: 将 vUv.x 量化成 steps 个等级（提示：floor）\n    float t = 0.0;\n\n    vec3 a = vec3(0.1, 0.15, 0.25);\n    vec3 b = vec3(0.9, 0.35, 0.25);\n    vec3 color = mix(a, b, t);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/value-steps.frag',
-        referenceSrc: '../glsl/basic/value-steps.answer.frag',
+        exerciseSrc: '../glsl/basic/29_value-steps.frag',
+        referenceSrc: '../glsl/basic/29_value-steps.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

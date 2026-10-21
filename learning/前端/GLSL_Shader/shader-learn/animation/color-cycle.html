@@ -58,7 +58,7 @@ gl_FragColor = vec4(c, 1.0);</code></pre>
 <ul><li>每个通道都用 <code>sin * 0.5 + 0.5</code> 换算到 0.0–1.0</li><li>三个通道分别加上 0、2.094、4.188 作为相位偏移</li><li>相位差 = 2π/3，三个通道在色轮上均匀分布</li></ul>
 <p>起始代码里 <code>c = vec3(0.0)</code> 是全黑。替换为三个带偏移的 sin 后，颜色通道开始交替主导，画面在整个色谱上流动。</p>
 <p>试着把第三个偏移从 <code>4.188</code> 改成 <code>3.0</code>，颜色循环会变得不对称，出现偏色感。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/color-cycle.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/04_color-cycle.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -96,7 +96,7 @@ void main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/color-cycle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/04_color-cycle.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -208,8 +208,8 @@ void main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time+4.188)*0.5+0.5);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){// TODO: 用 sin(u_time) 构造 RGB 循环\nvec3 c=vec3(0.0);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/animation/color-cycle.frag',
-        referenceSrc: '../glsl/animation/color-cycle.answer.frag',
+        exerciseSrc: '../glsl/animation/04_color-cycle.frag',
+        referenceSrc: '../glsl/animation/04_color-cycle.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

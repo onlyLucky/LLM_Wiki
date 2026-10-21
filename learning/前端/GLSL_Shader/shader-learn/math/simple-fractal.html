@@ -66,7 +66,7 @@ for (int i = 0; i &lt; 4; i++) {
 <p>练习的起始状态是 <code>pattern = 0.0</code> 且缺少迭代累加，画面没有任何图案。</p>
 <p>每次迭代对坐标做放大+fract+居中，相当于把画布无限细分。<code>circle / pow(2.0, float(i+1))</code> 保证每层贡献随尺度缩小而递减：最大的圆主导整体，最小的圆只是精细纹理。四次迭代叠加后，<code>pattern</code> 在有圆圈的地方接近 1，空白处接近 0。</p>
 <p>试着把 <code>smoothstep(0.1, 0.3, dist)</code> 改为 <code>smoothstep(0.05, 0.25, dist)</code>，让每个圆更实心，观察分形图案的密度变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/simple-fractal.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/12_simple-fractal.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 uniform float u_time;
@@ -153,7 +153,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/simple-fractal.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/12_simple-fractal.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -265,8 +265,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 将坐标转换为 -1 到 1 的范围，中心为原点\n    vec2 uv = (gl_FragCoord.xy / u_resolution.xy) * 2.0 - 1.0;\n\n    // 保持宽高比\n    uv.x *= u_resolution.x / u_resolution.y;\n\n    // 简单的分形：重复的圆形图案\n    vec2 pos = uv;\n    float pattern = 0.0;\n\n    // 创建多层次的重复图案\n    for (int i = 0; i < 4; i++) {\n        // 缩放坐标\n        pos *= 2.0;\n\n        // 取小数部分，创建重复\n        pos = fract(pos) - 0.5;\n\n        // 计算到中心的距离\n        float dist = length(pos);\n\n        // 创建圆形图案\n        float circle = 1.0 - smoothstep(0.1, 0.3, dist);\n\n        // 累加图案，每层权重递减\n        pattern += circle / pow(2.0, float(i + 1));\n    }\n\n    // 添加时间动画\n    pattern += 0.1 * sin(u_time + length(uv) * 5.0);\n\n    // 创建颜色\n    vec3 color = vec3(pattern);\n\n    // 彩色版本（注释掉上面的 color 赋值来使用）\n    // vec3 color = vec3(\n    //     pattern,\n    //     pattern * 0.7,\n    //     pattern * 0.5\n    // );\n\n    // 更复杂的颜色映射\n    // vec3 color = vec3(\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time),\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 2.0),\n    //     0.5 + 0.5 * sin(pattern * 3.14159 + u_time + 4.0)\n    // );\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：简单分形\n    // 目标：创建多层次的重复圆形图案\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 将坐标移到中心并添加时间动画\n    vec2 pos = (uv - 0.5) * 2.0;\n    pos += sin(u_time * 0.5) * 0.1;\n\n    // 练习1：初始化分形参数\n    float fractal = 0.0;\n    // TODO: 设置初始振幅（建议 0.5）\n    float amplitude = 0.5;\n\n    // 练习2：创建分形循环\n    // 通过多次迭代创建分形效果\n    for (int i = 0; i < 4; i++) {\n        // 缩放坐标\n        pos *= 2.0;\n\n        // 取小数部分，创建重复\n        pos = fract(pos) - 0.5;\n\n        // 计算到中心的距离\n        // TODO: distance = length(pos)\n        float distance = length(pos);\n\n        // 创建圆形并添加到分形中\n        float circle = smoothstep(0.4, 0.3, distance);\n        // TODO: fractal += circle * amplitude\n        fractal += circle * amplitude;\n\n        // 减小振幅，为下一层做准备\n        // TODO: amplitude *= 0.5\n        amplitude *= 0.5;\n    }\n\n    // 练习3：添加动态颜色\n    // 根据分形值和时间创建颜色\n    vec3 color1 = vec3(1.0, 0.3, 0.5); // 粉红色\n    vec3 color2 = vec3(0.3, 0.7, 1.0); // 蓝色\n    vec3 color3 = vec3(1.0, 0.8, 0.2); // 黄色\n\n    // 练习4：创建颜色混合\n    // 使用分形值在不同颜色间混合\n    vec3 finalColor;\n    if (fractal < 0.5) {\n        finalColor = mix(\n            vec3(0.1, 0.1, 0.2), // 背景色\n            color1,\n            // TODO: 用 fractal 作为混合因子（可适当放大）\n            fractal / 0.5\n        );\n    } else {\n        finalColor = mix(\n            color1,\n            mix(color2, color3, sin(u_time) * 0.5 + 0.5),\n            (fractal - 0.5) * 2.0\n        );\n    }\n\n    // 练习5：添加额外的动画效果\n    // 让整体颜色随时间脉动\n    float pulse = sin(u_time * 2.0) * 0.1 + 0.9;\n    // TODO: 让 finalColor 乘以 pulse\n    finalColor *= pulse;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseSrc: '../glsl/math/simple-fractal.frag',
-        referenceSrc: '../glsl/math/simple-fractal.answer.frag',
+        exerciseSrc: '../glsl/math/12_simple-fractal.frag',
+        referenceSrc: '../glsl/math/12_simple-fractal.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

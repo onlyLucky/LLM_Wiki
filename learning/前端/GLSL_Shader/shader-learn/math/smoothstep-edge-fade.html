@@ -60,7 +60,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>distance(vUv, vec2(0.5))</code> 算出每个像素到中心的距离。<code>smoothstep(0.3, 0.5, dist)</code> 在半径 0.3 到 0.5 之间制造柔和过渡，内部为 0（透明遮罩），外部为 1（不透明遮罩）。<code>mix</code> 把遮罩作为 t 值混合黄色和黑色，中心显示黄色、边缘渐渐变黑。</p>
 <p>练习起始状态是空的 <code>main()</code>，无任何输出。按上述步骤补全后就能看到带柔边的圆形光晕。</p>
 <p>试着把 <code>vec3(1.0, 0.8, 0.2)</code> 换成 <code>vec3(0.3, 0.8, 1.0)</code>（青蓝色），看看颜色变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/smoothstep-edge-fade.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/15_smoothstep-edge-fade.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -103,7 +103,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/smoothstep-edge-fade.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/15_smoothstep-edge-fade.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -215,8 +215,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float dist = distance(vUv, vec2(0.5));\n    float mask = smoothstep(0.3, 0.5, dist);\n    vec3 color = mix(vec3(1.0, 0.8, 0.2), vec3(0.0), mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 计算 vUv 到中心点的距离 dist\n    // TODO: 使用 smoothstep() 生成软边遮罩 mask\n    // TODO: 混合中心亮色和黑色背景\n    // TODO: 输出颜色\n}\n",
-        exerciseSrc: '../glsl/math/smoothstep-edge-fade.frag',
-        referenceSrc: '../glsl/math/smoothstep-edge-fade.answer.frag',
+        exerciseSrc: '../glsl/math/15_smoothstep-edge-fade.frag',
+        referenceSrc: '../glsl/math/15_smoothstep-edge-fade.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

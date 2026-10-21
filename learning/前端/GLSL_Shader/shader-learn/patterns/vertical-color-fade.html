@@ -53,7 +53,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>bottomColor</code> 是纯绿色（红 0%，绿 100%，蓝 0%），<code>topColor</code> 是黄色（红 100%，绿 100%，蓝 0%）。<code>mix</code> 用 <code>vUv.y</code> 作为权重，在底部完全取 <code>bottomColor</code>，顶部完全取 <code>topColor</code>，中间根据高度线性混合。</p>
 <p>初始代码没有任何输出，关键步骤是先定义两个颜色变量，再用 <code>mix</code> + <code>vUv.y</code> 连接它们。</p>
 <p>试着把 <code>vUv.y</code> 换成 <code>smoothstep(0.3, 0.7, vUv.y)</code>，让渐变集中在画面中间发生，两端维持纯色。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/vertical-color-fade.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/02_vertical-color-fade.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -96,7 +96,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/vertical-color-fade.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/02_vertical-color-fade.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -208,8 +208,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 bottomColor = vec3(0.0, 1.0, 0.0); // 绿色\n    vec3 topColor = vec3(1.0, 1.0, 0.0);    // 黄色\n    vec3 color = mix(bottomColor, topColor, vUv.y);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义底部颜色 bottomColor\n    // TODO: 定义顶部颜色 topColor\n    // TODO: 使用 vUv.y 作为渐变因子\n    // TODO: 使用 mix 生成过渡色\n    // TODO: 输出最终颜色\n}\n",
-        exerciseSrc: '../glsl/patterns/vertical-color-fade.frag',
-        referenceSrc: '../glsl/patterns/vertical-color-fade.answer.frag',
+        exerciseSrc: '../glsl/patterns/02_vertical-color-fade.frag',
+        referenceSrc: '../glsl/patterns/02_vertical-color-fade.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

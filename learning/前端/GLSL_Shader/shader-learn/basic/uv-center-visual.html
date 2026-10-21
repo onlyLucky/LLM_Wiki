@@ -53,7 +53,7 @@ vec3 c = vec3(p + 0.5, 0.0);</code></pre>
 <p><code>p + 0.5</code> 把范围从 -0.5~0.5 移回 0~1，才能当颜色用。</p>
 <ul><li><code>p.x + 0.5</code> 给红色通道 → 左边红色为 0，右边为 1</li><li><code>p.y + 0.5</code> 给绿色通道 → 下边绿色为 0，上边为 1</li><li>蓝色固定为 0</li></ul>
 <p>视觉上和 UV 颜色图一样，但现在你的坐标是以中心为原点的，后续画任何圆形、光晕都可以直接用 <code>p</code>。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/uv-center-visual.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/03_uv-center-visual.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/uv-center-visual.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/03_uv-center-visual.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    vec3 c = vec3(p + 0.5, 0.0);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    // TODO: 用 p + 0.5 计算颜色，赋值给 c\n    vec3 c = vec3(0.0);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/uv-center-visual.frag',
-        referenceSrc: '../glsl/basic/uv-center-visual.answer.frag',
+        exerciseSrc: '../glsl/basic/03_uv-center-visual.frag',
+        referenceSrc: '../glsl/basic/03_uv-center-visual.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

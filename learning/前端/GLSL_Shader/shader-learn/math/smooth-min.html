@@ -53,7 +53,7 @@
 <p>初始状态：<code>min(d1, d2)</code> 在两圆交汇处产生尖角——两个距离场直接相切，没有过渡。</p>
 <p>改动后：<code>smin(d1, d2, 0.2)</code> 在两圆距离约 0.2 单位的范围内引入一条平滑混合曲线，距离场在交汇处变得连续，渲染出来的形状就像两个水滴合并。</p>
 <p>试着把 <code>k</code> 改为 <code>1.0</code>，感受极宽融合区域下整个形状如何变成一个椭圆形的整体。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/smooth-min.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/08_smooth-min.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -90,7 +90,7 @@ float smin(float a,float b,float k){float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);retur
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/smooth-min.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/08_smooth-min.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -202,8 +202,8 @@ float smin(float a,float b,float k){float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);retur
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat smin(float a,float b,float k){float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);return mix(b,a,h)-k*h*(1.0-h);}void main(){vec2 p=vUv-0.5;float d1=length(p-vec2(-0.12,0.0))-0.18;float d2=length(p-vec2(0.12,0.0))-0.18;float d=smin(d1,d2,0.2);float m=1.0-smoothstep(0.0,0.01,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat smin(float a,float b,float k){float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0);return mix(b,a,h)-k*h*(1.0-h);}void main(){vec2 p=vUv-0.5;float d1=length(p-vec2(-0.12,0.0))-0.18;float d2=length(p-vec2(0.12,0.0))-0.18;// TODO: d = smin(d1,d2,0.2)\nfloat d=min(d1,d2);float m=1.0-smoothstep(0.0,0.01,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseSrc: '../glsl/math/smooth-min.frag',
-        referenceSrc: '../glsl/math/smooth-min.answer.frag',
+        exerciseSrc: '../glsl/math/08_smooth-min.frag',
+        referenceSrc: '../glsl/math/08_smooth-min.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

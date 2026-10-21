@@ -54,7 +54,7 @@ vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);</code></pre>
 <ul><li><code>12.0 * d</code> 以距离为自变量生成同心波纹</li><li><code>- u_time * 3.0</code> 让波纹随时间向外传播</li><li>结果是 -1.0 到 1.0 的值，代表每个像素处的波形高度</li></ul>
 <p>起始代码里 <code>wave = 0.0</code> 是常量，所以 <code>t = 0.5</code>，颜色固定在两色的中间值。换成 <code>sin(12.0 * d - u_time * 3.0)</code> 后，<code>wave</code> 随距离和时间变化，波纹就出现了。</p>
 <p>试着把 <code>12.0</code> 改成 <code>20.0</code>，波纹会变得非常密，像细密的水波。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/ripple.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/10_ripple.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -99,7 +99,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/ripple.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/10_ripple.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -211,8 +211,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    float wave = sin(12.0 * d - u_time * 3.0);\n    float t = wave * 0.5 + 0.5;\n    vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 创建随时间传播的波纹（提示：sin(freq * d - u_time * speed)）\n    float wave = 0.0;\n    float t = wave * 0.5 + 0.5;\n\n    vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/animation/ripple.frag',
-        referenceSrc: '../glsl/animation/ripple.answer.frag',
+        exerciseSrc: '../glsl/animation/10_ripple.frag',
+        referenceSrc: '../glsl/animation/10_ripple.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

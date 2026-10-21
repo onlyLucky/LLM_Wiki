@@ -56,7 +56,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>distance(vUv, vec2(0.5))</code> 计算每个像素到中心点的欧氏距离。<code>innerColor</code> 是偏蓝白的亮色，<code>outerColor</code> 是黑色（<code>vec3(0.0)</code> 等于 <code>vec3(0.0, 0.0, 0.0)</code>）。<code>mix</code> 以 <code>dist * 1.5</code> 为权重，距离越大越偏向 <code>outerColor</code>。</p>
 <p>初始代码什么都没有，关键步骤是先用 <code>distance</code> 建立一个从中心向外增大的数值场，再把它传给 <code>mix</code> 做颜色过渡。</p>
 <p>试着把 <code>distance(vUv, vec2(0.5))</code> 改为 <code>length(vUv - vec2(0.5))</code>，两者是等价的写法。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/radial-gradient-center.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/08_radial-gradient-center.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -100,7 +100,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/radial-gradient-center.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/08_radial-gradient-center.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -212,8 +212,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float dist = distance(vUv, vec2(0.5));\n    vec3 innerColor = vec3(0.1, 0.8, 1.0);\n    vec3 outerColor = vec3(0.0);\n    vec3 color = mix(innerColor, outerColor, dist * 1.5);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 计算 vUv 到中心的距离 dist\n    // TODO: 使用 mix() 按距离混合颜色\n    // TODO: 输出径向渐变颜色\n}\n",
-        exerciseSrc: '../glsl/patterns/radial-gradient-center.frag',
-        referenceSrc: '../glsl/patterns/radial-gradient-center.answer.frag',
+        exerciseSrc: '../glsl/patterns/08_radial-gradient-center.frag',
+        referenceSrc: '../glsl/patterns/08_radial-gradient-center.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -43,7 +43,7 @@
 float mask = 1.0 - smoothstep(thickness, thickness + aa, ringDist);</code></pre>
 <p><code>abs(length(p) - radius)</code> 把距离场以圆周为轴「折叠」：圆周上 ringDist = 0，圆内和圆外都是正值，smoothstep 对称地淡化两侧边缘。</p>
 <p>调整 <code>thickness = 0.06</code> 得到更粗的圆环，<code>radius = 0.15</code> 让圆更小，<code>aa = 0.02</code> 让边缘更柔和。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/sdf-ring.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/24_sdf-ring.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -96,7 +96,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/sdf-ring.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/24_sdf-ring.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -208,8 +208,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n\n    float radius = 0.28;\n    float thickness = 0.03;\n    float aa = 0.006;\n\n    float ringDist = abs(length(p) - radius);\n    float mask = 1.0 - smoothstep(thickness, thickness + aa, ringDist);\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    vec3 color = mix(bg, fg, mask);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n\n    float radius = 0.28;\n    float thickness = 0.03;\n    float aa = 0.006;\n\n    // TODO: 计算圆环距离 ringDist（提示：abs(length(p) - radius)）\n    float ringDist = 0.0;\n\n    // TODO: 用 smoothstep 把距离转成遮罩 mask（提示：1.0 - smoothstep(...)）\n    float mask = 0.0;\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    vec3 color = mix(bg, fg, mask);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/sdf-ring.frag',
-        referenceSrc: '../glsl/basic/sdf-ring.answer.frag',
+        exerciseSrc: '../glsl/basic/24_sdf-ring.frag',
+        referenceSrc: '../glsl/basic/24_sdf-ring.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

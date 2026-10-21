@@ -53,7 +53,7 @@
 <ul><li><code>vUv * 8.0</code>：噪声频率，不变</li><li><code>+ u_time * 0.2</code>：每帧把采样点向 (1,1) 方向推进一小步，产生流动感</li><li><code>0.2</code>：速度系数，决定流动快慢</li></ul>
 <p>初始代码 <code>valueNoise(vUv * 8.0)</code> 是静止的。加上时间偏移之后，采样坐标每帧都在变，噪声图案随之流动。</p>
 <p>试着把流动方向改成只沿 X 轴：<code>valueNoise(vUv * 8.0 + vec2(u_time * 0.2, 0.0))</code>，看看图案变成水平流动。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/animated-noise.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/08_animated-noise.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -91,7 +91,7 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/animated-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/08_animated-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -203,8 +203,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=valueNoise(vUv*8.0+u_time*0.2);gl_FragColor=vec4(vec3(n),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){// TODO: 给 valueNoise 的输入加上 u_time\nfloat n=valueNoise(vUv*8.0);gl_FragColor=vec4(vec3(n),1.0);}\n",
-        exerciseSrc: '../glsl/noise/animated-noise.frag',
-        referenceSrc: '../glsl/noise/animated-noise.answer.frag',
+        exerciseSrc: '../glsl/noise/08_animated-noise.frag',
+        referenceSrc: '../glsl/noise/08_animated-noise.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -55,7 +55,7 @@
 <ul><li><code>sin(u_time)</code> 产生 -1.0 到 1.0 的震荡</li><li><code>* 0.25</code> 控制幅度，变化范围为 ±0.25</li><li><code>+ 0.55</code> 让 <code>strength</code> 在 0.3～0.8 之间波动</li></ul>
 <p>起始代码里 <code>strength = 0.55</code> 是常量，暗角大小固定。换成动态计算后，每帧的 <code>strength</code> 不同，暗角边界随时间扩缩，呼吸效果出现。</p>
 <p>试着把 <code>+ 0.55</code> 改成 <code>+ 0.7</code>，呼吸的"中心点"移高，大部分时间暗角会更重，只在波谷时变亮。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/breathing-vignette.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/13_breathing-vignette.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ void main(){vec2 p=vUv-0.5;float d=length(p);float strength=sin(u_time)*0.25+0.5
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/breathing-vignette.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/13_breathing-vignette.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main(){vec2 p=vUv-0.5;float d=length(p);float strength=sin(u_time)*0.25+0.5
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 p=vUv-0.5;float d=length(p);float strength=sin(u_time)*0.25+0.55;float v=1.0-smoothstep(strength-0.15,strength,d);vec3 c=mix(vec3(0.03,0.04,0.06),vec3(0.25,0.9,0.85),v);gl_FragColor=vec4(c,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 p=vUv-0.5;float d=length(p);// TODO: strength = sin(u_time)*0.25+0.55\nfloat strength=0.55;float v=1.0-smoothstep(strength-0.15,strength,d);vec3 c=mix(vec3(0.03,0.04,0.06),vec3(0.25,0.9,0.85),v);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/animation/breathing-vignette.frag',
-        referenceSrc: '../glsl/animation/breathing-vignette.answer.frag',
+        exerciseSrc: '../glsl/animation/13_breathing-vignette.frag',
+        referenceSrc: '../glsl/animation/13_breathing-vignette.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

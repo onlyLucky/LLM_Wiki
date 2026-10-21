@@ -56,7 +56,7 @@
 <ul><li><code>1.0</code> → 红色开到最大</li><li><code>0.0</code> → 绿色关掉</li><li><code>0.0</code> → 蓝色关掉</li><li><code>1.0</code> → 完全不透明（固定写这个就行）</li></ul>
 <p>练习代码的初始状态是 <code>vec4(0.0, 0.0, 0.0, 1.0)</code>，四个颜色通道全是 0，所以是黑色。把第一个 <code>0.0</code> 改成 <code>1.0</code>，红色通道打开，就变成红色了。</p>
 <p>试着把 <code>1.0</code> 换成 <code>0.5</code>，看看会变成什么颜色。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/solid-color.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/01_solid-color.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 void main() {
@@ -93,7 +93,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/solid-color.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/01_solid-color.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nvoid main() {\n    // vec4(红, 绿, 蓝, 透明度) — 每个值范围 0.0 ~ 1.0\n    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nvoid main() {\n    // 目标：把整个画面填充成红色\n    // gl_FragColor = vec4(红, 绿, 蓝, 透明度)\n    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/solid-color.frag',
-        referenceSrc: '../glsl/basic/solid-color.answer.frag',
+        exerciseSrc: '../glsl/basic/01_solid-color.frag',
+        referenceSrc: '../glsl/basic/01_solid-color.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

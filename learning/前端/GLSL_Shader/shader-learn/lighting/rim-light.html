@@ -55,7 +55,7 @@
 <p>初始状态：<code>rim = 0.0</code>，<code>mix</code> 里的 <code>t</code> 始终为 0，球体只显示底色，没有亮边。</p>
 <p>改动：<code>1.0 - dot(n, v)</code> 让边缘的值接近 1.0，<code>pow(..., 2.0)</code> 让这个效果集中在球体轮廓处，<code>mix</code> 把底色渐变到白色。</p>
 <p>试着把指数 <code>2.0</code> 改成 <code>4.0</code>，看边缘光会变得多窄。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/rim-light.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/10_rim-light.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -92,7 +92,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/rim-light.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/10_rim-light.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -204,8 +204,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 v=normalize(vec3(0.0,0.0,1.0));float rim=pow(1.0-max(dot(n,v),0.0),2.0);vec3 col=mix(vec3(0.25,0.9,0.85),vec3(1.0),rim);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 v=normalize(vec3(0.0,0.0,1.0));// TODO: rim = pow(1.0 - max(dot(n,v),0.0), 2.0)\nfloat rim=0.0;vec3 col=mix(vec3(0.25,0.9,0.85),vec3(1.0),rim);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/rim-light.frag',
-        referenceSrc: '../glsl/lighting/rim-light.answer.frag',
+        exerciseSrc: '../glsl/lighting/10_rim-light.frag',
+        referenceSrc: '../glsl/lighting/10_rim-light.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

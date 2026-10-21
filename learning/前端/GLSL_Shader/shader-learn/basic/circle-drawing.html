@@ -42,7 +42,7 @@ gl_FragColor = vec4(mix(bg, fg, circle), 1.0);</code></pre>
 <pre><code>float circle = 1.0 - step(0.3, d);</code></pre>
 <p>和 simple-circle 里的遮罩完全一样——圆内为 1，圆外为 0。不同的是这里把它用于 <code>mix</code>，而不是直接作为灰度输出。遮罩的本质是一个 0/1 的开关，<code>mix(a, b, 0)</code> 取 a，<code>mix(a, b, 1)</code> 取 b。</p>
 <p>改变 <code>fg</code> 的颜色值，比如 <code>vec3(1.0, 0.4, 0.1)</code> 变成橙色圆。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/circle-drawing.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/22_circle-drawing.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -88,7 +88,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/circle-drawing.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/22_circle-drawing.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -200,8 +200,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    // 用颜色感受距离场：圆内为蓝色，圆外为深色背景\n    float circle = 1.0 - step(0.3, d);\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(0.2, 0.85, 1.0);\n    gl_FragColor = vec4(mix(bg, fg, circle), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 用 step(0.3, d) 取反，得到圆内为 1 的遮罩 circle\n    float circle = 0.0;\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(0.2, 0.85, 1.0);\n    gl_FragColor = vec4(mix(bg, fg, circle), 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/circle-drawing.frag',
-        referenceSrc: '../glsl/basic/circle-drawing.answer.frag',
+        exerciseSrc: '../glsl/basic/22_circle-drawing.frag',
+        referenceSrc: '../glsl/basic/22_circle-drawing.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

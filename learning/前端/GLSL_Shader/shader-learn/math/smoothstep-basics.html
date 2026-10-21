@@ -54,7 +54,7 @@ float m = 1.0 - smoothstep(0.0, 0.25, d);</code></pre>
 <p><code>abs(vUv.x - 0.5)</code> 算出每个像素到中心的水平距离，范围是 0–0.5。<code>smoothstep(0.0, 0.25, d)</code> 把 0–0.25 的距离平滑映射成 0–1，超过 0.25 就维持在 1（全黑）。用 <code>1.0 -</code> 翻转后，中心最亮、边缘最暗。</p>
 <p>练习起始状态 <code>m = 0.0</code>，画面全黑。替换成正确公式就能看到白色竖带。</p>
 <p>试着把 <code>smoothstep</code> 的第一个参数从 <code>0.0</code> 改成 <code>0.1</code>，看看白带内侧边缘出现渐变过渡的变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/smoothstep-basics.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/02_smoothstep-basics.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -91,7 +91,7 @@ void main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragCol
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/smoothstep-basics.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/02_smoothstep-basics.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -203,8 +203,8 @@ void main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragCol
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float d=abs(vUv.x-0.5);// TODO: m = 1.0 - smoothstep(0.0,0.25,d)\nfloat m=0.0;gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseSrc: '../glsl/math/smoothstep-basics.frag',
-        referenceSrc: '../glsl/math/smoothstep-basics.answer.frag',
+        exerciseSrc: '../glsl/math/02_smoothstep-basics.frag',
+        referenceSrc: '../glsl/math/02_smoothstep-basics.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

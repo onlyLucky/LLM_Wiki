@@ -56,7 +56,7 @@
 <ul><li><code>vUv.x</code> 是每个像素的横向位置</li><li><code>+ u_time * 0.2</code> 随时间推移横向坐标</li><li><code>fract(...)</code> 把超过 1.0 的部分折回到 0.0，实现无缝循环</li></ul>
 <p>起始代码里 <code>t = vUv.x</code>，渐变是静止的。加入 <code>fract</code> 和 <code>u_time</code> 后，每一帧的 <code>t</code> 值都在整体平移，渐变就开始滚动。</p>
 <p>试着把 <code>0.2</code> 改成 <code>1.0</code>，速度会快很多，渐变会明显地扫过画面。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/moving-gradient.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/06_moving-gradient.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -98,7 +98,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/moving-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/06_moving-gradient.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -210,8 +210,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    float t = fract(vUv.x + u_time * 0.2);\n    vec3 color = mix(vec3(0.05, 0.06, 0.08), vec3(0.9, 0.95, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    // TODO: 让渐变随时间向右移动（提示：fract(vUv.x + u_time * speed)）\n    float t = vUv.x;\n    vec3 color = mix(vec3(0.05, 0.06, 0.08), vec3(0.9, 0.95, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/animation/moving-gradient.frag',
-        referenceSrc: '../glsl/animation/moving-gradient.answer.frag',
+        exerciseSrc: '../glsl/animation/06_moving-gradient.frag',
+        referenceSrc: '../glsl/animation/06_moving-gradient.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

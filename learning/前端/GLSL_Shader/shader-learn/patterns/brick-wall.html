@@ -60,7 +60,7 @@ mortar = min(mortar, 1.0);</code></pre>
 <p><code>floor(uv.y)</code> 得到当前行的整数编号。<code>mod(..., 2.0)</code> 判断奇偶。<code>step(1.0, ...)</code> 把奇数行映射为 1，偶数行映射为 0。<code>* 0.5</code> 让奇数行的 x 坐标向右移动半格。</p>
 <p>练习初始代码有完整的砖缝逻辑，只缺少这一行偏移。没有偏移时，所有行的砖块垂直对齐，不像真正的砖墙。加上偏移后，奇偶行的砖块交错，砖墙的错缝排列就自然出现了。</p>
 <p>试着把 <code>* 0.5</code> 改为 <code>* 0.25</code>，看看偏移量减小时砖墙的视觉效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/brick-wall.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/13_brick-wall.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -97,7 +97,7 @@ void main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=frac
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/brick-wall.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/13_brick-wall.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -209,8 +209,8 @@ void main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=frac
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=fract(uv);float mortar=step(0.95,f.x)+step(0.95,f.y);mortar=min(mortar,1.0);vec3 brick=vec3(0.75,0.25,0.2);vec3 col=mix(brick,vec3(0.05),mortar);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 uv=vUv*8.0;// TODO: 每隔一行偏移 0.5\nvec2 f=fract(uv);float mortar=step(0.95,f.x)+step(0.95,f.y);mortar=min(mortar,1.0);vec3 brick=vec3(0.75,0.25,0.2);vec3 col=mix(brick,vec3(0.05),mortar);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/brick-wall.frag',
-        referenceSrc: '../glsl/patterns/brick-wall.answer.frag',
+        exerciseSrc: '../glsl/patterns/13_brick-wall.frag',
+        referenceSrc: '../glsl/patterns/13_brick-wall.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

@@ -51,7 +51,7 @@ gl_FragColor = vec4(c, 1.0);</code></pre>
 <p>初始状态：<code>c</code> 固定是 <code>vec3(0.0)</code>，所以球全黑。</p>
 <p>改动：把法线 <code>n</code> 乘以 0.5 再加 0.5，把范围从 <code>[-1, 1]</code> 压缩到 <code>[0, 1]</code>，这样才能作为颜色输出。每个轴对应一种颜色通道（X→红，Y→绿，Z→蓝）。</p>
 <p>试着把 <code>* 0.5 + 0.5</code> 改成 <code>* 0.5 + 0.3</code>，看看整体颜色会变深还是变浅。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/normal-visualizer.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/01_normal-visualizer.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -88,7 +88,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/normal-visualizer.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/01_normal-visualizer.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -200,8 +200,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);gl_FragColor=vec4(n*0.5+0.5,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);// TODO: 输出 n 的可视化颜色\nvec3 c=vec3(0.0);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseSrc: '../glsl/lighting/normal-visualizer.frag',
-        referenceSrc: '../glsl/lighting/normal-visualizer.answer.frag',
+        exerciseSrc: '../glsl/lighting/01_normal-visualizer.frag',
+        referenceSrc: '../glsl/lighting/01_normal-visualizer.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

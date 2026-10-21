@@ -54,7 +54,7 @@ gl_FragColor = vec4(vec3(t), 1.0);</code></pre>
 <p>起始代码里 <code>t</code> 未定义或为 0，画面全黑。</p>
 <p><code>atan(p.y, p.x)</code> 计算每个像素相对于画布中心的方位角，范围 [-π, π]。加 π 后变成 [0, 2π]，除以 2π 得到 [0, 1]。每个像素的 <code>t</code> 值就是它在圆上的相对位置，所以灰度图像呈现出一个绕中心平滑变化的角度轮盘。</p>
 <p>试着把 <code>gl_FragColor = vec4(vec3(t), 1.0)</code> 换成 <code>vec4(t, 1.0-t, 0.5, 1.0)</code>，看看彩色角度轮的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/angle-visualizer.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/09_angle-visualizer.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -91,7 +91,7 @@ void main(){vec2 p=vUv-0.5;float a=atan(p.y,p.x);float t=(a+3.14159265)/6.283185
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/angle-visualizer.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/09_angle-visualizer.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -203,8 +203,8 @@ void main(){vec2 p=vUv-0.5;float a=atan(p.y,p.x);float t=(a+3.14159265)/6.283185
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 p=vUv-0.5;float a=atan(p.y,p.x);float t=(a+3.14159265)/6.2831853;gl_FragColor=vec4(vec3(t),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 p=vUv-0.5;// TODO: 计算角度并归一化\nfloat t=0.0;gl_FragColor=vec4(vec3(t),1.0);}\n",
-        exerciseSrc: '../glsl/math/angle-visualizer.frag',
-        referenceSrc: '../glsl/math/angle-visualizer.answer.frag',
+        exerciseSrc: '../glsl/math/09_angle-visualizer.frag',
+        referenceSrc: '../glsl/math/09_angle-visualizer.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

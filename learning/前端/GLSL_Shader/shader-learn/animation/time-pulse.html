@@ -52,7 +52,7 @@ vec3 color = base * (0.2 + 0.8 * pulse);</code></pre>
 <ul><li><code>sin(u_time)</code> 产生 -1.0 到 1.0 的震荡</li><li><code>* 0.5 + 0.5</code> 将范围换算为 0.0 到 1.0</li></ul>
 <p>起始代码里 <code>pulse = 1.0</code> 是一个常量，所以亮度因子始终是 <code>0.2 + 0.8 * 1.0 = 1.0</code>，画面不变。换成 <code>sin(u_time) * 0.5 + 0.5</code> 后，<code>pulse</code> 开始在 0 到 1 之间变化，亮度随之起伏。</p>
 <p>试着把 <code>0.2 + 0.8 * pulse</code> 改成 <code>0.4 + 0.6 * pulse</code>，让暗部更亮，脉冲感更柔和。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/time-pulse.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/03_time-pulse.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/time-pulse.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/animation/03_time-pulse.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    float pulse = sin(u_time) * 0.5 + 0.5;\n    vec3 base = vec3(0.15, 0.25, 0.95);\n    vec3 color = base * (0.2 + 0.8 * pulse);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    // TODO: 用 sin(u_time) 生成 0-1 的脉冲值 pulse\n    float pulse = 1.0;\n\n    vec3 base = vec3(0.15, 0.25, 0.95);\n    vec3 color = base * (0.2 + 0.8 * pulse);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/animation/time-pulse.frag',
-        referenceSrc: '../glsl/animation/time-pulse.answer.frag',
+        exerciseSrc: '../glsl/animation/03_time-pulse.frag',
+        referenceSrc: '../glsl/animation/03_time-pulse.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

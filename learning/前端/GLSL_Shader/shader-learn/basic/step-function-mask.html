@@ -51,7 +51,7 @@ vec3 color = mix(leftColor, rightColor, mask);</code></pre>
 <p><code>step(0.5, vUv.x)</code> 在 <code>vUv.x = 0.5</code> 处从 0 跳到 1，产生垂直切线。</p>
 <p><code>mix(leftColor, rightColor, mask)</code> 用这个 0/1 值切换颜色：mask 为 0 时全是左边颜色，为 1 时全是右边颜色。</p>
 <p>把阈值改成 <code>step(vUv.y, 0.5)</code> 试试，切线方向会变成水平的。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/step-function-mask.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/28_step-function-mask.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/step-function-mask.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/28_step-function-mask.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float mask = step(0.5, vUv.x);\n    vec3 leftColor = vec3(1.0, 0.4, 0.4);\n    vec3 rightColor = vec3(0.4, 0.4, 1.0);\n    vec3 color = mix(leftColor, rightColor, mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 leftColor = vec3(1.0, 0.4, 0.4);\n    vec3 rightColor = vec3(0.4, 0.4, 1.0);\n\n    // TODO: 使用 step(0.5, vUv.x) 生成遮罩 mask（左侧 0，右侧 1）\n    float mask = 0.0;\n\n    // TODO: 使用 mix(leftColor, rightColor, mask) 得到最终颜色\n    vec3 color = leftColor;\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/step-function-mask.frag',
-        referenceSrc: '../glsl/basic/step-function-mask.answer.frag',
+        exerciseSrc: '../glsl/basic/28_step-function-mask.frag',
+        referenceSrc: '../glsl/basic/28_step-function-mask.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

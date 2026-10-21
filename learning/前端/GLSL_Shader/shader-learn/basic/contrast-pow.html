@@ -44,7 +44,7 @@
 <pre><code>float t = pow(vUv.x, 2.0);</code></pre>
 <p><code>pow(vUv.x, 2.0)</code> = <code>vUv.x * vUv.x</code>，把线性 0→1 压成二次曲线。视觉上，渐变的起始段颜色变化很慢，接近 1 的地方变化很快。</p>
 <p>把指数从 <code>2.0</code> 改成 <code>0.5</code>（等于 <code>sqrt(vUv.x)</code>），曲线反过来，起始变化快，结尾变化慢。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/contrast-pow.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/14_contrast-pow.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -86,7 +86,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/contrast-pow.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/14_contrast-pow.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -198,8 +198,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float t = pow(vUv.x, 2.0);\n    vec3 c = mix(vec3(0.1, 0.15, 0.25), vec3(1.0, 0.85, 0.25), t);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 用 pow(vUv.x, 2.0) 计算 t\n    float t = 0.0;\n    vec3 c = mix(vec3(0.1, 0.15, 0.25), vec3(1.0, 0.85, 0.25), t);\n    gl_FragColor = vec4(c, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/contrast-pow.frag',
-        referenceSrc: '../glsl/basic/contrast-pow.answer.frag',
+        exerciseSrc: '../glsl/basic/14_contrast-pow.frag',
+        referenceSrc: '../glsl/basic/14_contrast-pow.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

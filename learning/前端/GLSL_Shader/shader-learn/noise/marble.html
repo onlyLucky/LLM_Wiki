@@ -56,7 +56,7 @@ m = m * 0.5 + 0.5;</code></pre>
 <ul><li><code>vUv.x * 6.0</code>：沿 X 轴生成 6 条竖条纹</li><li><code>+ n * 2.0</code>：用噪声扰动相位，条纹弯曲变成脉络</li><li><code>* 3.14159265</code>：让 sin 的输入以 π 为单位，整数倍时为零交叉点</li><li><code>m * 0.5 + 0.5</code>：把 [-1,1] 映射到 [0,1] 作为灰度</li></ul>
 <p>初始 <code>m = 0.0</code> 是全黑。替换之后你会看到弯曲的黑白条纹，就是大理石纹路的基本形态。</p>
 <p>试着把 <code>vUv.x * 6.0</code> 改成 <code>(vUv.x + vUv.y) * 4.0</code>，让脉络方向变成斜向。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/marble.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/10_marble.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -94,7 +94,7 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/marble.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/10_marble.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=fbm(vUv*6.0);float m=sin((vUv.x*6.0+n*2.0)*3.14159265);m=m*0.5+0.5;gl_FragColor=vec4(vec3(m),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}float valueNoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);float a=hash21(i);float b=hash21(i+vec2(1,0));float c=hash21(i+vec2(0,1));float d=hash21(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<4;i++){v+=a*valueNoise(p);p*=2.0;a*=0.5;}return v;}void main(){float n=fbm(vUv*6.0);// TODO: marble = sin((x+n)*PI)\nfloat m=0.0;gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseSrc: '../glsl/noise/marble.frag',
-        referenceSrc: '../glsl/noise/marble.answer.frag',
+        exerciseSrc: '../glsl/noise/10_marble.frag',
+        referenceSrc: '../glsl/noise/10_marble.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

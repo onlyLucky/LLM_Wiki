@@ -61,7 +61,7 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
 <p><code>distance(vUv, center)</code> 算出每个像素到中心的距离。<code>step(dist, radius)</code> 判断该距离是否在半径以内——小于 radius 返回 1（圆内），大于等于返回 0（圆外）。<code>mix</code> 用这个 0/1 遮罩在黑色和黄色之间切换。</p>
 <p>练习是空的 <code>main()</code>，需要从头补全六行代码。</p>
 <p>试着把 <code>step</code> 换成 <code>1.0 - smoothstep(0.29, 0.31, dist)</code> 看看边缘软化的效果。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/centered-circle-mask.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/05_centered-circle-mask.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -106,7 +106,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/centered-circle-mask.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/05_centered-circle-mask.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -218,8 +218,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 center = vec2(0.5, 0.5);\n    float radius = 0.3;\n    float dist = distance(vUv, center);\n    float inside = step(dist, radius);\n    vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义中心点 center（0.5, 0.5）\n    // TODO: 计算当前像素与中心的距离 dist\n    // TODO: 使用 step() 判断是否在圆形内，生成遮罩值 inside\n    // TODO: 使用 mix() 混合颜色\n    // TODO: 输出最终颜色\n}\n",
-        exerciseSrc: '../glsl/math/centered-circle-mask.frag',
-        referenceSrc: '../glsl/math/centered-circle-mask.answer.frag',
+        exerciseSrc: '../glsl/math/05_centered-circle-mask.frag',
+        referenceSrc: '../glsl/math/05_centered-circle-mask.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

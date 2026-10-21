@@ -52,7 +52,7 @@ vec3 color = vec3(uv.x);</code></pre>
 <p><code>vec3(uv.x)</code> 是 <code>vec3(uv.x, uv.x, uv.x)</code> 的简写——三个通道相同就是灰色。<code>uv.x</code> 从 0 到 1，灰色就从黑到白。</p>
 <p><code>u_resolution</code> 是 uniform，代表画布宽高（如 300×300）。除以它，就把像素坐标缩放到 0~1 之间。</p>
 <p>试试把 <code>vec3(uv.x)</code> 改成 <code>vec3(uv.y)</code>，渐变方向会变成从下到上。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/uv-coordinates.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/basic/02_uv-coordinates.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
 
 uniform vec2 u_resolution;
@@ -94,7 +94,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/uv-coordinates.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/basic/02_uv-coordinates.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -206,8 +206,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "precision mediump float;\n\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 把像素坐标除以画布尺寸，得到 0.0 ~ 1.0 的 UV\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    // uv.x 从左到右是 0.0 → 1.0，当作三个通道的亮度\n    vec3 color = vec3(uv.x);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "precision mediump float;\n\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 第一步：把像素坐标转成 0~1 的 UV\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 目标：让画面从左边黑色渐变到右边白色\n    // 只用 uv.x 来控制颜色亮度\n\n    vec3 color = vec3(0.0); // 修改这里\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/basic/uv-coordinates.frag',
-        referenceSrc: '../glsl/basic/uv-coordinates.answer.frag',
+        exerciseSrc: '../glsl/basic/02_uv-coordinates.frag',
+        referenceSrc: '../glsl/basic/02_uv-coordinates.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

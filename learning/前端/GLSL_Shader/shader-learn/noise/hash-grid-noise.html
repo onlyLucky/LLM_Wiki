@@ -60,7 +60,7 @@ gl_FragColor = vec4(vec3(n), 1.0);</code></pre>
 <ul><li><code>vUv * 64.0</code>：把 UV 放大，决定格子密度</li><li><code>floor(...)</code>：把同一格内所有像素压到同一个整数坐标</li><li><code>hash21(...)</code>：对这个整数坐标取伪随机值，得到 0–1 的灰度</li><li><code>vec3(n)</code>：把单个浮点数扩展成灰度颜色</li></ul>
 <p>初始代码 <code>n = 0.0</code> 让所有像素都是黑色。替换之后每个格子拿到属于自己的随机数，画面就变成马赛克噪声。</p>
 <p>试着把 <code>64.0</code> 改成 <code>16.0</code>，感受格子大小和噪声粗细的关系。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/hash-grid-noise.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/01_hash-grid-noise.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -105,7 +105,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/hash-grid-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/noise/01_hash-grid-noise.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -217,8 +217,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\nvoid main() {\n    float n = hash21(floor(vUv * 64.0));\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\nvoid main() {\n    // TODO: 用 hash21 + floor(vUv * grid) 生成随机格点噪声\n    float n = 0.0;\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
-        exerciseSrc: '../glsl/noise/hash-grid-noise.frag',
-        referenceSrc: '../glsl/noise/hash-grid-noise.answer.frag',
+        exerciseSrc: '../glsl/noise/01_hash-grid-noise.frag',
+        referenceSrc: '../glsl/noise/01_hash-grid-noise.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

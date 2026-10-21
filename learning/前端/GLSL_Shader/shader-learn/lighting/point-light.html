@@ -64,7 +64,7 @@ vec3 col = baseCol * (0.1 + diff * 2.0);</code></pre>
 <p>加上 <code>att</code> 后，离光源近的像素 att 接近 1（亮度几乎不损失），远的像素 att 趋近 0（几乎不受光），球体就产生了真实的明暗过渡。</p>
 <p><code>dot(lightPos-pos, lightPos-pos)</code> 是距离平方，比 <code>length()</code> 少一次开根号运算，在 GPU 上效率更高。</p>
 <p>试着把光源位置 z 分量从 <code>0.6</code> 改成 <code>0.1</code>，让光源更贴近球面，观察衰减形状的变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/point-light.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/11_point-light.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -101,7 +101,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/point-light.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/11_point-light.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -213,8 +213,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 lightPos=vec3(0.3,0.4,0.6);vec3 pos=vec3(p,0.0);vec3 l=normalize(lightPos-pos);float att=1.0/(1.0+3.0*dot(lightPos-pos,lightPos-pos));float diff=max(dot(n,l),0.0)*att;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.1+diff*2.0);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 lightPos=vec3(0.3,0.4,0.6);vec3 pos=vec3(p,0.0);vec3 l=normalize(lightPos-pos);// TODO: 计算衰减 att 并乘到 diff\nfloat diff=max(dot(n,l),0.0);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.1+diff*2.0);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/point-light.frag',
-        referenceSrc: '../glsl/lighting/point-light.answer.frag',
+        exerciseSrc: '../glsl/lighting/11_point-light.frag',
+        referenceSrc: '../glsl/lighting/11_point-light.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

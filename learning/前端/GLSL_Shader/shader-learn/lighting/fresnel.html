@@ -54,7 +54,7 @@
 <p>初始状态：<code>f = 0.0</code>，球体颜色是 <code>baseCol * 0.2</code>，只有 20% 的暗底，没有边缘亮度。</p>
 <p>改动：<code>1.0 - dot(n, v)</code> 让边缘值大、中心值小，<code>pow(..., 5.0)</code> 把这个效果集中到更窄的边缘带。最终 <code>vec3(1.0) * f</code> 加到底色上，边缘变白亮。</p>
 <p>试着把指数从 <code>5.0</code> 改成 <code>1.5</code>，看 Fresnel 效果会不会扩散到球体中心区域。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/fresnel.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/09_fresnel.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -91,7 +91,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/fresnel.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/09_fresnel.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -203,8 +203,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 v=normalize(vec3(0.0,0.0,1.0));float f=pow(1.0-max(dot(n,v),0.0),5.0);vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.2)+vec3(1.0)*f;gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 v=normalize(vec3(0.0,0.0,1.0));// TODO: f = pow(1.0 - max(dot(n,v),0.0), 5.0)\nfloat f=0.0;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.2)+vec3(1.0)*f;gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/fresnel.frag',
-        referenceSrc: '../glsl/lighting/fresnel.answer.frag',
+        exerciseSrc: '../glsl/lighting/09_fresnel.frag',
+        referenceSrc: '../glsl/lighting/09_fresnel.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

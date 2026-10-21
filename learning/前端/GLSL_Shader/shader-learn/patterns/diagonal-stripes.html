@@ -53,7 +53,7 @@ float m = step(0.5, v);</code></pre>
 <p><code>vUv.x + vUv.y</code> 是沿对角线方向的线性坐标，范围 0–2。乘以 <code>c = 14.0</code> 扩展成 0–28，<code>fract()</code> 折叠成 14 段循环。</p>
 <p>初始代码 <code>v = 0.0</code> 让所有像素的 v 恒为 0，<code>step(0.5, 0.0)</code> 永远返回 0，画面全是深色。改成 <code>fract((vUv.x + vUv.y) * c)</code> 后，v 沿对角线方向变化，条纹就出现了。</p>
 <p>试着把 <code>vUv.x + vUv.y</code> 改为 <code>vUv.x * 0.5 + vUv.y</code>，条纹角度会向垂直方向倾斜。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/diagonal-stripes.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/05_diagonal-stripes.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -90,7 +90,7 @@ void main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/diagonal-stripes.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/05_diagonal-stripes.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -202,8 +202,8 @@ void main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=14.0;// TODO: v=fract((vUv.x+vUv.y)*c)\nfloat v=0.0;float m=step(0.5,v);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseSrc: '../glsl/patterns/diagonal-stripes.frag',
-        referenceSrc: '../glsl/patterns/diagonal-stripes.answer.frag',
+        exerciseSrc: '../glsl/patterns/05_diagonal-stripes.frag',
+        referenceSrc: '../glsl/patterns/05_diagonal-stripes.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

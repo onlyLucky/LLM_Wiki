@@ -52,7 +52,7 @@ float mask = step(0.5, y);</code></pre>
 <p><code>count</code> 是 12.0，所以 <code>vUv.y * 12.0</code> 把 y 坐标范围扩展到 0–12。<code>fract()</code> 把这段范围每隔 1.0 折叠一次，得到 12 段重复的 0–1 波形。</p>
 <p>初始代码 <code>float y = 0.0</code> 让所有像素的 y 都等于 0，<code>step(0.5, 0.0)</code> 永远返回 0，画面全是深色。改成 <code>fract(vUv.y * count)</code> 后，y 随高度变化，<code>step</code> 就能在每段里分出上下两半，形成条纹。</p>
 <p>试着把 <code>count</code> 改成 <code>20.0</code>，看看条纹密度的变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/stripes-horizontal.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/03_stripes-horizontal.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -95,7 +95,7 @@ void main() {
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/stripes-horizontal.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/patterns/03_stripes-horizontal.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -207,8 +207,8 @@ void main() {
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 12.0;\n    float y = fract(vUv.y * count);\n    float mask = step(0.5, y);\n    vec3 color = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 12.0;\n\n    // TODO: 用 vUv.y 做条纹（提示：fract(vUv.y * count)）\n    float y = 0.0;\n    float mask = step(0.5, y);\n\n    vec3 color = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseSrc: '../glsl/patterns/stripes-horizontal.frag',
-        referenceSrc: '../glsl/patterns/stripes-horizontal.answer.frag',
+        exerciseSrc: '../glsl/patterns/03_stripes-horizontal.frag',
+        referenceSrc: '../glsl/patterns/03_stripes-horizontal.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

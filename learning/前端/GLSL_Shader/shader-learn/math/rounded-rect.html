@@ -53,7 +53,7 @@
 <p><code>sdRoundBox</code> 的实现与 <code>sdBox</code> 几乎相同，只在最后减去圆角半径 <code>r = 0.05</code>。这使每个角的尖锐区域被削去一个半径为 0.05 的圆弧，形成平滑圆角。<code>1.0 - smoothstep(0.0, 0.01, d)</code> 把负值（内部）映射为白色，正值（外部）映射为黑色。</p>
 <p>练习起始是 <code>float d = 0.0</code>，整个画面都被视为恰在边界处，效果不正确。换成 <code>sdRoundBox</code> 调用就能看到圆角矩形。</p>
 <p>试着把圆角半径从 <code>0.05</code> 改成 <code>0.12</code>，看看角的圆弧弧度变化。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/rounded-rect.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/07_rounded-rect.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -90,7 +90,7 @@ float sdRoundBox(vec2 p, vec2 b, float r){vec2 d=abs(p)-b;return length(max(d,0.
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/rounded-rect.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/math/07_rounded-rect.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -202,8 +202,8 @@ float sdRoundBox(vec2 p, vec2 b, float r){vec2 d=abs(p)-b;return length(max(d,0.
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sdRoundBox(vec2 p, vec2 b, float r){vec2 d=abs(p)-b;return length(max(d,0.0))-r+min(max(d.x,d.y),0.0);}void main(){vec2 p=vUv-0.5;float d=sdRoundBox(p,vec2(0.22,0.14),0.05);float m=1.0-smoothstep(0.0,0.01,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sdRoundBox(vec2 p, vec2 b, float r){vec2 d=abs(p)-b;return length(max(d,0.0))-r+min(max(d.x,d.y),0.0);}void main(){vec2 p=vUv-0.5;// TODO: 调用 sdRoundBox\nfloat d=0.0;float m=1.0-smoothstep(0.0,0.01,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseSrc: '../glsl/math/rounded-rect.frag',
-        referenceSrc: '../glsl/math/rounded-rect.answer.frag',
+        exerciseSrc: '../glsl/math/07_rounded-rect.frag',
+        referenceSrc: '../glsl/math/07_rounded-rect.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')

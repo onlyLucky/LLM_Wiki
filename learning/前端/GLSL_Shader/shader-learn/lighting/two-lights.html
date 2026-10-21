@@ -56,7 +56,7 @@ vec3 l2 = normalize(vec3(0.6, 0.2, 0.6));   // 右侧，偏低</code></pre>
 <p>起始代码只有 <code>diff = max(dot(n, l1), 0.0) * 0.7</code>，球体只受一盏灯影响。右侧区域只能靠环境光显示，缺少层次感。</p>
 <p>加上 <code>+ max(dot(n, l2), 0.0) * 0.5</code> 后，第二盏灯从右侧补光，球体正面中心两灯叠加最亮，两侧各受一盏灯，背面接近黑色。权重 0.7 和 0.5 让主光和补光有明显区别。</p>
 <p>试着给第二项再加一个颜色乘数，比如 <code>* vec3(0.8, 0.6, 1.0)</code>，让补光带一点蓝紫色，制造冷暖对比。</p>
-        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/two-lights.answer.frag</span></div>
+        <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/12_two-lights.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
@@ -93,7 +93,7 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
     </section>
   </main>
 
-  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/two-lights.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
+  <div class="file-hint"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg><span>练习代码 <code>glsl/lighting/12_two-lights.frag</code> · 保存后约 1.5s 自动应用到「当前预览」</span></div>
 
   <script src="../assets/runtime.js"></script>
   <script>
@@ -205,8 +205,8 @@ float sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p)
         resetBtn: document.getElementById('btn-reset'),
         referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l1=normalize(vec3(-0.4,0.6,0.7));vec3 l2=normalize(vec3(0.6,0.2,0.6));float diff=max(dot(n,l1),0.0)*0.7+max(dot(n,l2),0.0)*0.5;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.15+0.85*diff);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
         exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat sphereSDF(vec2 p, float r){return length(p)-r;}vec3 estimateNormal(vec2 p){float e=0.001;float d=sphereSDF(p,0.32);vec2 n=vec2(sphereSDF(p+vec2(e,0),0.32)-d,sphereSDF(p+vec2(0,e),0.32)-d);return normalize(vec3(n,0.35));}void main(){vec2 p=vUv-0.5;float d=sphereSDF(p,0.32);vec3 bg=vec3(0.05,0.06,0.08);if(d>0.0){gl_FragColor=vec4(bg,1.0);return;}vec3 n=estimateNormal(p);vec3 l1=normalize(vec3(-0.4,0.6,0.7));vec3 l2=normalize(vec3(0.6,0.2,0.6));// TODO: diff = max(dot(n,l1),0)+max(dot(n,l2),0)（可加权）\nfloat diff=0.0;vec3 baseCol=vec3(0.25,0.9,0.85);vec3 col=baseCol*(0.15+0.85*diff);gl_FragColor=vec4(mix(bg,col,1.0),1.0);}\n",
-        exerciseSrc: '../glsl/lighting/two-lights.frag',
-        referenceSrc: '../glsl/lighting/two-lights.answer.frag',
+        exerciseSrc: '../glsl/lighting/12_two-lights.frag',
+        referenceSrc: '../glsl/lighting/12_two-lights.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
         fpsEl: document.getElementById('fps-stage'),
         statusEl: document.getElementById('status-current')
