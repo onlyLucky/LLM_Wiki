@@ -64,16 +64,16 @@ gl_FragColor = vec4(vec3(n), 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 float hash21(vec2 p) {
-    p = fract(p * vec2(123.34, 345.45));
-    p += dot(p, p + 34.345);
-    return fract(p.x * p.y);
+  p = fract(p * vec2(123.34, 345.45));
+  p+=dot(p, p + 34.345);
+  return fract(p.x * p.y);
 }
+
 void main() {
-    float n = hash21(floor(vUv * 64.0));
-    gl_FragColor = vec4(vec3(n), 1.0);
+  float n = hash21(floor(vUv * 64.0));
+  gl_FragColor = vec4(vec3(n), 1.0);
 }
 </code></pre>
       </div>
@@ -215,8 +215,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\nvoid main() {\n    float n = hash21(floor(vUv * 64.0));\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n    p = fract(p * vec2(123.34, 345.45));\n    p += dot(p, p + 34.345);\n    return fract(p.x * p.y);\n}\nvoid main() {\n    // TODO: 用 hash21 + floor(vUv * grid) 生成随机格点噪声\n    float n = 0.0;\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n  p = fract(p * vec2(123.34, 345.45));\n  p+=dot(p, p + 34.345);\n  return fract(p.x * p.y);\n}\n\nvoid main() {\n  float n = hash21(floor(vUv * 64.0));\n  gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n  p = fract(p * vec2(123.34, 345.45));\n  p+=dot(p, p + 34.345);\n  return fract(p.x * p.y);\n}\n\nvoid main() {\n  // TODO: 用 hash21 + floor(vUv * grid) 生成随机格点噪声\n  float n = 0.0;\n  gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
         exerciseSrc: '../glsl/noise/01_hash-grid-noise.frag',
         referenceSrc: '../glsl/noise/01_hash-grid-noise.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

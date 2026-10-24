@@ -57,99 +57,81 @@ return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);</code></pre>
         <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/noise/02_noise-functions.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">// 噪声函数
 // 教程ID: noise-functions
-
 precision mediump float;
-
-uniform vec2 u_resolution; // 画布尺寸
-uniform float u_time; // 时间（秒）
-
+uniform vec2 u_resolution;
+// 画布尺寸
+uniform float u_time;
+// 时间（秒）
 // 伪随机数生成函数
 float random(vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+  return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
 // 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；
 // 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）
 vec2 hash2(vec2 p) {
-    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
+  return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
 }
 
 // 值噪声函数
 float valueNoise(vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
-
-    // 四个角的随机值
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-    // 平滑插值
-    vec2 u = smoothstep(0.0, 1.0, f);
-
-    // 混合4个角的值
-    return mix(
-        mix(a, b, u.x),
-        mix(c, d, u.x),
-        u.y
-    );
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+  // 四个角的随机值
+  float a = random(i);
+  float b = random(i + vec2(1.0, 0.0));
+  float c = random(i + vec2(0.0, 1.0));
+  float d = random(i + vec2(1.0, 1.0));
+  // 平滑插值
+  vec2 u = smoothstep(0.0, 1.0, f);
+  // 混合4个角的值
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
 // Perlin噪声（简化版）
 float perlinNoise(vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
-
-    // 四个角的随机梯度
-    vec2 a = hash2(i) * 2.0 - 1.0;
-    vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;
-    vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;
-    vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;
-
-    // 计算点积
-    float dotA = dot(a, f);
-    float dotB = dot(b, f - vec2(1.0, 0.0));
-    float dotC = dot(c, f - vec2(0.0, 1.0));
-    float dotD = dot(d, f - vec2(1.0, 1.0));
-
-    // 平滑插值
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    return mix(
-        mix(dotA, dotB, u.x),
-        mix(dotC, dotD, u.x),
-        u.y
-    ) * 0.5 + 0.5; // 将范围从[-1,1]转换到[0,1]
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+  // 四个角的随机梯度
+  vec2 a = hash2(i) * 2.0 - 1.0;
+  vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;
+  vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;
+  vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;
+  // 计算点积
+  float dotA = dot(a, f);
+  float dotB = dot(b, f - vec2(1.0, 0.0));
+  float dotC = dot(c, f - vec2(0.0, 1.0));
+  float dotD = dot(d, f - vec2(1.0, 1.0));
+  // 平滑插值
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(dotA, dotB, u.x), mix(dotC, dotD, u.x), u.y) * 0.5 + 0.5;
+  // 将范围从[-1,1]转换到[0,1]
 }
 
 void main() {
-    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-
-    // 将画布分成三部分显示不同类型的噪声
-    vec3 color;
-
-    // 坐标缩放和动画
-    vec2 pos = uv * 5.0;
-    pos.x += u_time * 0.5;
-
-    if (uv.x &lt; 0.33) {
-        // 随机噪声
-        color = vec3(random(pos * 10.0));
-    } else if (uv.x &lt; 0.66) {
-        // 值噪声
-        color = vec3(valueNoise(pos));
-    } else {
-        // Perlin噪声
-        color = vec3(perlinNoise(pos));
-    }
-
-    // 添加分隔线
-    if (abs(uv.x - 0.33) &lt; 0.002 || abs(uv.x - 0.66) &lt; 0.002) {
-        color = vec3(1.0, 0.0, 0.0);
-    }
-
-    gl_FragColor = vec4(color, 1.0);
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+  // 将画布分成三部分显示不同类型的噪声
+  vec3 color;
+  // 坐标缩放和动画
+  vec2 pos = uv * 5.0;
+  pos.x+=u_time * 0.5;
+  if (uv.x &lt; 0.33) {
+    // 随机噪声
+    color = vec3(random(pos * 10.0));
+  }
+  else if (uv.x &lt; 0.66) {
+    // 值噪声
+    color = vec3(valueNoise(pos));
+  }
+  else {
+    // Perlin噪声
+    color = vec3(perlinNoise(pos));
+  }
+  // 添加分隔线
+  if (abs(uv.x - 0.33) &lt; 0.002 || abs(uv.x - 0.66) &lt; 0.002) {
+    color = vec3(1.0, 0.0, 0.0);
+  }
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -291,8 +273,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "// 噪声函数\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 伪随机数生成函数\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\n// 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；\n// 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）\nvec2 hash2(vec2 p) {\n    return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);\n}\n\n// 值噪声函数\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机值\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    // 混合4个角的值\n    return mix(\n        mix(a, b, u.x),\n        mix(c, d, u.x),\n        u.y\n    );\n}\n\n// Perlin噪声（简化版）\nfloat perlinNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // 四个角的随机梯度\n    vec2 a = hash2(i) * 2.0 - 1.0;\n    vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;\n    vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;\n    vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;\n\n    // 计算点积\n    float dotA = dot(a, f);\n    float dotB = dot(b, f - vec2(1.0, 0.0));\n    float dotC = dot(c, f - vec2(0.0, 1.0));\n    float dotD = dot(d, f - vec2(1.0, 1.0));\n\n    // 平滑插值\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(\n        mix(dotA, dotB, u.x),\n        mix(dotC, dotD, u.x),\n        u.y\n    ) * 0.5 + 0.5; // 将范围从[-1,1]转换到[0,1]\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 将画布分成三部分显示不同类型的噪声\n    vec3 color;\n\n    // 坐标缩放和动画\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    if (uv.x < 0.33) {\n        // 随机噪声\n        color = vec3(random(pos * 10.0));\n    } else if (uv.x < 0.66) {\n        // 值噪声\n        color = vec3(valueNoise(pos));\n    } else {\n        // Perlin噪声\n        color = vec3(perlinNoise(pos));\n    }\n\n    // 添加分隔线\n    if (abs(uv.x - 0.33) < 0.002 || abs(uv.x - 0.66) < 0.002) {\n        color = vec3(1.0, 0.0, 0.0);\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "// 噪声函数（练习版）\n// 教程ID: noise-functions\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat random(vec2 st) {\n    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\nfloat valueNoise(vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    // TODO: 用平滑曲线替代线性插值（比如 u = f*f*(3-2f)）\n    vec2 u = smoothstep(0.0, 1.0, f);\n\n    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    vec2 pos = uv * 5.0;\n    pos.x += u_time * 0.5;\n\n    // TODO: 修改 scale/pos，观察随机噪声与平滑噪声的区别\n    float n = valueNoise(pos);\n\n    gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
+        referenceCode: "// 噪声函数\n// 教程ID: noise-functions\nprecision mediump float;\nuniform vec2 u_resolution;\n// 画布尺寸\nuniform float u_time;\n// 时间（秒）\n// 伪随机数生成函数\nfloat random(vec2 st) {\n  return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\n// 二维伪随机向量（本地修正：原站此处误用返回 float 的 random() 给 vec2 赋值，无法编译；\n// 改为返回 vec2 的 hash2，与 The Book of Shaders 的梯度噪声写法一致）\nvec2 hash2(vec2 p) {\n  return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);\n}\n\n// 值噪声函数\nfloat valueNoise(vec2 st) {\n  vec2 i = floor(st);\n  vec2 f = fract(st);\n  // 四个角的随机值\n  float a = random(i);\n  float b = random(i + vec2(1.0, 0.0));\n  float c = random(i + vec2(0.0, 1.0));\n  float d = random(i + vec2(1.0, 1.0));\n  // 平滑插值\n  vec2 u = smoothstep(0.0, 1.0, f);\n  // 混合4个角的值\n  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\n// Perlin噪声（简化版）\nfloat perlinNoise(vec2 st) {\n  vec2 i = floor(st);\n  vec2 f = fract(st);\n  // 四个角的随机梯度\n  vec2 a = hash2(i) * 2.0 - 1.0;\n  vec2 b = hash2(i + vec2(1.0, 0.0)) * 2.0 - 1.0;\n  vec2 c = hash2(i + vec2(0.0, 1.0)) * 2.0 - 1.0;\n  vec2 d = hash2(i + vec2(1.0, 1.0)) * 2.0 - 1.0;\n  // 计算点积\n  float dotA = dot(a, f);\n  float dotB = dot(b, f - vec2(1.0, 0.0));\n  float dotC = dot(c, f - vec2(0.0, 1.0));\n  float dotD = dot(d, f - vec2(1.0, 1.0));\n  // 平滑插值\n  vec2 u = f * f * (3.0 - 2.0 * f);\n  return mix(mix(dotA, dotB, u.x), mix(dotC, dotD, u.x), u.y) * 0.5 + 0.5;\n  // 将范围从[-1,1]转换到[0,1]\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  // 将画布分成三部分显示不同类型的噪声\n  vec3 color;\n  // 坐标缩放和动画\n  vec2 pos = uv * 5.0;\n  pos.x+=u_time * 0.5;\n  if (uv.x < 0.33) {\n    // 随机噪声\n    color = vec3(random(pos * 10.0));\n  }\n  else if (uv.x < 0.66) {\n    // 值噪声\n    color = vec3(valueNoise(pos));\n  }\n  else {\n    // Perlin噪声\n    color = vec3(perlinNoise(pos));\n  }\n  // 添加分隔线\n  if (abs(uv.x - 0.33) < 0.002 || abs(uv.x - 0.66) < 0.002) {\n    color = vec3(1.0, 0.0, 0.0);\n  }\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "// 噪声函数（练习版）\n// 教程ID: noise-functions\nprecision mediump float;\nuniform vec2 u_resolution;\n// 画布尺寸\nuniform float u_time;\n// 时间（秒）\nfloat random(vec2 st) {\n  return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);\n}\n\nfloat valueNoise(vec2 st) {\n  vec2 i = floor(st);\n  vec2 f = fract(st);\n  float a = random(i);\n  float b = random(i + vec2(1.0, 0.0));\n  float c = random(i + vec2(0.0, 1.0));\n  float d = random(i + vec2(1.0, 1.0));\n  // TODO: 用平滑曲线替代线性插值（比如 u = f*f*(3-2f)）\n  vec2 u = smoothstep(0.0, 1.0, f);\n  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  vec2 pos = uv * 5.0;\n  pos.x+=u_time * 0.5;\n  // TODO: 修改 scale/pos，观察随机噪声与平滑噪声的区别\n  float n = valueNoise(pos);\n  gl_FragColor = vec4(vec3(n), 1.0);\n}\n",
         exerciseSrc: '../glsl/noise/02_noise-functions.frag',
         referenceSrc: '../glsl/noise/02_noise-functions.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

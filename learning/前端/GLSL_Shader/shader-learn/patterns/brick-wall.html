@@ -64,9 +64,17 @@ mortar = min(mortar, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=fract(uv);float mortar=step(0.95,f.x)+step(0.95,f.y);mortar=min(mortar,1.0);vec3 brick=vec3(0.75,0.25,0.2);vec3 col=mix(brick,vec3(0.05),mortar);gl_FragColor=vec4(col,1.0);}
+void main() {
+  vec2 uv = vUv * 8.0;
+  uv.x+=step(1.0, mod(floor(uv.y), 2.0)) * 0.5;
+  vec2 f = fract(uv);
+  float mortar = step(0.95, f.x) + step(0.95, f.y);
+  mortar = min(mortar, 1.0);
+  vec3 brick = vec3(0.75, 0.25, 0.2);
+  vec3 col = mix(brick, vec3(0.05), mortar);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -207,8 +215,8 @@ void main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=frac
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 uv=vUv*8.0;uv.x+=step(1.0,mod(floor(uv.y),2.0))*0.5;vec2 f=fract(uv);float mortar=step(0.95,f.x)+step(0.95,f.y);mortar=min(mortar,1.0);vec3 brick=vec3(0.75,0.25,0.2);vec3 col=mix(brick,vec3(0.05),mortar);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 uv=vUv*8.0;// TODO: 每隔一行偏移 0.5\nvec2 f=fract(uv);float mortar=step(0.95,f.x)+step(0.95,f.y);mortar=min(mortar,1.0);vec3 brick=vec3(0.75,0.25,0.2);vec3 col=mix(brick,vec3(0.05),mortar);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec2 uv = vUv * 8.0;\n  uv.x+=step(1.0, mod(floor(uv.y), 2.0)) * 0.5;\n  vec2 f = fract(uv);\n  float mortar = step(0.95, f.x) + step(0.95, f.y);\n  mortar = min(mortar, 1.0);\n  vec3 brick = vec3(0.75, 0.25, 0.2);\n  vec3 col = mix(brick, vec3(0.05), mortar);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec2 uv = vUv * 8.0;\n  // TODO: 每隔一行偏移 0.5\n  vec2 f = fract(uv);\n  float mortar = step(0.95, f.x) + step(0.95, f.y);\n  mortar = min(mortar, 1.0);\n  vec3 brick = vec3(0.75, 0.25, 0.2);\n  vec3 col = mix(brick, vec3(0.05), mortar);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/13_brick-wall.frag',
         referenceSrc: '../glsl/patterns/13_brick-wall.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

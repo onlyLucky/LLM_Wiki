@@ -58,16 +58,15 @@ float dot = 1.0 - smoothstep(0.18, 0.19, d);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 void main() {
-    float count = 8.0;
-    vec2 gv = fract(vUv * count) - 0.5;
-    float d = length(gv);
-    float dot = 1.0 - smoothstep(0.18, 0.19, d);
-    vec3 bg = vec3(0.06, 0.07, 0.1);
-    vec3 fg = vec3(1.0, 0.85, 0.25);
-    gl_FragColor = vec4(mix(bg, fg, dot), 1.0);
+  float count = 8.0;
+  vec2 gv = fract(vUv * count) - 0.5;
+  float d = length(gv);
+  float dot = 1.0 - smoothstep(0.18, 0.19, d);
+  vec3 bg = vec3(0.06, 0.07, 0.1);
+  vec3 fg = vec3(1.0, 0.85, 0.25);
+  gl_FragColor = vec4(mix(bg, fg, dot), 1.0);
 }
 </code></pre>
       </div>
@@ -209,8 +208,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 8.0;\n    vec2 gv = fract(vUv * count) - 0.5;\n    float d = length(gv);\n    float dot = 1.0 - smoothstep(0.18, 0.19, d);\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main() {\n    float count = 8.0;\n\n    // TODO: 把 vUv 分成网格，并让每个单元以中心为原点（提示：fract(vUv*count)-0.5）\n    vec2 gv = vec2(0.0);\n\n    float d = length(gv);\n\n    // TODO: 用 smoothstep 画圆点（单元中心为 1，外部为 0）\n    float dot = 0.0;\n\n    vec3 bg = vec3(0.06, 0.07, 0.1);\n    vec3 fg = vec3(1.0, 0.85, 0.25);\n    gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float count = 8.0;\n  vec2 gv = fract(vUv * count) - 0.5;\n  float d = length(gv);\n  float dot = 1.0 - smoothstep(0.18, 0.19, d);\n  vec3 bg = vec3(0.06, 0.07, 0.1);\n  vec3 fg = vec3(1.0, 0.85, 0.25);\n  gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float count = 8.0;\n  // TODO: 把 vUv 分成网格，并让每个单元以中心为原点（提示：fract(vUv*count)-0.5）\n  vec2 gv = vec2(0.0);\n  float d = length(gv);\n  // TODO: 用 smoothstep 画圆点（单元中心为 1，外部为 0）\n  float dot = 0.0;\n  vec3 bg = vec3(0.06, 0.07, 0.1);\n  vec3 fg = vec3(1.0, 0.85, 0.25);\n  gl_FragColor = vec4(mix(bg, fg, dot), 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/12_polka-dots.frag',
         referenceSrc: '../glsl/patterns/12_polka-dots.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

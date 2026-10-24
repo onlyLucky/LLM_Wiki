@@ -60,10 +60,17 @@ float dot = 1.0 - smoothstep(0.02, 0.025, d);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 uniform float u_time;
-void main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),sin(u_time))*r;float d=distance(vUv,pos);float dot=1.0-smoothstep(0.02,0.025,d);vec3 c=mix(vec3(0.05,0.06,0.08),vec3(0.2,0.85,1.0),dot);gl_FragColor=vec4(c,1.0);}
+void main() {
+  vec2 center = vec2(0.5);
+  float r = 0.25;
+  vec2 pos = center + vec2(cos(u_time), sin(u_time)) * r;
+  float d = distance(vUv, pos);
+  float dot = 1.0 - smoothstep(0.02, 0.025, d);
+  vec3 c = mix(vec3(0.05, 0.06, 0.08), vec3(0.2, 0.85, 1.0), dot);
+  gl_FragColor = vec4(c, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -204,8 +211,8 @@ void main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 center=vec2(0.5);float r=0.25;vec2 pos=center+vec2(cos(u_time),sin(u_time))*r;float d=distance(vUv,pos);float dot=1.0-smoothstep(0.02,0.025,d);vec3 c=mix(vec3(0.05,0.06,0.08),vec3(0.2,0.85,1.0),dot);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec2 center=vec2(0.5);float r=0.25;// TODO: 计算 pos\nvec2 pos=center;float d=distance(vUv,pos);float dot=1.0-smoothstep(0.02,0.025,d);vec3 c=mix(vec3(0.05,0.06,0.08),vec3(0.2,0.85,1.0),dot);gl_FragColor=vec4(c,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  vec2 center = vec2(0.5);\n  float r = 0.25;\n  vec2 pos = center + vec2(cos(u_time), sin(u_time)) * r;\n  float d = distance(vUv, pos);\n  float dot = 1.0 - smoothstep(0.02, 0.025, d);\n  vec3 c = mix(vec3(0.05, 0.06, 0.08), vec3(0.2, 0.85, 1.0), dot);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  vec2 center = vec2(0.5);\n  float r = 0.25;\n  // TODO: 计算 pos\n  vec2 pos = center;\n  float d = distance(vUv, pos);\n  float dot = 1.0 - smoothstep(0.02, 0.025, d);\n  vec3 c = mix(vec3(0.05, 0.06, 0.08), vec3(0.2, 0.85, 1.0), dot);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseSrc: '../glsl/animation/09_orbiting-dot.frag',
         referenceSrc: '../glsl/animation/09_orbiting-dot.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

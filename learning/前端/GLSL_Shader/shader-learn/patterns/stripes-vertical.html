@@ -54,9 +54,14 @@ float m = step(0.5, x);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(col,1.0);}
+void main() {
+  float c = 12.0;
+  float x = fract(vUv.x * c);
+  float m = step(0.5, x);
+  vec3 col = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -197,8 +202,8 @@ void main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=12.0;float x=fract(vUv.x*c);float m=step(0.5,x);vec3 col=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=12.0;float x=0.0; // TODO: fract(vUv.x*c)\nfloat m=step(0.5,x);vec3 col=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float c = 12.0;\n  float x = fract(vUv.x * c);\n  float m = step(0.5, x);\n  vec3 col = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float c = 12.0;\n  float x = 0.0;\n  // TODO: fract(vUv.x*c)\n  float m = step(0.5, x);\n  vec3 col = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/04_stripes-vertical.frag',
         referenceSrc: '../glsl/patterns/04_stripes-vertical.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

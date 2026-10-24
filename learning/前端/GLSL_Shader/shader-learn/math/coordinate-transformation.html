@@ -72,59 +72,44 @@ vec2 scaled = rotated * scale;</code></pre>
 <p>试着在旋转后加一行 <code>rotated *= 0.7</code>，看看坐标缩放对最终图案密度的影响。</p>
         <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/math/11_coordinate-transformation.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
-
 uniform float u_time;
-
 void main() {
-    // 坐标变换 - 完整实现
-    // 这是最终效果代码，展示旋转和缩放的图案
-
-    // 获取当前像素的归一化坐标
-    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);
-
-    // 将坐标原点移到屏幕中心
-    vec2 centered = uv - vec2(0.5, 0.5);
-
-    // 创建旋转矩阵
-    // 旋转角度随时间变化
-    float angle = u_time;
-    float cosA = cos(angle);
-    float sinA = sin(angle);
-
-    // 2D旋转矩阵的应用
-    vec2 rotated = vec2(
-        centered.x * cosA - centered.y * sinA,
-        centered.x * sinA + centered.y * cosA
-    );
-
-    // 应用缩放变换
-    // 缩放因子随时间变化
-    float scale = 1.0 + sin(u_time * 2.0) * 0.5;
-    vec2 scaled = rotated * scale;
-
-    // 创建重复图案
-    // 使用 fract 函数创建重复效果
-    vec2 repeated = fract(scaled * 3.0);
-
-    // 在每个重复单元中绘制图案
-    // 将重复坐标重新居中
-    vec2 cellCenter = repeated - vec2(0.5);
-
-    // 计算到单元中心的距离
-    float dist = length(cellCenter);
-
-    // 创建圆形图案
-    float circle = smoothstep(0.3, 0.2, dist);
-
-    // 创建颜色渐变
-    vec3 color1 = vec3(1.0, 0.5, 0.2); // 橙色
-    vec3 color2 = vec3(0.2, 0.5, 1.0); // 蓝色
-
-    // 根据时间和位置混合颜色
-    float colorMix = sin(u_time + dist * 10.0) * 0.5 + 0.5;
-    vec3 finalColor = mix(color1, color2, colorMix) * circle;
-
-    gl_FragColor = vec4(finalColor, 1.0);
+  // 坐标变换 - 完整实现
+  // 这是最终效果代码，展示旋转和缩放的图案
+  // 获取当前像素的归一化坐标
+  vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);
+  // 将坐标原点移到屏幕中心
+  vec2 centered = uv - vec2(0.5, 0.5);
+  // 创建旋转矩阵
+  // 旋转角度随时间变化
+  float angle = u_time;
+  float cosA = cos(angle);
+  float sinA = sin(angle);
+  // 2D旋转矩阵的应用
+  vec2 rotated = vec2(centered.x * cosA - centered.y * sinA, centered.x * sinA + centered.y * cosA);
+  // 应用缩放变换
+  // 缩放因子随时间变化
+  float scale = 1.0 + sin(u_time * 2.0) * 0.5;
+  vec2 scaled = rotated * scale;
+  // 创建重复图案
+  // 使用 fract 函数创建重复效果
+  vec2 repeated = fract(scaled * 3.0);
+  // 在每个重复单元中绘制图案
+  // 将重复坐标重新居中
+  vec2 cellCenter = repeated - vec2(0.5);
+  // 计算到单元中心的距离
+  float dist = length(cellCenter);
+  // 创建圆形图案
+  float circle = smoothstep(0.3, 0.2, dist);
+  // 创建颜色渐变
+  vec3 color1 = vec3(1.0, 0.5, 0.2);
+  // 橙色
+  vec3 color2 = vec3(0.2, 0.5, 1.0);
+  // 蓝色
+  // 根据时间和位置混合颜色
+  float colorMix = sin(u_time + dist * 10.0) * 0.5 + 0.5;
+  vec3 finalColor = mix(color1, color2, colorMix) * circle;
+  gl_FragColor = vec4(finalColor, 1.0);
 }
 </code></pre>
       </div>
@@ -266,8 +251,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 坐标变换 - 完整实现\n    // 这是最终效果代码，展示旋转和缩放的图案\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 将坐标原点移到屏幕中心\n    vec2 centered = uv - vec2(0.5, 0.5);\n\n    // 创建旋转矩阵\n    // 旋转角度随时间变化\n    float angle = u_time;\n    float cosA = cos(angle);\n    float sinA = sin(angle);\n\n    // 2D旋转矩阵的应用\n    vec2 rotated = vec2(\n        centered.x * cosA - centered.y * sinA,\n        centered.x * sinA + centered.y * cosA\n    );\n\n    // 应用缩放变换\n    // 缩放因子随时间变化\n    float scale = 1.0 + sin(u_time * 2.0) * 0.5;\n    vec2 scaled = rotated * scale;\n\n    // 创建重复图案\n    // 使用 fract 函数创建重复效果\n    vec2 repeated = fract(scaled * 3.0);\n\n    // 在每个重复单元中绘制图案\n    // 将重复坐标重新居中\n    vec2 cellCenter = repeated - vec2(0.5);\n\n    // 计算到单元中心的距离\n    float dist = length(cellCenter);\n\n    // 创建圆形图案\n    float circle = smoothstep(0.3, 0.2, dist);\n\n    // 创建颜色渐变\n    vec3 color1 = vec3(1.0, 0.5, 0.2); // 橙色\n    vec3 color2 = vec3(0.2, 0.5, 1.0); // 蓝色\n\n    // 根据时间和位置混合颜色\n    float colorMix = sin(u_time + dist * 10.0) * 0.5 + 0.5;\n    vec3 finalColor = mix(color1, color2, colorMix) * circle;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：坐标变换\n    // 目标：创建旋转和缩放的图案\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 练习1：将坐标原点移到屏幕中心\n    // TODO: centered = uv - vec2(0.5)\n    vec2 centered = uv - vec2(0.5);\n\n    // 练习2：创建旋转矩阵\n    // 旋转角度随时间变化\n    float angle = u_time;\n    float cosA = cos(angle);\n    float sinA = sin(angle);\n\n    // 2D旋转矩阵的应用\n    vec2 rotated = vec2(\n        // TODO: 替换为 centered.x * cosA - centered.y * sinA\n        centered.x * cosA - centered.y * sinA,\n        // TODO: 替换为 centered.x * sinA + centered.y * cosA\n        centered.x * sinA + centered.y * cosA\n    );\n\n    // 练习3：应用缩放变换\n    // 缩放因子随时间变化\n    float scale = 1.0 + sin(u_time * 2.0) * 0.5;\n    // TODO: scaled = rotated * scale\n    vec2 scaled = rotated * scale;\n\n    // 练习4：创建重复图案\n    // 使用 fract 函数创建重复效果\n    vec2 repeated = fract(scaled * 3.0);\n\n    // 练习5：在每个重复单元中绘制图案\n    // 将重复坐标重新居中\n    vec2 cellCenter = repeated - vec2(0.5);\n\n    // 计算到单元中心的距离\n    // TODO: distance = length(cellCenter)\n    float distance = length(cellCenter);\n\n    // 练习6：创建图案\n    // 使用距离创建圆形图案\n    float pattern = smoothstep(0.3, 0.25, distance);\n\n    // 练习7：添加颜色\n    // 根据原始坐标和变换后的坐标创建颜色\n    vec3 color = vec3(\n        pattern * (sin(u_time + uv.x * 10.0) * 0.5 + 0.5),\n        pattern * (cos(u_time + uv.y * 10.0) * 0.5 + 0.5),\n        // TODO: 给蓝色通道一个变化（如 sin(u_time)）\n        pattern * (sin(u_time) * 0.5 + 0.5)\n    );\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        referenceCode: "precision mediump float;\nuniform float u_time;\nvoid main() {\n  // 坐标变换 - 完整实现\n  // 这是最终效果代码，展示旋转和缩放的图案\n  // 获取当前像素的归一化坐标\n  vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n  // 将坐标原点移到屏幕中心\n  vec2 centered = uv - vec2(0.5, 0.5);\n  // 创建旋转矩阵\n  // 旋转角度随时间变化\n  float angle = u_time;\n  float cosA = cos(angle);\n  float sinA = sin(angle);\n  // 2D旋转矩阵的应用\n  vec2 rotated = vec2(centered.x * cosA - centered.y * sinA, centered.x * sinA + centered.y * cosA);\n  // 应用缩放变换\n  // 缩放因子随时间变化\n  float scale = 1.0 + sin(u_time * 2.0) * 0.5;\n  vec2 scaled = rotated * scale;\n  // 创建重复图案\n  // 使用 fract 函数创建重复效果\n  vec2 repeated = fract(scaled * 3.0);\n  // 在每个重复单元中绘制图案\n  // 将重复坐标重新居中\n  vec2 cellCenter = repeated - vec2(0.5);\n  // 计算到单元中心的距离\n  float dist = length(cellCenter);\n  // 创建圆形图案\n  float circle = smoothstep(0.3, 0.2, dist);\n  // 创建颜色渐变\n  vec3 color1 = vec3(1.0, 0.5, 0.2);\n  // 橙色\n  vec3 color2 = vec3(0.2, 0.5, 1.0);\n  // 蓝色\n  // 根据时间和位置混合颜色\n  float colorMix = sin(u_time + dist * 10.0) * 0.5 + 0.5;\n  vec3 finalColor = mix(color1, color2, colorMix) * circle;\n  gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        exerciseCode: "precision mediump float;\nuniform float u_time;\nvoid main() {\n  // 练习：坐标变换\n  // 目标：创建旋转和缩放的图案\n  // 获取当前像素的归一化坐标\n  vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n  // 练习1：将坐标原点移到屏幕中心\n  // TODO: centered = uv - vec2(0.5)\n  vec2 centered = uv - vec2(0.5);\n  // 练习2：创建旋转矩阵\n  // 旋转角度随时间变化\n  float angle = u_time;\n  float cosA = cos(angle);\n  float sinA = sin(angle);\n  // 2D旋转矩阵的应用\n  vec2 rotated = vec2(\n  // TODO: 替换为 centered.x * cosA - centered.y * sinA\n  centered.x * cosA - centered.y * sinA,\n  // TODO: 替换为 centered.x * sinA + centered.y * cosA\n  centered.x * sinA + centered.y * cosA);\n  // 练习3：应用缩放变换\n  // 缩放因子随时间变化\n  float scale = 1.0 + sin(u_time * 2.0) * 0.5;\n  // TODO: scaled = rotated * scale\n  vec2 scaled = rotated * scale;\n  // 练习4：创建重复图案\n  // 使用 fract 函数创建重复效果\n  vec2 repeated = fract(scaled * 3.0);\n  // 练习5：在每个重复单元中绘制图案\n  // 将重复坐标重新居中\n  vec2 cellCenter = repeated - vec2(0.5);\n  // 计算到单元中心的距离\n  // TODO: distance = length(cellCenter)\n  float distance = length(cellCenter);\n  // 练习6：创建图案\n  // 使用距离创建圆形图案\n  float pattern = smoothstep(0.3, 0.25, distance);\n  // 练习7：添加颜色\n  // 根据原始坐标和变换后的坐标创建颜色\n  vec3 color = vec3(pattern * (sin(u_time + uv.x * 10.0) * 0.5 + 0.5), pattern * (cos(u_time + uv.y * 10.0) * 0.5 + 0.5),\n  // TODO: 给蓝色通道一个变化（如 sin(u_time)）\n  pattern * (sin(u_time) * 0.5 + 0.5));\n  gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseSrc: '../glsl/math/11_coordinate-transformation.frag',
         referenceSrc: '../glsl/math/11_coordinate-transformation.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

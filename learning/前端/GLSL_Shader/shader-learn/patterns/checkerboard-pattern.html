@@ -60,15 +60,13 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-
 void main() {
-    float x = floor(vUv.x * 8.0);
-    float y = floor(vUv.y * 8.0);
-    float pattern = mod(x + y, 2.0);
-    vec3 color = mix(vec3(1.0), vec3(0.0), pattern);
-    gl_FragColor = vec4(color, 1.0);
+  float x = floor(vUv.x * 8.0);
+  float y = floor(vUv.y * 8.0);
+  float pattern = mod(x + y, 2.0);
+  vec3 color = mix(vec3(1.0), vec3(0.0), pattern);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -210,8 +208,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float x = floor(vUv.x * 8.0);\n    float y = floor(vUv.y * 8.0);\n    float pattern = mod(x + y, 2.0);\n    vec3 color = mix(vec3(1.0), vec3(0.0), pattern);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 将 vUv 扩展为 8x8 网格\n    // TODO: 使用 floor() 计算每个单元格编号\n    // TODO: 使用 mod() 生成黑白交替模式\n    // TODO: 使用 mix() 混合颜色输出\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float x = floor(vUv.x * 8.0);\n  float y = floor(vUv.y * 8.0);\n  float pattern = mod(x + y, 2.0);\n  vec3 color = mix(vec3(1.0), vec3(0.0), pattern);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 将 vUv 扩展为 8x8 网格\n  // TODO: 使用 floor() 计算每个单元格编号\n  // TODO: 使用 mod() 生成黑白交替模式\n  // TODO: 使用 mix() 混合颜色输出\n}\n",
         exerciseSrc: '../glsl/patterns/07_checkerboard-pattern.frag',
         referenceSrc: '../glsl/patterns/07_checkerboard-pattern.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

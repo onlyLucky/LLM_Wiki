@@ -58,16 +58,15 @@ vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 uniform float u_time;
 void main() {
-    vec2 p = vUv - 0.5;
-    float d = length(p);
-    float wave = sin(12.0 * d - u_time * 3.0);
-    float t = wave * 0.5 + 0.5;
-    vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);
-    gl_FragColor = vec4(color, 1.0);
+  vec2 p = vUv - 0.5;
+  float d = length(p);
+  float wave = sin(12.0 * d - u_time * 3.0);
+  float t = wave * 0.5 + 0.5;
+  vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -209,8 +208,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n    float wave = sin(12.0 * d - u_time * 3.0);\n    float t = wave * 0.5 + 0.5;\n    vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n    vec2 p = vUv - 0.5;\n    float d = length(p);\n\n    // TODO: 创建随时间传播的波纹（提示：sin(freq * d - u_time * speed)）\n    float wave = 0.0;\n    float t = wave * 0.5 + 0.5;\n\n    vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  vec2 p = vUv - 0.5;\n  float d = length(p);\n  float wave = sin(12.0 * d - u_time * 3.0);\n  float t = wave * 0.5 + 0.5;\n  vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  vec2 p = vUv - 0.5;\n  float d = length(p);\n  // TODO: 创建随时间传播的波纹（提示：sin(freq * d - u_time * speed)）\n  float wave = 0.0;\n  float t = wave * 0.5 + 0.5;\n  vec3 color = mix(vec3(0.1, 0.12, 0.18), vec3(0.2, 0.85, 1.0), t);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseSrc: '../glsl/animation/10_ripple.frag',
         referenceSrc: '../glsl/animation/10_ripple.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

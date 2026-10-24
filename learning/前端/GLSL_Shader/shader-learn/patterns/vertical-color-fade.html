@@ -57,14 +57,14 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-
 void main() {
-    vec3 bottomColor = vec3(0.0, 1.0, 0.0); // 绿色
-    vec3 topColor = vec3(1.0, 1.0, 0.0);    // 黄色
-    vec3 color = mix(bottomColor, topColor, vUv.y);
-    gl_FragColor = vec4(color, 1.0);
+  vec3 bottomColor = vec3(0.0, 1.0, 0.0);
+  // 绿色
+  vec3 topColor = vec3(1.0, 1.0, 0.0);
+  // 黄色
+  vec3 color = mix(bottomColor, topColor, vUv.y);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -206,8 +206,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 bottomColor = vec3(0.0, 1.0, 0.0); // 绿色\n    vec3 topColor = vec3(1.0, 1.0, 0.0);    // 黄色\n    vec3 color = mix(bottomColor, topColor, vUv.y);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义底部颜色 bottomColor\n    // TODO: 定义顶部颜色 topColor\n    // TODO: 使用 vUv.y 作为渐变因子\n    // TODO: 使用 mix 生成过渡色\n    // TODO: 输出最终颜色\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec3 bottomColor = vec3(0.0, 1.0, 0.0);\n  // 绿色\n  vec3 topColor = vec3(1.0, 1.0, 0.0);\n  // 黄色\n  vec3 color = mix(bottomColor, topColor, vUv.y);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 定义底部颜色 bottomColor\n  // TODO: 定义顶部颜色 topColor\n  // TODO: 使用 vUv.y 作为渐变因子\n  // TODO: 使用 mix 生成过渡色\n  // TODO: 输出最终颜色\n}\n",
         exerciseSrc: '../glsl/patterns/02_vertical-color-fade.frag',
         referenceSrc: '../glsl/patterns/02_vertical-color-fade.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

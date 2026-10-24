@@ -58,9 +58,12 @@ float m = 1.0 - smoothstep(0.0, 0.25, d);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragColor=vec4(vec3(m),1.0);}
+void main() {
+  float d = abs(vUv.x - 0.5);
+  float m = 1.0 - smoothstep(0.0, 0.25, d);
+  gl_FragColor = vec4(vec3(m), 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -201,8 +204,8 @@ void main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragCol
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float d=abs(vUv.x-0.5);float m=1.0-smoothstep(0.0,0.25,d);gl_FragColor=vec4(vec3(m),1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float d=abs(vUv.x-0.5);// TODO: m = 1.0 - smoothstep(0.0,0.25,d)\nfloat m=0.0;gl_FragColor=vec4(vec3(m),1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float d = abs(vUv.x - 0.5);\n  float m = 1.0 - smoothstep(0.0, 0.25, d);\n  gl_FragColor = vec4(vec3(m), 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float d = abs(vUv.x - 0.5);\n  // TODO: m = 1.0 - smoothstep(0.0,0.25,d)\n  float m = 0.0;\n  gl_FragColor = vec4(vec3(m), 1.0);\n}\n",
         exerciseSrc: '../glsl/math/02_smoothstep-basics.frag',
         referenceSrc: '../glsl/math/02_smoothstep-basics.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

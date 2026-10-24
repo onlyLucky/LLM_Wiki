@@ -59,10 +59,15 @@
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 uniform float u_time;
-void main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(0.5,x);vec3 c=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(c,1.0);}
+void main() {
+  float count = 12.0;
+  float x = fract(vUv.x * count + u_time * 0.6);
+  float m = step(0.5, x);
+  vec3 c = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);
+  gl_FragColor = vec4(c, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -203,8 +208,8 @@ void main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){float count=12.0;float x=fract(vUv.x*count+u_time*0.6);float m=step(0.5,x);vec3 c=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){float count=12.0;// TODO: 把 u_time 加到 fract 前\nfloat x=fract(vUv.x*count);float m=step(0.5,x);vec3 c=mix(vec3(0.08,0.1,0.12),vec3(0.9,0.95,1.0),m);gl_FragColor=vec4(c,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  float count = 12.0;\n  float x = fract(vUv.x * count + u_time * 0.6);\n  float m = step(0.5, x);\n  vec3 c = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  float count = 12.0;\n  // TODO: 把 u_time 加到 fract 前\n  float x = fract(vUv.x * count);\n  float m = step(0.5, x);\n  vec3 c = mix(vec3(0.08, 0.1, 0.12), vec3(0.9, 0.95, 1.0), m);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseSrc: '../glsl/animation/07_scrolling-stripes.frag',
         referenceSrc: '../glsl/animation/07_scrolling-stripes.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

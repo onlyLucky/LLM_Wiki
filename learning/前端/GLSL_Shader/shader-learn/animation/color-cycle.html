@@ -62,10 +62,12 @@ gl_FragColor = vec4(c, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
 uniform float u_time;
-void main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time+4.188)*0.5+0.5);gl_FragColor=vec4(c,1.0);}
+void main() {
+  vec3 c = vec3(sin(u_time) * 0.5 + 0.5, sin(u_time + 2.094) * 0.5 + 0.5, sin(u_time + 4.188) * 0.5 + 0.5);
+  gl_FragColor = vec4(c, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -206,8 +208,8 @@ void main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){vec3 c=vec3(sin(u_time)*0.5+0.5,sin(u_time+2.094)*0.5+0.5,sin(u_time+4.188)*0.5+0.5);gl_FragColor=vec4(c,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nuniform float u_time;\nvoid main(){// TODO: 用 sin(u_time) 构造 RGB 循环\nvec3 c=vec3(0.0);gl_FragColor=vec4(c,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  vec3 c = vec3(sin(u_time) * 0.5 + 0.5, sin(u_time + 2.094) * 0.5 + 0.5, sin(u_time + 4.188) * 0.5 + 0.5);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform float u_time;\nvoid main() {\n  // TODO: 用 sin(u_time) 构造 RGB 循环\n  vec3 c = vec3(0.0);\n  gl_FragColor = vec4(c, 1.0);\n}\n",
         exerciseSrc: '../glsl/animation/04_color-cycle.frag',
         referenceSrc: '../glsl/animation/04_color-cycle.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

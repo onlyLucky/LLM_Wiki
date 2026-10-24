@@ -58,14 +58,12 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 uniform float u_time;
 varying vec2 vUv;
-
 void main() {
-    float brightness = 0.5 + 0.5 * sin(u_time);
-    vec3 color = vec3(brightness, 0.6, 0.9);
-    gl_FragColor = vec4(color, 1.0);
+  float brightness = 0.5 + 0.5 * sin(u_time);
+  vec3 color = vec3(brightness, 0.6, 0.9);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -207,8 +205,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nuniform float u_time;\nvarying vec2 vUv;\n\nvoid main() {\n    float brightness = 0.5 + 0.5 * sin(u_time);\n    vec3 color = vec3(brightness, 0.6, 0.9);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nuniform float u_time;\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 使用 sin(u_time) 生成亮度因子\n    // TODO: 构建动态 RGB 颜色值\n    // TODO: 输出 gl_FragColor\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nuniform float u_time;\nvarying vec2 vUv;\nvoid main() {\n  float brightness = 0.5 + 0.5 * sin(u_time);\n  vec3 color = vec3(brightness, 0.6, 0.9);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nuniform float u_time;\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 使用 sin(u_time) 生成亮度因子\n  // TODO: 构建动态 RGB 颜色值\n  // TODO: 输出 gl_FragColor\n}\n",
         exerciseSrc: '../glsl/animation/02_breathing-color-block.frag',
         referenceSrc: '../glsl/animation/02_breathing-color-block.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

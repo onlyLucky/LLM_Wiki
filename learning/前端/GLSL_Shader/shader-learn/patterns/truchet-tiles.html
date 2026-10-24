@@ -63,9 +63,23 @@ float m = step(length(f - 0.5), 0.35);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}void main(){vec2 uv=vUv*6.0;vec2 i=floor(uv);vec2 f=fract(uv);float r=hash21(i);if(r&lt;0.5) f.x=1.0-f.x;float m=step(length(f-0.5),0.35);vec3 col=mix(vec3(0.05,0.06,0.08),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}
+float hash21(vec2 p) {
+  p = fract(p * vec2(123.34, 345.45));
+  p+=dot(p, p + 34.345);
+  return fract(p.x * p.y);
+}
+
+void main() {
+  vec2 uv = vUv * 6.0;
+  vec2 i = floor(uv);
+  vec2 f = fract(uv);
+  float r = hash21(i);
+  if (r &lt; 0.5) f.x = 1.0 - f.x;
+  float m = step(length(f - 0.5), 0.35);
+  vec3 col = mix(vec3(0.05, 0.06, 0.08), vec3(1.0, 0.85, 0.25), m);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -206,8 +220,8 @@ float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fr
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}void main(){vec2 uv=vUv*6.0;vec2 i=floor(uv);vec2 f=fract(uv);float r=hash21(i);if(r<0.5) f.x=1.0-f.x;float m=step(length(f-0.5),0.35);vec3 col=mix(vec3(0.05,0.06,0.08),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nfloat hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}void main(){vec2 uv=vUv*6.0;vec2 i=floor(uv);vec2 f=fract(uv);float r=hash21(i);// TODO: if(r<0.5) f.x=1.0-f.x\nfloat m=step(length(f-0.5),0.35);vec3 col=mix(vec3(0.05,0.06,0.08),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n  p = fract(p * vec2(123.34, 345.45));\n  p+=dot(p, p + 34.345);\n  return fract(p.x * p.y);\n}\n\nvoid main() {\n  vec2 uv = vUv * 6.0;\n  vec2 i = floor(uv);\n  vec2 f = fract(uv);\n  float r = hash21(i);\n  if (r < 0.5) f.x = 1.0 - f.x;\n  float m = step(length(f - 0.5), 0.35);\n  vec3 col = mix(vec3(0.05, 0.06, 0.08), vec3(1.0, 0.85, 0.25), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nfloat hash21(vec2 p) {\n  p = fract(p * vec2(123.34, 345.45));\n  p+=dot(p, p + 34.345);\n  return fract(p.x * p.y);\n}\n\nvoid main() {\n  vec2 uv = vUv * 6.0;\n  vec2 i = floor(uv);\n  vec2 f = fract(uv);\n  float r = hash21(i);\n  // TODO: if(r<0.5) f.x=1.0-f.x\n  float m = step(length(f - 0.5), 0.35);\n  vec3 col = mix(vec3(0.05, 0.06, 0.08), vec3(1.0, 0.85, 0.25), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/14_truchet-tiles.frag',
         referenceSrc: '../glsl/patterns/14_truchet-tiles.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

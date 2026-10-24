@@ -55,9 +55,12 @@
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=vec4(col,1.0);}
+void main() {
+  vec2 cell = floor(vUv * 6.0) / 6.0;
+  vec3 col = vec3(cell, 0.0);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -198,8 +201,8 @@ void main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=ve
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 cell=floor(vUv*6.0)/6.0;vec3 col=vec3(cell,0.0);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: cell=floor(vUv*6.0)/6.0\nvec2 cell=vUv;vec3 col=vec3(cell,0.0);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec2 cell = floor(vUv * 6.0) / 6.0;\n  vec3 col = vec3(cell, 0.0);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: cell=floor(vUv*6.0)/6.0\n  vec2 cell = vUv;\n  vec3 col = vec3(cell, 0.0);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/11_gradient-grid.frag',
         referenceSrc: '../glsl/patterns/11_gradient-grid.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

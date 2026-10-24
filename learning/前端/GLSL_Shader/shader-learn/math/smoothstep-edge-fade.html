@@ -64,14 +64,12 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-
 void main() {
-    float dist = distance(vUv, vec2(0.5));
-    float mask = smoothstep(0.3, 0.5, dist);
-    vec3 color = mix(vec3(1.0, 0.8, 0.2), vec3(0.0), mask);
-    gl_FragColor = vec4(color, 1.0);
+  float dist = distance(vUv, vec2(0.5));
+  float mask = smoothstep(0.3, 0.5, dist);
+  vec3 color = mix(vec3(1.0, 0.8, 0.2), vec3(0.0), mask);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -213,8 +211,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    float dist = distance(vUv, vec2(0.5));\n    float mask = smoothstep(0.3, 0.5, dist);\n    vec3 color = mix(vec3(1.0, 0.8, 0.2), vec3(0.0), mask);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 计算 vUv 到中心点的距离 dist\n    // TODO: 使用 smoothstep() 生成软边遮罩 mask\n    // TODO: 混合中心亮色和黑色背景\n    // TODO: 输出颜色\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float dist = distance(vUv, vec2(0.5));\n  float mask = smoothstep(0.3, 0.5, dist);\n  vec3 color = mix(vec3(1.0, 0.8, 0.2), vec3(0.0), mask);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 计算 vUv 到中心点的距离 dist\n  // TODO: 使用 smoothstep() 生成软边遮罩 mask\n  // TODO: 混合中心亮色和黑色背景\n  // TODO: 输出颜色\n}\n",
         exerciseSrc: '../glsl/math/15_smoothstep-edge-fade.frag',
         referenceSrc: '../glsl/math/15_smoothstep-edge-fade.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

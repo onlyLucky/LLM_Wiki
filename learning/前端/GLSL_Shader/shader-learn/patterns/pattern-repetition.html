@@ -67,86 +67,68 @@ float pattern = mix(cross, circle, switchTime);</code></pre>
 <p>试着把 <code>repeatCount</code> 改为 <code>8.0</code>，让格子更密。</p>
         <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/patterns/10_pattern-repetition.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
-
 uniform vec2 u_resolution;
 uniform float u_time;
-
 void main() {
-    // 图案重复 - 完整实现
-    // 这是最终效果代码，展示如何创建重复的几何图案
-
-    // 归一化坐标
-    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-
-    // 创建重复网格
-    float gridSize = 8.0;
-    vec2 grid = uv * gridSize;
-    vec2 gridId = floor(grid);
-    vec2 gridUv = fract(grid);
-
-    // 将每个网格单元的坐标居中
-    vec2 centered = gridUv - vec2(0.5);
-
-    // 为每个网格单元创建唯一的随机值
-    float random = fract(sin(dot(gridId, vec2(12.9898, 78.233))) * 43758.5453);
-
-    // 创建旋转动画
-    float rotation = u_time * 0.5 + random * 6.28318;
-    float cosR = cos(rotation);
-    float sinR = sin(rotation);
-
-    // 应用旋转变换
-    vec2 rotated = vec2(
-        centered.x * cosR - centered.y * sinR,
-        centered.x * sinR + centered.y * cosR
-    );
-
-    // 创建多种图案
-    // 图案1：圆形
-    float circle = 1.0 - smoothstep(0.2, 0.25, length(rotated));
-
-    // 图案2：方形
-    vec2 square = abs(rotated);
-    float squarePattern = 1.0 - smoothstep(0.15, 0.2, max(square.x, square.y));
-
-    // 图案3：十字形
-    float cross = min(
-        1.0 - smoothstep(0.05, 0.1, abs(rotated.x)),
-        1.0 - smoothstep(0.05, 0.1, abs(rotated.y))
-    );
-    cross = max(cross, min(
-        1.0 - smoothstep(0.05, 0.1, abs(rotated.y)),
-        1.0 - smoothstep(0.05, 0.1, abs(rotated.x))
-    ));
-
-    // 根据网格位置选择不同图案
-    float patternType = mod(gridId.x + gridId.y, 3.0);
-    float pattern;
-    if (patternType &lt; 1.0) {
-        pattern = circle;
-    } else if (patternType &lt; 2.0) {
-        pattern = squarePattern;
-    } else {
-        pattern = cross;
-    }
-
-    // 创建颜色变化
-    vec3 color1 = vec3(1.0, 0.3, 0.5); // 粉红色
-    vec3 color2 = vec3(0.3, 0.7, 1.0); // 蓝色
-    vec3 color3 = vec3(0.9, 0.9, 0.2); // 黄色
-
-    vec3 finalColor;
-    if (patternType &lt; 1.0) {
-        finalColor = color1;
-    } else if (patternType &lt; 2.0) {
-        finalColor = color2;
-    } else {
-        finalColor = color3;
-    }
-
-    finalColor *= pattern;
-
-    gl_FragColor = vec4(finalColor, 1.0);
+  // 图案重复 - 完整实现
+  // 这是最终效果代码，展示如何创建重复的几何图案
+  // 归一化坐标
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+  // 创建重复网格
+  float gridSize = 8.0;
+  vec2 grid = uv * gridSize;
+  vec2 gridId = floor(grid);
+  vec2 gridUv = fract(grid);
+  // 将每个网格单元的坐标居中
+  vec2 centered = gridUv - vec2(0.5);
+  // 为每个网格单元创建唯一的随机值
+  float random = fract(sin(dot(gridId, vec2(12.9898, 78.233))) * 43758.5453);
+  // 创建旋转动画
+  float rotation = u_time * 0.5 + random * 6.28318;
+  float cosR = cos(rotation);
+  float sinR = sin(rotation);
+  // 应用旋转变换
+  vec2 rotated = vec2(centered.x * cosR - centered.y * sinR, centered.x * sinR + centered.y * cosR);
+  // 创建多种图案
+  // 图案1：圆形
+  float circle = 1.0 - smoothstep(0.2, 0.25, length(rotated));
+  // 图案2：方形
+  vec2 square = abs(rotated);
+  float squarePattern = 1.0 - smoothstep(0.15, 0.2, max(square.x, square.y));
+  // 图案3：十字形
+  float cross = min(1.0 - smoothstep(0.05, 0.1, abs(rotated.x)), 1.0 - smoothstep(0.05, 0.1, abs(rotated.y)));
+  cross = max(cross, min(1.0 - smoothstep(0.05, 0.1, abs(rotated.y)), 1.0 - smoothstep(0.05, 0.1, abs(rotated.x))));
+  // 根据网格位置选择不同图案
+  float patternType = mod(gridId.x + gridId.y, 3.0);
+  float pattern;
+  if (patternType &lt; 1.0) {
+    pattern = circle;
+  }
+  else if (patternType &lt; 2.0) {
+    pattern = squarePattern;
+  }
+  else {
+    pattern = cross;
+  }
+  // 创建颜色变化
+  vec3 color1 = vec3(1.0, 0.3, 0.5);
+  // 粉红色
+  vec3 color2 = vec3(0.3, 0.7, 1.0);
+  // 蓝色
+  vec3 color3 = vec3(0.9, 0.9, 0.2);
+  // 黄色
+  vec3 finalColor;
+  if (patternType &lt; 1.0) {
+    finalColor = color1;
+  }
+  else if (patternType &lt; 2.0) {
+    finalColor = color2;
+  }
+  else {
+    finalColor = color3;
+  }
+  finalColor*=pattern;
+  gl_FragColor = vec4(finalColor, 1.0);
 }
 </code></pre>
       </div>
@@ -288,8 +270,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "precision mediump float;\n\nuniform vec2 u_resolution;\nuniform float u_time;\n\nvoid main() {\n    // 图案重复 - 完整实现\n    // 这是最终效果代码，展示如何创建重复的几何图案\n\n    // 归一化坐标\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n\n    // 创建重复网格\n    float gridSize = 8.0;\n    vec2 grid = uv * gridSize;\n    vec2 gridId = floor(grid);\n    vec2 gridUv = fract(grid);\n\n    // 将每个网格单元的坐标居中\n    vec2 centered = gridUv - vec2(0.5);\n\n    // 为每个网格单元创建唯一的随机值\n    float random = fract(sin(dot(gridId, vec2(12.9898, 78.233))) * 43758.5453);\n\n    // 创建旋转动画\n    float rotation = u_time * 0.5 + random * 6.28318;\n    float cosR = cos(rotation);\n    float sinR = sin(rotation);\n\n    // 应用旋转变换\n    vec2 rotated = vec2(\n        centered.x * cosR - centered.y * sinR,\n        centered.x * sinR + centered.y * cosR\n    );\n\n    // 创建多种图案\n    // 图案1：圆形\n    float circle = 1.0 - smoothstep(0.2, 0.25, length(rotated));\n\n    // 图案2：方形\n    vec2 square = abs(rotated);\n    float squarePattern = 1.0 - smoothstep(0.15, 0.2, max(square.x, square.y));\n\n    // 图案3：十字形\n    float cross = min(\n        1.0 - smoothstep(0.05, 0.1, abs(rotated.x)),\n        1.0 - smoothstep(0.05, 0.1, abs(rotated.y))\n    );\n    cross = max(cross, min(\n        1.0 - smoothstep(0.05, 0.1, abs(rotated.y)),\n        1.0 - smoothstep(0.05, 0.1, abs(rotated.x))\n    ));\n\n    // 根据网格位置选择不同图案\n    float patternType = mod(gridId.x + gridId.y, 3.0);\n    float pattern;\n    if (patternType < 1.0) {\n        pattern = circle;\n    } else if (patternType < 2.0) {\n        pattern = squarePattern;\n    } else {\n        pattern = cross;\n    }\n\n    // 创建颜色变化\n    vec3 color1 = vec3(1.0, 0.3, 0.5); // 粉红色\n    vec3 color2 = vec3(0.3, 0.7, 1.0); // 蓝色\n    vec3 color3 = vec3(0.9, 0.9, 0.2); // 黄色\n\n    vec3 finalColor;\n    if (patternType < 1.0) {\n        finalColor = color1;\n    } else if (patternType < 2.0) {\n        finalColor = color2;\n    } else {\n        finalColor = color3;\n    }\n\n    finalColor *= pattern;\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
-        exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：图案重复\n    // 目标：创建重复的几何图案\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 练习1：创建基础重复\n    // 使用 fract 函数将坐标重复\n    float repeatCount = 5.0;\n    // TODO: 使用 repeatCount\n    vec2 repeated = fract(uv * repeatCount);\n\n    // 练习2：在每个重复单元中创建图案\n    // 将坐标重新居中到 [-0.5, 0.5] 范围\n    // TODO: centered = repeated - vec2(0.5)\n    vec2 centered = repeated - vec2(0.5);\n\n    // 练习3：创建十字图案\n    // 计算到坐标轴的距离\n    float crossWidth = 0.1;\n    float horizontal = step(-crossWidth, centered.y) * step(centered.y, crossWidth);\n    // TODO: 竖线宽度也使用 crossWidth\n    float vertical = step(-crossWidth, centered.x) * step(centered.x, crossWidth);\n\n    // 组合十字图案\n    // TODO: cross = max(horizontal, vertical)\n    float cross = max(horizontal, vertical);\n\n    // 练习4：创建圆形图案\n    float distance = length(centered);\n    // TODO: circle 使用 distance\n    float circle = smoothstep(0.25, 0.2, distance);\n\n    // 练习5：创建动态效果\n    // 让图案随时间变化\n    float timeOffset = sin(u_time + uv.x * 10.0 + uv.y * 10.0) * 0.5 + 0.5;\n\n    // 练习6：组合不同图案\n    // 根据时间在不同图案间切换\n    float switchTime = sin(u_time * 0.5) * 0.5 + 0.5;\n    float pattern = mix(\n        cross,\n        circle,\n        // TODO: 使用 switchTime 作为切换因子\n        switchTime\n    );\n\n    // 练习7：添加颜色变化\n    // 根据位置和时间创建颜色\n    vec3 color1 = vec3(1.0, 0.5, 0.2); // 橙色\n    vec3 color2 = vec3(0.2, 0.8, 1.0); // 蓝色\n\n    vec3 finalColor = mix(\n        vec3(0.1), // 背景色\n        mix(color1, color2, timeOffset),\n        // TODO: 使用 pattern 作为遮罩\n        pattern\n    );\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        referenceCode: "precision mediump float;\nuniform vec2 u_resolution;\nuniform float u_time;\nvoid main() {\n  // 图案重复 - 完整实现\n  // 这是最终效果代码，展示如何创建重复的几何图案\n  // 归一化坐标\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  // 创建重复网格\n  float gridSize = 8.0;\n  vec2 grid = uv * gridSize;\n  vec2 gridId = floor(grid);\n  vec2 gridUv = fract(grid);\n  // 将每个网格单元的坐标居中\n  vec2 centered = gridUv - vec2(0.5);\n  // 为每个网格单元创建唯一的随机值\n  float random = fract(sin(dot(gridId, vec2(12.9898, 78.233))) * 43758.5453);\n  // 创建旋转动画\n  float rotation = u_time * 0.5 + random * 6.28318;\n  float cosR = cos(rotation);\n  float sinR = sin(rotation);\n  // 应用旋转变换\n  vec2 rotated = vec2(centered.x * cosR - centered.y * sinR, centered.x * sinR + centered.y * cosR);\n  // 创建多种图案\n  // 图案1：圆形\n  float circle = 1.0 - smoothstep(0.2, 0.25, length(rotated));\n  // 图案2：方形\n  vec2 square = abs(rotated);\n  float squarePattern = 1.0 - smoothstep(0.15, 0.2, max(square.x, square.y));\n  // 图案3：十字形\n  float cross = min(1.0 - smoothstep(0.05, 0.1, abs(rotated.x)), 1.0 - smoothstep(0.05, 0.1, abs(rotated.y)));\n  cross = max(cross, min(1.0 - smoothstep(0.05, 0.1, abs(rotated.y)), 1.0 - smoothstep(0.05, 0.1, abs(rotated.x))));\n  // 根据网格位置选择不同图案\n  float patternType = mod(gridId.x + gridId.y, 3.0);\n  float pattern;\n  if (patternType < 1.0) {\n    pattern = circle;\n  }\n  else if (patternType < 2.0) {\n    pattern = squarePattern;\n  }\n  else {\n    pattern = cross;\n  }\n  // 创建颜色变化\n  vec3 color1 = vec3(1.0, 0.3, 0.5);\n  // 粉红色\n  vec3 color2 = vec3(0.3, 0.7, 1.0);\n  // 蓝色\n  vec3 color3 = vec3(0.9, 0.9, 0.2);\n  // 黄色\n  vec3 finalColor;\n  if (patternType < 1.0) {\n    finalColor = color1;\n  }\n  else if (patternType < 2.0) {\n    finalColor = color2;\n  }\n  else {\n    finalColor = color3;\n  }\n  finalColor*=pattern;\n  gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        exerciseCode: "precision mediump float;\nuniform float u_time;\nvoid main() {\n  // 练习：图案重复\n  // 目标：创建重复的几何图案\n  // 获取当前像素的归一化坐标\n  vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n  // 练习1：创建基础重复\n  // 使用 fract 函数将坐标重复\n  float repeatCount = 5.0;\n  // TODO: 使用 repeatCount\n  vec2 repeated = fract(uv * repeatCount);\n  // 练习2：在每个重复单元中创建图案\n  // 将坐标重新居中到 [-0.5, 0.5] 范围\n  // TODO: centered = repeated - vec2(0.5)\n  vec2 centered = repeated - vec2(0.5);\n  // 练习3：创建十字图案\n  // 计算到坐标轴的距离\n  float crossWidth = 0.1;\n  float horizontal = step(-crossWidth, centered.y) * step(centered.y, crossWidth);\n  // TODO: 竖线宽度也使用 crossWidth\n  float vertical = step(-crossWidth, centered.x) * step(centered.x, crossWidth);\n  // 组合十字图案\n  // TODO: cross = max(horizontal, vertical)\n  float cross = max(horizontal, vertical);\n  // 练习4：创建圆形图案\n  float distance = length(centered);\n  // TODO: circle 使用 distance\n  float circle = smoothstep(0.25, 0.2, distance);\n  // 练习5：创建动态效果\n  // 让图案随时间变化\n  float timeOffset = sin(u_time + uv.x * 10.0 + uv.y * 10.0) * 0.5 + 0.5;\n  // 练习6：组合不同图案\n  // 根据时间在不同图案间切换\n  float switchTime = sin(u_time * 0.5) * 0.5 + 0.5;\n  float pattern = mix(cross, circle,\n  // TODO: 使用 switchTime 作为切换因子\n  switchTime);\n  // 练习7：添加颜色变化\n  // 根据位置和时间创建颜色\n  vec3 color1 = vec3(1.0, 0.5, 0.2);\n  // 橙色\n  vec3 color2 = vec3(0.2, 0.8, 1.0);\n  // 蓝色\n  vec3 finalColor = mix(vec3(0.1),\n  // 背景色\n  mix(color1, color2, timeOffset),\n  // TODO: 使用 pattern 作为遮罩\n  pattern);\n  gl_FragColor = vec4(finalColor, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/10_pattern-repetition.frag',
         referenceSrc: '../glsl/patterns/10_pattern-repetition.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

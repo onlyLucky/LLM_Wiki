@@ -59,28 +59,22 @@ gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);</code></pre>
 <p>试着把 <code>* 0.5</code> 改成 <code>* 0.3</code>，让暗部保留更多红色，呼吸幅度变小。</p>
         <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/animation/01_time-animation.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">precision mediump float;
-
 uniform float u_time;
 uniform vec2 u_resolution;
-
 void main() {
-    // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值
-    float oscillation = sin(u_time);
-
-    // 将振荡值转换为 0.0 到 1.0 的范围
-    // sin 函数返回 -1 到 1，我们需要 0 到 1
-    float normalizedOscillation = (oscillation + 1.0) * 0.5;
-
-    // 使用这个值作为红色分量，创建呼吸效果
-    gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);
-
-    // 尝试其他动画效果：
-    // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸
-    // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸
-
-    // 更快的动画（乘以2让时间流逝更快）：
-    // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;
-    // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);
+  // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值
+  float oscillation = sin(u_time);
+  // 将振荡值转换为 0.0 到 1.0 的范围
+  // sin 函数返回 -1 到 1，我们需要 0 到 1
+  float normalizedOscillation = (oscillation + 1.0) * 0.5;
+  // 使用这个值作为红色分量，创建呼吸效果
+  gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);
+  // 尝试其他动画效果：
+  // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸
+  // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸
+  // 更快的动画（乘以2让时间流逝更快）：
+  // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;
+  // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);
 }
 </code></pre>
       </div>
@@ -222,8 +216,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "precision mediump float;\n\nuniform float u_time;\nuniform vec2 u_resolution;\n\nvoid main() {\n    // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值\n    float oscillation = sin(u_time);\n\n    // 将振荡值转换为 0.0 到 1.0 的范围\n    // sin 函数返回 -1 到 1，我们需要 0 到 1\n    float normalizedOscillation = (oscillation + 1.0) * 0.5;\n\n    // 使用这个值作为红色分量，创建呼吸效果\n    gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);\n\n    // 尝试其他动画效果：\n    // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸\n    // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸\n\n    // 更快的动画（乘以2让时间流逝更快）：\n    // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;\n    // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);\n}\n",
-        exerciseCode: "precision mediump float;\n\nuniform float u_time;\n\nvoid main() {\n    // 练习：创建时间动画效果\n    // 目标：创建一个会动的彩色圆形\n\n    // 获取当前像素的归一化坐标\n    vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n\n    // 练习1：创建动态的圆心位置\n    // 让圆心在屏幕中央做圆周运动\n    vec2 center = vec2(\n        // TODO: 填写运动半径（建议 0.2）\n        0.5 + sin(u_time) * 0.2,\n        0.5 + cos(u_time) * 0.2\n    );\n\n    // 练习2：计算到动态圆心的距离\n    vec2 pos = uv - center;\n    // TODO: distance = length(pos)\n    float distance = length(pos);\n\n    // 练习3：创建动态半径\n    // 让圆的大小随时间变化\n    // TODO: 填写半径变化幅度（建议 0.05）\n    float radius = 0.1 + sin(u_time * 2.0) * 0.05;\n\n    // 练习4：创建动态颜色\n    // 让颜色随时间变化\n    vec3 dynamicColor = vec3(\n        sin(u_time) * 0.5 + 0.5,\n        cos(u_time * 1.5) * 0.5 + 0.5,\n        sin(u_time * 0.8) * 0.5 + 0.5\n    );\n\n    // 练习5：使用 smoothstep 创建平滑边缘\n    // smoothstep(edge0, edge1, x) 在 edge0 和 edge1 之间创建平滑过渡\n    float circle = smoothstep(\n        radius + 0.02,  // 外边缘\n        radius - 0.02,  // 内边缘\n        // TODO: 填写距离变量（distance）\n        distance\n    );\n\n    // 练习6：混合背景和圆形颜色\n    vec3 backgroundColor = vec3(0.1, 0.1, 0.2);\n    vec3 finalColor = mix(\n        backgroundColor,\n        // TODO: 使用 dynamicColor 作为圆形颜色\n        dynamicColor,\n        circle\n    );\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n",
+        referenceCode: "precision mediump float;\nuniform float u_time;\nuniform vec2 u_resolution;\nvoid main() {\n  // 使用 sin 函数创建在 -1.0 到 1.0 之间振荡的值\n  float oscillation = sin(u_time);\n  // 将振荡值转换为 0.0 到 1.0 的范围\n  // sin 函数返回 -1 到 1，我们需要 0 到 1\n  float normalizedOscillation = (oscillation + 1.0) * 0.5;\n  // 使用这个值作为红色分量，创建呼吸效果\n  gl_FragColor = vec4(normalizedOscillation, 0.0, 0.0, 1.0);\n  // 尝试其他动画效果：\n  // gl_FragColor = vec4(0.0, normalizedOscillation, 0.0, 1.0); // 绿色呼吸\n  // gl_FragColor = vec4(normalizedOscillation, normalizedOscillation, 0.0, 1.0); // 黄色呼吸\n  // 更快的动画（乘以2让时间流逝更快）：\n  // float fastOscillation = (sin(u_time * 2.0) + 1.0) * 0.5;\n  // gl_FragColor = vec4(fastOscillation, 0.0, 0.0, 1.0);\n}\n",
+        exerciseCode: "precision mediump float;\nuniform float u_time;\nvoid main() {\n  // 练习：创建时间动画效果\n  // 目标：创建一个会动的彩色圆形\n  // 获取当前像素的归一化坐标\n  vec2 uv = gl_FragCoord.xy / vec2(300.0, 300.0);\n  // 练习1：创建动态的圆心位置\n  // 让圆心在屏幕中央做圆周运动\n  vec2 center = vec2(\n  // TODO: 填写运动半径（建议 0.2）\n  0.5 + sin(u_time) * 0.2, 0.5 + cos(u_time) * 0.2);\n  // 练习2：计算到动态圆心的距离\n  vec2 pos = uv - center;\n  // TODO: distance = length(pos)\n  float distance = length(pos);\n  // 练习3：创建动态半径\n  // 让圆的大小随时间变化\n  // TODO: 填写半径变化幅度（建议 0.05）\n  float radius = 0.1 + sin(u_time * 2.0) * 0.05;\n  // 练习4：创建动态颜色\n  // 让颜色随时间变化\n  vec3 dynamicColor = vec3(sin(u_time) * 0.5 + 0.5, cos(u_time * 1.5) * 0.5 + 0.5, sin(u_time * 0.8) * 0.5 + 0.5);\n  // 练习5：使用 smoothstep 创建平滑边缘\n  // smoothstep(edge0, edge1, x) 在 edge0 和 edge1 之间创建平滑过渡\n  float circle = smoothstep(radius + 0.02,\n  // 外边缘\n  radius - 0.02,\n  // 内边缘\n  // TODO: 填写距离变量（distance）\n  distance);\n  // 练习6：混合背景和圆形颜色\n  vec3 backgroundColor = vec3(0.1, 0.1, 0.2);\n  vec3 finalColor = mix(backgroundColor,\n  // TODO: 使用 dynamicColor 作为圆形颜色\n  dynamicColor, circle);\n  gl_FragColor = vec4(finalColor, 1.0);\n}\n",
         exerciseSrc: '../glsl/animation/01_time-animation.frag',
         referenceSrc: '../glsl/animation/01_time-animation.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

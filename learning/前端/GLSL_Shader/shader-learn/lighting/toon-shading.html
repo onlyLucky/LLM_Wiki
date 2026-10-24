@@ -63,113 +63,112 @@ return objectColor * 0.25;</code></pre>
         <div class="answer-label"><span>完整参考代码</span><span class="answer-src">glsl/lighting/15_toon-shading.answer.frag</span></div>
         <pre class="answer-code"><code id="answer-code">// 卡通渲染
 // 教程ID: toon-shading
-
 precision mediump float;
-
-uniform vec2 u_resolution; // 画布尺寸
-uniform float u_time; // 时间（秒）
-
+uniform vec2 u_resolution;
+// 画布尺寸
+uniform float u_time;
+// 时间（秒）
 // 球体SDF（有符号距离场）
 float sphereSDF(vec3 p, float radius) {
-    return length(p) - radius;
+  return length(p) - radius;
 }
 
 // 计算法线
 vec3 calcNormal(vec3 p, float radius) {
-    float eps = 0.001;
-    vec3 n;
-    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);
-    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);
-    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);
-    return normalize(n);
+  float eps = 0.001;
+  vec3 n;
+  n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);
+  n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);
+  n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);
+  return normalize(n);
 }
 
 // 基本光线投射
 float castRay(vec3 ro, vec3 rd, float radius) {
-    float t = 0.0;
-    for(int i = 0; i &lt; 64; i ++ ) {
-        vec3 p = ro + rd * t;
-        float h = sphereSDF(p, radius);
-        if (h &lt; 0.001)break;
-        t += h;
-        if (t &gt; 5.0)break;
-    }
-    return t;
+  float t = 0.0;
+  for (int i = 0; i &lt; 64; i++) {
+    vec3 p = ro + rd * t;
+    float h = sphereSDF(p, radius);
+    if (h &lt; 0.001) break;
+    t+=h;
+    if (t &gt; 5.0) break;
+  }
+  return t;
 }
 
 // 卡通着色
 vec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {
-    float intensity = dot(normal, lightDir);
-
-    // 根据光照强度分几个级别
-    vec3 color;
-    if (intensity &gt; 0.9) {
-        color = objectColor * 1.0;
-    } else if (intensity &gt; 0.6) {
-        color = objectColor * 0.8;
-    } else if (intensity &gt; 0.3) {
-        color = objectColor * 0.6;
-    } else if (intensity &gt; 0.1) {
-        color = objectColor * 0.4;
-    } else {
-        color = objectColor * 0.2;
-    }
-
-    return color;
+  float intensity = dot(normal, lightDir);
+  // 根据光照强度分几个级别
+  vec3 color;
+  if (intensity &gt; 0.9) {
+    color = objectColor * 1.0;
+  }
+  else if (intensity &gt; 0.6) {
+    color = objectColor * 0.8;
+  }
+  else if (intensity &gt; 0.3) {
+    color = objectColor * 0.6;
+  }
+  else if (intensity &gt; 0.1) {
+    color = objectColor * 0.4;
+  }
+  else {
+    color = objectColor * 0.2;
+  }
+  return color;
 }
 
 // 添加轮廓线
 float outline(vec3 normal, vec3 viewDir, float thickness) {
-    float edge = dot(normal, viewDir);
-    edge = 1.0 - edge;
-    return smoothstep(0.0, thickness, edge);
+  float edge = dot(normal, viewDir);
+  edge = 1.0 - edge;
+  return smoothstep(0.0, thickness, edge);
 }
 
 void main() {
-    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-    uv = uv * 2.0 - 1.0; // 将uv映射到[-1, 1]
-    uv.x *= u_resolution.x / u_resolution.y; // 宽高比校正
-
-    // 摄像机与光源设置
-    vec3 ro = vec3(0.0, 0.0, 2.0); // 射线原点（摄像机位置）
-    vec3 rd = normalize(vec3(uv, - 1.0)); // 射线方向
-
-    // 球体参数
-    float radius = 0.8;
-    float outlineThickness = 0.4 + sin(u_time) * 0.1; // 轮廓线厚度（带动画）
-
-    // 光源方向（动态）
-    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));
-
-    // 光线投射
-    float t = castRay(ro, rd, radius);
-
-    vec3 color = vec3(0.1); // 背景色
-
-    // 如果光线击中物体
-    if (t &lt; 5.0) {
-        vec3 p = ro + rd * t; // 交点位置
-        vec3 normal = calcNormal(p, radius); // 法线方向
-        vec3 viewDir = normalize(ro - p); // 视线方向
-
-        // 物体基础颜色
-        vec3 objectColor = vec3(0.4, 0.7, 0.9);
-
-        // 使用卡通着色
-        color = toonShading(normal, lightDir, objectColor);
-
-        // 添加轮廓线
-        float edgeFactor = outline(normal, viewDir, outlineThickness);
-        color = mix(color, vec3(0.0), edgeFactor * 0.8);
-
-        // 添加高光点（简化的卡通高光）
-        float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));
-        specular = pow(specular, 10.0);
-        specular = step(0.85, specular);
-        color += specular * 0.5;
-    }
-
-    gl_FragColor = vec4(color, 1.0);
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+  uv = uv * 2.0 - 1.0;
+  // 将uv映射到[-1, 1]
+  uv.x*=u_resolution.x / u_resolution.y;
+  // 宽高比校正
+  // 摄像机与光源设置
+  vec3 ro = vec3(0.0, 0.0, 2.0);
+  // 射线原点（摄像机位置）
+  vec3 rd = normalize(vec3(uv, -1.0));
+  // 射线方向
+  // 球体参数
+  float radius = 0.8;
+  float outlineThickness = 0.4 + sin(u_time) * 0.1;
+  // 轮廓线厚度（带动画）
+  // 光源方向（动态）
+  vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));
+  // 光线投射
+  float t = castRay(ro, rd, radius);
+  vec3 color = vec3(0.1);
+  // 背景色
+  // 如果光线击中物体
+  if (t &lt; 5.0) {
+    vec3 p = ro + rd * t;
+    // 交点位置
+    vec3 normal = calcNormal(p, radius);
+    // 法线方向
+    vec3 viewDir = normalize(ro - p);
+    // 视线方向
+    // 物体基础颜色
+    vec3 objectColor = vec3(0.4, 0.7, 0.9);
+    // 使用卡通着色
+    color = toonShading(normal, lightDir, objectColor);
+    // 添加轮廓线
+    float edgeFactor = outline(normal, viewDir, outlineThickness);
+    color = mix(color, vec3(0.0), edgeFactor * 0.8);
+    // 添加高光点（简化的卡通高光）
+    float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));
+    specular = pow(specular, 10.0);
+    specular = step(0.85, specular);
+    color+=specular * 0.5;
+  }
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -311,8 +310,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "// 卡通渲染\n// 教程ID: toon-shading\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\n// 球体SDF（有符号距离场）\nfloat sphereSDF(vec3 p, float radius) {\n    return length(p) - radius;\n}\n\n// 计算法线\nvec3 calcNormal(vec3 p, float radius) {\n    float eps = 0.001;\n    vec3 n;\n    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n    return normalize(n);\n}\n\n// 基本光线投射\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n    float t = 0.0;\n    for(int i = 0; i < 64; i ++ ) {\n        vec3 p = ro + rd * t;\n        float h = sphereSDF(p, radius);\n        if (h < 0.001)break;\n        t += h;\n        if (t > 5.0)break;\n    }\n    return t;\n}\n\n// 卡通着色\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n    float intensity = dot(normal, lightDir);\n\n    // 根据光照强度分几个级别\n    vec3 color;\n    if (intensity > 0.9) {\n        color = objectColor * 1.0;\n    } else if (intensity > 0.6) {\n        color = objectColor * 0.8;\n    } else if (intensity > 0.3) {\n        color = objectColor * 0.6;\n    } else if (intensity > 0.1) {\n        color = objectColor * 0.4;\n    } else {\n        color = objectColor * 0.2;\n    }\n\n    return color;\n}\n\n// 添加轮廓线\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n    float edge = dot(normal, viewDir);\n    edge = 1.0 - edge;\n    return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    uv = uv * 2.0 - 1.0; // 将uv映射到[-1, 1]\n    uv.x *= u_resolution.x / u_resolution.y; // 宽高比校正\n\n    // 摄像机与光源设置\n    vec3 ro = vec3(0.0, 0.0, 2.0); // 射线原点（摄像机位置）\n    vec3 rd = normalize(vec3(uv, - 1.0)); // 射线方向\n\n    // 球体参数\n    float radius = 0.8;\n    float outlineThickness = 0.4 + sin(u_time) * 0.1; // 轮廓线厚度（带动画）\n\n    // 光源方向（动态）\n    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n\n    // 光线投射\n    float t = castRay(ro, rd, radius);\n\n    vec3 color = vec3(0.1); // 背景色\n\n    // 如果光线击中物体\n    if (t < 5.0) {\n        vec3 p = ro + rd * t; // 交点位置\n        vec3 normal = calcNormal(p, radius); // 法线方向\n        vec3 viewDir = normalize(ro - p); // 视线方向\n\n        // 物体基础颜色\n        vec3 objectColor = vec3(0.4, 0.7, 0.9);\n\n        // 使用卡通着色\n        color = toonShading(normal, lightDir, objectColor);\n\n        // 添加轮廓线\n        float edgeFactor = outline(normal, viewDir, outlineThickness);\n        color = mix(color, vec3(0.0), edgeFactor * 0.8);\n\n        // 添加高光点（简化的卡通高光）\n        float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));\n        specular = pow(specular, 10.0);\n        specular = step(0.85, specular);\n        color += specular * 0.5;\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "// 卡通渲染（练习版）\n// 教程ID: toon-shading\n\nprecision mediump float;\n\nuniform vec2 u_resolution; // 画布尺寸\nuniform float u_time; // 时间（秒）\n\nfloat sphereSDF(vec3 p, float radius) {\n    return length(p) - radius;\n}\n\nvec3 calcNormal(vec3 p, float radius) {\n    float eps = 0.001;\n    vec3 n;\n    n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n    n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n    n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n    return normalize(n);\n}\n\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n    float t = 0.0;\n    for (int i = 0; i < 64; i++) {\n        vec3 p = ro + rd * t;\n        float h = sphereSDF(p, radius);\n        if (h < 0.001) break;\n        t += h;\n        if (t > 5.0) break;\n    }\n    return t;\n}\n\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n    float intensity = dot(normal, lightDir);\n\n    // TODO: 调整分级阈值/层数，观察卡通分段效果\n    if (intensity > 0.75) return objectColor * 1.0;\n    if (intensity > 0.45) return objectColor * 0.7;\n    if (intensity > 0.2) return objectColor * 0.45;\n    return objectColor * 0.25;\n}\n\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n    float edge = 1.0 - dot(normal, viewDir);\n    return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n    vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n    uv = uv * 2.0 - 1.0;\n    uv.x *= u_resolution.x / u_resolution.y;\n\n    vec3 ro = vec3(0.0, 0.0, 2.0);\n    vec3 rd = normalize(vec3(uv, -1.0));\n\n    float radius = 0.8;\n    // TODO: 调整轮廓线 thickness（建议 0.3 - 0.6）\n    float outlineThickness = 0.45 + sin(u_time) * 0.08;\n\n    vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n\n    float t = castRay(ro, rd, radius);\n\n    vec3 color = vec3(0.1);\n    if (t < 5.0) {\n        vec3 p = ro + rd * t;\n        vec3 normal = calcNormal(p, radius);\n        vec3 viewDir = normalize(ro - p);\n\n        vec3 objectColor = vec3(0.4, 0.7, 0.9);\n        color = toonShading(normal, lightDir, objectColor);\n\n        float edgeFactor = outline(normal, viewDir, outlineThickness);\n        color = mix(color, vec3(0.0), edgeFactor * 0.8);\n    }\n\n    gl_FragColor = vec4(color, 1.0);\n}\n",
+        referenceCode: "// 卡通渲染\n// 教程ID: toon-shading\nprecision mediump float;\nuniform vec2 u_resolution;\n// 画布尺寸\nuniform float u_time;\n// 时间（秒）\n// 球体SDF（有符号距离场）\nfloat sphereSDF(vec3 p, float radius) {\n  return length(p) - radius;\n}\n\n// 计算法线\nvec3 calcNormal(vec3 p, float radius) {\n  float eps = 0.001;\n  vec3 n;\n  n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n  n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n  n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n  return normalize(n);\n}\n\n// 基本光线投射\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n  float t = 0.0;\n  for (int i = 0; i < 64; i++) {\n    vec3 p = ro + rd * t;\n    float h = sphereSDF(p, radius);\n    if (h < 0.001) break;\n    t+=h;\n    if (t > 5.0) break;\n  }\n  return t;\n}\n\n// 卡通着色\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n  float intensity = dot(normal, lightDir);\n  // 根据光照强度分几个级别\n  vec3 color;\n  if (intensity > 0.9) {\n    color = objectColor * 1.0;\n  }\n  else if (intensity > 0.6) {\n    color = objectColor * 0.8;\n  }\n  else if (intensity > 0.3) {\n    color = objectColor * 0.6;\n  }\n  else if (intensity > 0.1) {\n    color = objectColor * 0.4;\n  }\n  else {\n    color = objectColor * 0.2;\n  }\n  return color;\n}\n\n// 添加轮廓线\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n  float edge = dot(normal, viewDir);\n  edge = 1.0 - edge;\n  return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  uv = uv * 2.0 - 1.0;\n  // 将uv映射到[-1, 1]\n  uv.x*=u_resolution.x / u_resolution.y;\n  // 宽高比校正\n  // 摄像机与光源设置\n  vec3 ro = vec3(0.0, 0.0, 2.0);\n  // 射线原点（摄像机位置）\n  vec3 rd = normalize(vec3(uv, -1.0));\n  // 射线方向\n  // 球体参数\n  float radius = 0.8;\n  float outlineThickness = 0.4 + sin(u_time) * 0.1;\n  // 轮廓线厚度（带动画）\n  // 光源方向（动态）\n  vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n  // 光线投射\n  float t = castRay(ro, rd, radius);\n  vec3 color = vec3(0.1);\n  // 背景色\n  // 如果光线击中物体\n  if (t < 5.0) {\n    vec3 p = ro + rd * t;\n    // 交点位置\n    vec3 normal = calcNormal(p, radius);\n    // 法线方向\n    vec3 viewDir = normalize(ro - p);\n    // 视线方向\n    // 物体基础颜色\n    vec3 objectColor = vec3(0.4, 0.7, 0.9);\n    // 使用卡通着色\n    color = toonShading(normal, lightDir, objectColor);\n    // 添加轮廓线\n    float edgeFactor = outline(normal, viewDir, outlineThickness);\n    color = mix(color, vec3(0.0), edgeFactor * 0.8);\n    // 添加高光点（简化的卡通高光）\n    float specular = max(0.0, dot(reflect(-lightDir, normal), viewDir));\n    specular = pow(specular, 10.0);\n    specular = step(0.85, specular);\n    color+=specular * 0.5;\n  }\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "// 卡通渲染（练习版）\n// 教程ID: toon-shading\nprecision mediump float;\nuniform vec2 u_resolution;\n// 画布尺寸\nuniform float u_time;\n// 时间（秒）\nfloat sphereSDF(vec3 p, float radius) {\n  return length(p) - radius;\n}\n\nvec3 calcNormal(vec3 p, float radius) {\n  float eps = 0.001;\n  vec3 n;\n  n.x = sphereSDF(vec3(p.x + eps, p.y, p.z), radius) - sphereSDF(vec3(p.x - eps, p.y, p.z), radius);\n  n.y = sphereSDF(vec3(p.x, p.y + eps, p.z), radius) - sphereSDF(vec3(p.x, p.y - eps, p.z), radius);\n  n.z = sphereSDF(vec3(p.x, p.y, p.z + eps), radius) - sphereSDF(vec3(p.x, p.y, p.z - eps), radius);\n  return normalize(n);\n}\n\nfloat castRay(vec3 ro, vec3 rd, float radius) {\n  float t = 0.0;\n  for (int i = 0; i < 64; i++) {\n    vec3 p = ro + rd * t;\n    float h = sphereSDF(p, radius);\n    if (h < 0.001) break;\n    t+=h;\n    if (t > 5.0) break;\n  }\n  return t;\n}\n\nvec3 toonShading(vec3 normal, vec3 lightDir, vec3 objectColor) {\n  float intensity = dot(normal, lightDir);\n  // TODO: 调整分级阈值/层数，观察卡通分段效果\n  if (intensity > 0.75) return objectColor * 1.0;\n  if (intensity > 0.45) return objectColor * 0.7;\n  if (intensity > 0.2) return objectColor * 0.45;\n  return objectColor * 0.25;\n}\n\nfloat outline(vec3 normal, vec3 viewDir, float thickness) {\n  float edge = 1.0 - dot(normal, viewDir);\n  return smoothstep(0.0, thickness, edge);\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  uv = uv * 2.0 - 1.0;\n  uv.x*=u_resolution.x / u_resolution.y;\n  vec3 ro = vec3(0.0, 0.0, 2.0);\n  vec3 rd = normalize(vec3(uv, -1.0));\n  float radius = 0.8;\n  // TODO: 调整轮廓线 thickness（建议 0.3 - 0.6）\n  float outlineThickness = 0.45 + sin(u_time) * 0.08;\n  vec3 lightDir = normalize(vec3(cos(u_time * 0.5), sin(u_time * 0.5), 0.5));\n  float t = castRay(ro, rd, radius);\n  vec3 color = vec3(0.1);\n  if (t < 5.0) {\n    vec3 p = ro + rd * t;\n    vec3 normal = calcNormal(p, radius);\n    vec3 viewDir = normalize(ro - p);\n    vec3 objectColor = vec3(0.4, 0.7, 0.9);\n    color = toonShading(normal, lightDir, objectColor);\n    float edgeFactor = outline(normal, viewDir, outlineThickness);\n    color = mix(color, vec3(0.0), edgeFactor * 0.8);\n  }\n  gl_FragColor = vec4(color, 1.0);\n}\n",
         exerciseSrc: '../glsl/lighting/15_toon-shading.frag',
         referenceSrc: '../glsl/lighting/15_toon-shading.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

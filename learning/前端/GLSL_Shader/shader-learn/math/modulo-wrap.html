@@ -54,9 +54,11 @@
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}
+void main() {
+  float t = fract(vUv.x * 5.0);
+  gl_FragColor = vec4(vec3(t), 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -197,8 +199,8 @@ void main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float t=fract(vUv.x*5.0);gl_FragColor=vec4(vec3(t),1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: 用 fract 做循环\nfloat t=vUv.x;gl_FragColor=vec4(vec3(t),1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float t = fract(vUv.x * 5.0);\n  gl_FragColor = vec4(vec3(t), 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 用 fract 做循环\n  float t = vUv.x;\n  gl_FragColor = vec4(vec3(t), 1.0);\n}\n",
         exerciseSrc: '../glsl/math/03_modulo-wrap.frag',
         referenceSrc: '../glsl/math/03_modulo-wrap.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

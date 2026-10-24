@@ -65,16 +65,14 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-
 void main() {
-    vec2 center = vec2(0.5, 0.5);
-    float radius = 0.3;
-    float dist = distance(vUv, center);
-    float inside = step(dist, radius);
-    vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);
-    gl_FragColor = vec4(color, 1.0);
+  vec2 center = vec2(0.5, 0.5);
+  float radius = 0.3;
+  float dist = distance(vUv, center);
+  float inside = step(dist, radius);
+  vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -216,8 +214,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec2 center = vec2(0.5, 0.5);\n    float radius = 0.3;\n    float dist = distance(vUv, center);\n    float inside = step(dist, radius);\n    vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义中心点 center（0.5, 0.5）\n    // TODO: 计算当前像素与中心的距离 dist\n    // TODO: 使用 step() 判断是否在圆形内，生成遮罩值 inside\n    // TODO: 使用 mix() 混合颜色\n    // TODO: 输出最终颜色\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec2 center = vec2(0.5, 0.5);\n  float radius = 0.3;\n  float dist = distance(vUv, center);\n  float inside = step(dist, radius);\n  vec3 color = mix(vec3(0.0), vec3(1.0, 0.8, 0.2), inside);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 定义中心点 center（0.5, 0.5）\n  // TODO: 计算当前像素与中心的距离 dist\n  // TODO: 使用 step() 判断是否在圆形内，生成遮罩值 inside\n  // TODO: 使用 mix() 混合颜色\n  // TODO: 输出最终颜色\n}\n",
         exerciseSrc: '../glsl/math/05_centered-circle-mask.frag',
         referenceSrc: '../glsl/math/05_centered-circle-mask.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

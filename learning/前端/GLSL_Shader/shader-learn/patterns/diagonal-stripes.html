@@ -57,9 +57,14 @@ float m = step(0.5, v);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}
+void main() {
+  float c = 14.0;
+  float v = fract((vUv.x + vUv.y) * c);
+  float m = step(0.5, v);
+  vec3 col = mix(vec3(0.06, 0.07, 0.1), vec3(1.0, 0.85, 0.25), m);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -200,8 +205,8 @@ void main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=14.0;float v=fract((vUv.x+vUv.y)*c);float m=step(0.5,v);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){float c=14.0;// TODO: v=fract((vUv.x+vUv.y)*c)\nfloat v=0.0;float m=step(0.5,v);vec3 col=mix(vec3(0.06,0.07,0.1),vec3(1.0,0.85,0.25),m);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float c = 14.0;\n  float v = fract((vUv.x + vUv.y) * c);\n  float m = step(0.5, v);\n  vec3 col = mix(vec3(0.06, 0.07, 0.1), vec3(1.0, 0.85, 0.25), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  float c = 14.0;\n  // TODO: v=fract((vUv.x+vUv.y)*c)\n  float v = 0.0;\n  float m = step(0.5, v);\n  vec3 col = mix(vec3(0.06, 0.07, 0.1), vec3(1.0, 0.85, 0.25), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/05_diagonal-stripes.frag',
         referenceSrc: '../glsl/patterns/05_diagonal-stripes.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

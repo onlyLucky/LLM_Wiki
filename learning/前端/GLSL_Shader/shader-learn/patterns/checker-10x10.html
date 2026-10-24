@@ -57,9 +57,13 @@ float m = mod(g.x + g.y, 2.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-void main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.1),vec3(0.9),m);gl_FragColor=vec4(col,1.0);}
+void main() {
+  vec2 g = floor(vUv * 10.0);
+  float m = mod(g.x + g.y, 2.0);
+  vec3 col = mix(vec3(0.1), vec3(0.9), m);
+  gl_FragColor = vec4(col, 1.0);
+}
 </code></pre>
       </div>
     </section>
@@ -200,8 +204,8 @@ void main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){vec2 g=floor(vUv*10.0);float m=mod(g.x+g.y,2.0);vec3 col=mix(vec3(0.1),vec3(0.9),m);gl_FragColor=vec4(col,1.0);}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\nvoid main(){// TODO: g=floor(vUv*10.0); m=mod(g.x+g.y,2.0)\nvec2 g=vec2(0.0);float m=0.0;vec3 col=mix(vec3(0.1),vec3(0.9),m);gl_FragColor=vec4(col,1.0);}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec2 g = floor(vUv * 10.0);\n  float m = mod(g.x + g.y, 2.0);\n  vec3 col = mix(vec3(0.1), vec3(0.9), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: g=floor(vUv*10.0); m=mod(g.x+g.y,2.0)\n  vec2 g = vec2(0.0);\n  float m = 0.0;\n  vec3 col = mix(vec3(0.1), vec3(0.9), m);\n  gl_FragColor = vec4(col, 1.0);\n}\n",
         exerciseSrc: '../glsl/patterns/06_checker-10x10.frag',
         referenceSrc: '../glsl/patterns/06_checker-10x10.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),

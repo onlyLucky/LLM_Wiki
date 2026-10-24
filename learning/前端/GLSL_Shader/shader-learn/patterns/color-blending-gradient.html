@@ -57,14 +57,12 @@ gl_FragColor = vec4(color, 1.0);</code></pre>
         <pre class="answer-code"><code id="answer-code">#ifdef GL_ES
 precision mediump float;
 #endif
-
 varying vec2 vUv;
-
 void main() {
-    vec3 colorA = vec3(1.0, 0.0, 0.0);
-    vec3 colorB = vec3(0.0, 0.0, 1.0);
-    vec3 color = mix(colorA, colorB, vUv.x);
-    gl_FragColor = vec4(color, 1.0);
+  vec3 colorA = vec3(1.0, 0.0, 0.0);
+  vec3 colorB = vec3(0.0, 0.0, 1.0);
+  vec3 color = mix(colorA, colorB, vUv.x);
+  gl_FragColor = vec4(color, 1.0);
 }
 </code></pre>
       </div>
@@ -206,8 +204,8 @@ void main() {
         stage: document.getElementById('panel-stage'),
         modeBtns: document.querySelectorAll('.mode-btn'),
         resetBtn: document.getElementById('btn-reset'),
-        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    vec3 colorA = vec3(1.0, 0.0, 0.0);\n    vec3 colorB = vec3(0.0, 0.0, 1.0);\n    vec3 color = mix(colorA, colorB, vUv.x);\n    gl_FragColor = vec4(color, 1.0);\n}\n",
-        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\n\nvarying vec2 vUv;\n\nvoid main() {\n    // TODO: 定义 colorA 为红色\n    // TODO: 定义 colorB 为蓝色\n    // TODO: 使用 vUv.x 作为混合因子\n    // TODO: 使用 mix 函数进行颜色插值\n    // TODO: 输出最终颜色\n}\n",
+        referenceCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  vec3 colorA = vec3(1.0, 0.0, 0.0);\n  vec3 colorB = vec3(0.0, 0.0, 1.0);\n  vec3 color = mix(colorA, colorB, vUv.x);\n  gl_FragColor = vec4(color, 1.0);\n}\n",
+        exerciseCode: "#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nvoid main() {\n  // TODO: 定义 colorA 为红色\n  // TODO: 定义 colorB 为蓝色\n  // TODO: 使用 vUv.x 作为混合因子\n  // TODO: 使用 mix 函数进行颜色插值\n  // TODO: 输出最终颜色\n}\n",
         exerciseSrc: '../glsl/patterns/01_color-blending-gradient.frag',
         referenceSrc: '../glsl/patterns/01_color-blending-gradient.answer.frag',
         answerCodeEl: document.getElementById('answer-code'),
